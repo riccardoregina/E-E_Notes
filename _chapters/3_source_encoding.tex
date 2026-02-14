@@ -5,34 +5,33 @@ Ci inoltriamo finalmente nel cuore della teoria dell'informazione, ovvero la cod
 \section{Sorgenti e Codifica}
 
 \begin{definition}{Sorgente (discreta e a memoria zero)}
-  Chiamiamo \keyword{Sorgente discreta e a memoria zero} una variabile aleatoria discreta, identificabile come una coppia \(S = (\SCal,p)\), con \(\SCal\) alfabeto sorgente finito, ovvero l'insieme dei simboli che la sorgente può emettere,
-  ovvero i valori che la variabile aleatoria può assumere, e \(p\) distribuzione su \(\SCal\).
+  Chiamiamo \keyword{Sorgente discreta e a memoria zero} una variabile aleatoria discreta, identificabile come una coppia \(S = (\SCal,p)\), con \(\SCal\) alfabeto finito, e \(p\) distribuzione su \(\SCal\).
 \end{definition}
+$\SCal$ viene spesso detto \textit{alfabeto sorgente}.
 
 \begin{definition}{Codifica}
-  Definiamo \keyword{codifica} un morfismo iniettivo \(\varphi: \SCal^* \to A^*\) con \(A\) alfabeto (di codice).
-  Il \keyword{codice} relativo a questa codifica è \(X = \varphi(\SCal)\), ovvero l'immagine di \(\SCal\) sotto \(\varphi\).
-  Diremo inoltre che un codice è \keyword{adattabile} alla sorgente \(S\) se \(\# X = \# \SCal\). In questo caso è possibile definire una codifica biettiva tra i simboli della sorgente e le parole del codice.
-  In particolare, tale codice sarà \keyword{adattato} a una sorgente \(S\) mediante \(\varphi\), se \(\varphi\) induce una biiezione tra \(\SCal\) e \(X\), \(\varphi_{|_X}: \SCal \leftrightarrow X\).
+  Definiamo \keyword{codifica} un morfismo iniettivo \(\varphi: \SCal^* \to A^*\) con \(A\) alfabeto. Il morfismo $\varphi$ identifica il \keyword{codice} $X=\varphi(\SCal)$.
+  Diremo inoltre che $X$ è \keyword{adattabile} alla sorgente \(S\) se \(\# X = \# \SCal\).
+  In particolare, $X$ sarà \keyword{adattato} a una sorgente \(S\) mediante \(\varphi\), se \(\varphi\) induce una biezione tra \(\SCal\) e \(X\), \(\varphi_{|_X}: \SCal \leftrightarrow X\).
 \end{definition}
-
+Si noti che il fatto che un $X$ sia adattabile non implica che esso sia anche adattato: l'esistenza di una biezione tra $X$ e $\SCal$ non è garantita da $\#\SCal=\#X$. Ciò avviene perché $\varphi$ è definito come iniettivo: $\varphi$ potrebbe non mappare una parola di $X$. Invece, nel caso in cui $\varphi$ mappi tutte le parole di $X$, allora si può ottenere la biezione $\varphi_{|_X}$ semplicemente restringendo $\varphi$ a $\varphi^{-1}(X)$, ovvero forzando la suriettività.
 
 \begin{definition}{Costo di una codifica}
   Data una sorgente \(S = (\SCal,p)\) e una codifica \(\varphi: \SCal^* \to A^*\) con codice \(X = \varphi(\SCal)\), definiamo il \keyword{costo} di \(\varphi\) la quantità:
   \[c(X,\varphi) = \sum_{s \in \SCal} p(s) \abs{\varphi(s)}\]
-  ovvero la media pesata sulla distribuzione \(p\) delle lunghezze delle parole codificate.
+  ovvero la media pesata sulla distribuzione \(p\) delle lunghezze delle parole codificate.\\
   Il \keyword{costo assoluto} di un codice \(X\) sarà
-  \[c(X) = \min_{\varphi: \varphi(\SCal) \leftrightarrow  X} c(X,\varphi)\]
+  \[c(X) = \min_{\varphi: \varphi(\SCal) \leftrightarrow  X} c(X,\varphi)\] ovvero il costo associato alla codifica che per cui si ottiene il costo minimo.
 \end{definition}
-
 
 \begin{example}[label=ex:codifica]{}
   Sia \(\SCal = \set{s_1,s_2,s_3}\), \(A = \set{a,b}\), \(X = \set{a,ba,bb}\).
   Se \(p(s_1) = 1/2, p(s_2) = p(s_3) = 1/4\), e inoltre \(\varphi(s_1) = ba, \varphi(s_2) = a, \varphi(s_3) = bb\), si ha che
     \[c(X,\varphi) = \frac{7}{4} > c(X) = \frac{3}{2}\]
+  dove $c(X)$ è il costo ottenuto scegliendo la codifica $\varphi'$ che associa probabilità maggiori a parole di $X$ più corte, ovvero associa la probabilità massima alla parola più corta, la seconda probabilità massima alla seconda parola più corta e così via. 
 \end{example}
 
-Da questo esempio è possibile trarne una regola generale.
+La scelta di $\varphi'$ nell'esempio non è casuale, ma è anzi il risultato della seguente proposizione.
 
 \begin{proposition}{}
   Sia \(S\) sorgente, \(X\) codice su \(A\) \emph{adattato} a \(S\) mediante \(\varphi\).
@@ -40,16 +39,12 @@ Da questo esempio è possibile trarne una regola generale.
     \[\forall s,s' \in \SCal, p(s) < p(s') \implies \abs{\varphi(s)} < \abs{\varphi(s')} \]
 \end{proposition}
 
-\begin{proof}
-  La dimostrazione è abbastanza intuitiva, in quanto la proposizione è l'unico modo per minimizzare la somma pesata delle lunghezze.
-\end{proof}
-
-In altre parole, per minimizzare il costo di una codifica, i simboli più probabili devono essere codificati con parole più corte.
-
 \begin{definition}{Codice ottimale}
-  Diremo che \(X\) è un \keyword{codice ottimale} per la sorgente \(S\) se, per ogni codice \(Z\) sullo stesso alfabeto e di cardinalità \(\# X = \# \SCal\), si ha che
+  Diremo che \(X\) è un \keyword{codice ottimale} per la sorgente \(S\) se, per ogni codice \(Z\) sullo stesso alfabeto e con la stessa cardinalità, si ha che
   \[c(X) \leq c(Z)\]
 \end{definition}
+
+In altre parole, un codice è ottimale se il suo costo assoluto è minore o uguale di qualsiasi altro costo assoluto ottenuto a partire da un altro codice sullo stesso alfabeto e con stessa cardinalità.
 
 \begin{example}{}
   Data la sorgente dell'esempio~\ref{ex:codifica}, il codice \(Z = \set{aa,ba,bb}\) \textbf{non} è ottimale, poiché \(c(Z) = 2\), mentre abbiamo trovato un codice di costo inferiore nell'esempio precedente.
@@ -63,22 +58,22 @@ In altre parole, per minimizzare il costo di una codifica, i simboli più probab
 \end{definition}
 
 Tale quantità rappresenta un valore medio dell'autoinformazione (ovvero dell'incertezza) della sorgente.
-La base del logaritmo non è specificata, non perché non cambi il valore di \(H(S)\), ma poiché la variazione è solo un fattore moltiplicativo costante, analogo a un cambio di unità di misura.
+La base del logaritmo non è specificata in quanto cambierebbe il valore di $H(S)$ solo di una costante moltiplicativa dovuta al cambio di base. Tale costante moltiplicativa è del tutto analoga ad un cambio di unità di misura.
 
-Corrispondentemente l'entropia (e l'informazione in generale) si misura utilizzando comunemente tre unità di misura:
+Infatti, l'entropia (e l'informazione in generale) si misura utilizzando comunemente tre unità di misura:
 \begin{itemize}
-  \item \emph{hartley} (base \(10\)), prima unità di misura dell'informazione
-  \item \emph{nat} (base \(e\)), utile per alcune formulazioni matematiche
-  \item \emph{bit} (base \(2\)), più utilizzata al giorno d'oggi
+  \item \emph{hartley} (base \(10\)), prima unità di misura dell'informazione;
+  \item \emph{nat} (base \(e\)), utile per alcune formulazioni matematiche;
+  \item \emph{bit} (base \(2\)), più utilizzata al giorno d'oggi.
 \end{itemize}
 L'entropia di \(1 bit\) è quella di una sorgente binaria uniforme:
 \[H(S) = \frac{1}{2}\log_2(2) + \frac{1}{2}\log_2(2) = 1\]
-Da questo momento in avanti si farà riferimento unicamente ai \(bit\) come unità di misura dell'informazione, omettendo dunque la base del logaritmo.
+Da questo momento in avanti si farà riferimento unicamente ai \(bit\) come unità di misura dell'informazione, omettendo dunque la base del logaritmo e assumendola pari a $2$.
 
-\begin{note}{}
+\begin{note}[label=note:entropy-continuity-assumption]{}
   La definizione di entropia fornita non esclude la possibilità di avere \(p(s) = 0\) per qualche \(s \in \SCal\).
-  In tal caso il termine della somma corrispondente a tale \(s\) non saredefinito. 
-  Dunque si assume che il termine \(p(s)\log\left(p(s)\right) = 0\) per continuità, dato che \(\lim_{x \to 0^+} x \log\left(x\right) = 0\).
+  In tal caso il termine della somma corrispondente a tale \(s\) non sarebbe definito, in quanto si otterrebbe una forma indeterminata $0\cdot -\infty$.
+  Dunque, per fornire continuità a $H$, si assume \(p(s)\log\left(p(s)\right) = 0\), dato che è noto che \(\lim_{x \to 0^+} x \log\left(x\right) = 0\).
 
   In maniera formale, si può ridefinire l'entropia come
   \[H(S) = -\sum_{s \in \SCal} h(s)\]
@@ -90,51 +85,54 @@ Da questo momento in avanti si farà riferimento unicamente ai \(bit\) come unit
   \]
 \end{note}
 
-In generale si ha che \(0 \leq H(S) \leq \log\left(\#\SCal\right)\), e inoltre possibile caratterizzare tali casi limite.
-Il limite inferiore è dato da:
-\begin{equation}\label{eq:lower_bound_entropy}
-    H(S) = 0 \iff \exists s \in \SCal: p(s) = 1
-\end{equation}
+Andiamo adesso a dimostrare che l'entropia è sempre dotata di un limite inferiore e di un limite superiore.
 
-Ovviamente dalla definizione di distribuzione segue che \(\forall s' \neq s: p(s') = 0\).
+\begin{proposition}[label=prop:lower_bound_entropy]{Limite inferiore dell'entropia}
+  Sia $S=(\mathcal{S},p)$ una sorgente discreta a memoria zero. Allora si ha $H(S)\geq 0$.\\
+  Inoltre, $H(S)=0 \iff \exists !\bar{s}\in \mathcal{S}:p(s)=1$.
+\end{proposition}
 
-Mentre il limite superiore è dato da:
-\begin{equation}\label{eq:upper_bound_entropy}
-  H(S) = \log\left(\#\SCal\right) \iff \forall s \in \SCal: p(s) = \frac{1}{\#\SCal}
-\end{equation}
-Ovvero l'entropia (e quindi l'incertezza) è nulla se la sorgente è certa (emette sempre lo stesso simbolo), e massima se la sorgente è uniforme (emette tutti i simboli con la stessa probabilità).
-
-Andiamo dunque a dimostrare tali affermazioni.
-
-\begin{proof}[Dimostrazione di~\ref{eq:lower_bound_entropy}]
-  Essendo che \(\forall s \in \SCal: 0\leq p(s) \leq 1\), abbiamo che\footnote{È denotato che \(-\infty \leq \log\left(p(s)\right)\) e non \(-\infty < \log\left(p(s)\right)\), poiché si assume \(\log\left(0\right)\) definito come \(-\infty\) per continuità.}
+\begin{proof}
+  Poiché \(\forall s \in \SCal: 0\leq p(s) \leq 1\), abbiamo che\footnote{È denotato che \(-\infty \leq \log\left(p(s)\right)\) e non \(-\infty < \log\left(p(s)\right)\), poiché si assume \(\log\left(0\right)\) definito come \(-\infty\) per continuità.}
   \[-\infty \leq \log\left(p(s)\right) \leq 0 \iff  0 \leq -\log\left(p(s)\right) = \log\left(\frac{1}{p(s)}\right) \leq \infty\]
 
-  Dunque \(H(S) = \sum_{s \in \SCal} p(s) \log\left(\frac{1}{p(s)}\right) = E[\log\left(\frac{1}{p(S)}\right)] \geq 0\), essendo somma pesata (o media) di quantità non negative.
+  Dunque \(H(S) = \sum_{s \in \SCal} p(s) \log\left(\frac{1}{p(s)}\right) = \mathbb{E}[\log\left(\frac{1}{p(S)}\right)] \geq 0\), essendo somma pesata di quantità non negative.
 
-  Inoltre se \(p(s) = 1\) e \(p(t) = 0 \forall t \in \SCal \setminus \set{s}\) si ha che
+  Inoltre, se \(p(s) = 1\) e \(p(t) = 0, \forall t \in \SCal \setminus \set{s}\) si ha che
   \[H(S) = 1 \cdot \log\left(\frac{1}{1}\right) - \sum_{t \in \SCal \setminus \set{s}} 0 \cdot \log\left(0\right) = 0 - 0 = 0\]
-  Viceversa, se \(H(S) = 0\), deve aversi che \(\forall s \in \SCal: p(s) \log\left(\frac{1}{p(s)}\right) = 0\), che può avvenire solo in due casi, ovvero \(\forall s \in \SCal p(s) = 0 \lor p(s) = 1\).
-  Ma essendo che \(p\) è una distribuzione, \(\sum_{s \in \SCal} p(s) = 1\), e dunque
+  Viceversa, se \(H(S) = 0\), deve aversi \(p(s) \log\left(\frac{1}{p(s)}\right) = 0, \forall s \in \SCal\), che può avvenire solo in due casi, ovvero \(\forall s \in \SCal (p(s) = 0 \lor p(s) = 1)\).
+  Poiché \(p\) è una distribuzione di probabilità, si ha \(\sum_{s \in \SCal} p(s) = 1\), e dunque
   \[\exists!\bar{s} \in \SCal: p(\bar{s}) = 1\]
 \end{proof}
 
-\begin{proof}[Dimostrazione di~\ref{eq:upper_bound_entropy}]
-  Si può utilizzare la disuguaglianza di Gibbs.
-  Tale disuguaglianza afferma che, date due distribuzioni \(p\) e \(q\) su \(\SCal\), Allora:
-  \begin{equation}\label{eq:gibbs}
-    \sum_{s \in \SCal} p(s) \log\left(\frac{1}{p(s)}\right) \leq -\sum_{s \in \SCal} p(s) \log\left(\frac{1}{q(s)}\right)
-  \end{equation}
-  Ovvero che l'entropia di \(S\) rispetto a \(p\) è minore o uguale alla media in probabilità \(p\) dell'inverso del logaritmo della probabilità secondo \(q\), e vale l'uguaglianza se e solo se \(p = q\).
-  \begin{note}{}
-    È importate notare che il lato destro della disuguaglianza può divergere, poiché essendo le distribuzioni diverse non è possibile definire separatamente il caso dello \(0\), poiché le due distribuzioni potrebbero essere nulle in punti diversi.
-  \end{note}
-  Posto \(q(s) = \frac{1}{\#\SCal}, \forall s \in \SCal\), per la disuguaglianza di Gibbs si ha che
-  \[H(S) \leq \sum_{s \in \SCal} p(s) \log\left(\#\SCal\right) = \log\left(\#\SCal\right)\sum_{s \in \SCal} p(s) = \log\left(\#\SCal\right)\]
-  Inoltre, per l'uguaglianza, deve aversi che \(p = q\). Dunque, essendo \(H(S)\) superiormente limitata da un valore che può assumere, tale valore è il massimo di \(H(S)\), e si ha che tale massimo è raggiunto se e solo se \(p\) è la distribuzione uniforme su \(\SCal\).
+\begin{proposition}[label=prop:upper_bound_entropy]{Limite superiore dell'entropia}
+  Sia $S=(\mathcal{S},p)$ una sorgente discreta a memoria zero e $k=\#\mathcal{S}$. Allora si ha $H(S)\leq \log k$.\\
+  Inoltre, $H(S)=\log k \iff \forall s \in \mathcal{S}:p(s)=\frac{1}{k}$.
+\end{proposition}
+
+Per dimostrare questa proposizione, abbiamo bisogno di un risultato di Analisi matematica: la disuguaglianza di Gibbs.
+
+Siano $p,q$ distribuzioni su $\mathcal{S}$. Allora:
+\begin{equation}\label{eq:gibbs}
+H(S)=\sum_{s \in \mathcal{S}}{p(s)\log\left( \frac{1}{p(s)} \right)} \leq \sum_{s \in \mathcal{S}}{p(s)\log\left( \frac{1}{q(s)} \right)}
+\end{equation}
+e vale con il segno uguale solo se $p=q$.
+
+\begin{note}{}
+  Si noti che la somma a destra può divergere, poiché non vale l'assunzione \ref{note:entropy-continuity-assumption} in quanto i due termini della somma appartengono a due distribuzioni distinte. Infatti, potrebbe esistere un $s \in \mathcal{S}: p(s) \neq 0 \wedge q(s)=0$ per cui si avrebbe $p(s)\log\left( \frac{1}{q(s)} \right)=\infty$.\\
+  Affinché la somma a destra non diverga, è sufficiente imporre che $p$ e $q$ siano distribuzioni positive.
+\end{note}
+
+\begin{proof}[Dimostrazione di \ref{prop:upper_bound_entropy}]
+  Sia $q$ la distribuzione uniforme su $\mathcal{S}$ t.c. $\forall s \in \mathcal{S}:q(s)=\frac{1}{k}$.
+  Per Gibbs \ref{eq:gibbs}, si ha $$H(S)\leq \sum_{s \in \mathcal{S}}{p(s)\log k}$$ 
+  Il $\log k$, non dipendendo da $s$, può essere portato fuori dalla sommatoria: $$\sum_{s \in \mathcal{S}}{p(s)\log k} = \log k \sum_{s \in \mathcal{S}}{p(s)}=\log k\cdot1=\log k$$ 
+  Quindi, $H(S)\leq \log k$. 
+  
+  Inoltre, sempre per Gibbs \ref{eq:gibbs}, si verifica l'uguaglianza se e solo se $p=q$. 
 \end{proof}
 
-Possiamo dunque arrivare a un risultato fondamentale per questo corso che lega l'entropia di una sorgente al costo di codifica, ovvero il teorema di Shannon.
+Possiamo dunque arrivare a un risultato fondamentale per la Teoria dell'Informazione che lega l'entropia di una sorgente al costo di codifica, ovvero il teorema di Shannon.
 
 \begin{theorem}[label=thm:shannon]{Shannon}
   Sia \(S = (\SCal,p)\) sorgente, \(A\) alfabeto di codice con \(\#\SCal = d \geq 2\) e \(X \subseteq A^+\) codice adattato a \(S\) mediante \(\varphi\).
