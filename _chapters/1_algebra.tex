@@ -34,7 +34,7 @@ Un esempio di semigruppo è dato da \((\N',+)\) dove l'operazione binaria è la 
 
 \begin{definition}{Monoide}
   Un \keyword{monoide} \((M,\cdot,1_M)\) è un semigruppo \((M, \cdot)\) dotato di elemento neutro \(1_M\) per l'operazione binaria\footnote{Denotato semplicemente \(1\) in caso di non ambiguità del monoide di riferimento}, ovvero:
-  \[\forall a \in M, a \cdot 1_M = 1_M \cdot a = a.\]
+  \[\forall a \in M, a \cdot 1_M = 1_M \cdot a = a\]
 \end{definition}
 
 \begin{example}{}
@@ -112,18 +112,6 @@ Tale notazione permette di formulare in modo più compatto la chiusura di un sot
   \[Y^* = \set{1_S} \cup Y^+ = \bigcup_{n=0}^{\infty} Y^n.\]
 \end{definition}
 
-Tali sottostrutture sono le più piccole possibili che contengono \(Y\).\\
-Un monoide notevole per il corso è il cosiddetto \emph{monoide delle parole}.
-Dato un insieme finito \(A\), detto \emph{alfabeto}, l'insieme di tutte le possibili sequenze finite (dette stringhe o parole) di elementi di \(A\) forma un monoide rispetto all'operazione di concatenazione di stringhe. 
-Tale monoide contiene \(A\) e ha come elemento neutro la stringa vuota, indicata con \(\varepsilon\).
-Denotiamo tale monoide con \(A^*\), e l'insieme delle stringhe non vuote con \(A^+ = A^* \setminus \set\varepsilon\).
-
-\begin{example}{}
-  Sia \(A = \set{0,1}\) un alfabeto binario.
-  Allora \(A^* = \set{\varepsilon, 0, 1, 00, 01, 10, 11, 000, \ldots}\) è il monoide delle parole binarie.
-  Si noti che \(A^*\) è infinito anche se \(A\) è finito.
-\end{example}
-
 \begin{definition}{Base di un semigruppo (monoide)}
   Sia \(S\) un semigruppo (monoide).
   Una \keyword{base} di \(S\) è un sottoinsieme \(X \subseteq S\) che gode di \emph{univoca fattorizzazione}, ovvero che dati \(\forall x_1,x_2,\ldots,x_n,x_1',x_2',\ldots,x_m' \in X\) si ha che:
@@ -143,18 +131,6 @@ In altre parole, ogni elemento di \(X^{+}\) si fattorizza in un unico modo come 
 Un modo meno formale ma più intuitivo di definire un semigruppo (monoide) libero è quella di considerarlo il semigruppo (monoide) con la minor quantità di vincoli possibile, ovvero solo quelli imposti dalla definizione di semigruppo (monoide).
 La struttura è \emph{libera} poiché non ha vincoli aggiuntivi che la limitano, essendo dunque la più generale possibile dato l'insieme sottostante.
 Tale proprietà di generalità verrà formalizzata più avanti tramite una proprietà universale.
-
-
-\begin{example}[]{}
-  Esempi di basi (e dunque di monoidi liberi) sono:
-  \begin{itemize}
-    \item \(A\) è una base di \(A^*\) per ogni alfabeto \(A\).
-    \item \(\set{1}\) è una base di \((\N, +, 0)\).
-  \end{itemize}
-  Contrariamente a quello che si potrebbe pensare, \((\N, \cdot, 1)\) \textbf{non} è un monoide libero con base l'insieme dei numeri primi, poiché \(6 = 2 \cdot 3 = 3 \cdot 2\) ammette due fattorizzazioni distinte.
-  Il concetto di struttura libera però si generalizza a diverse strutture algebriche, ad esempio \((\N, \cdot, 1)\) è un \emph{monoide \textbf{commutativo} libero} di base l'insieme dei numeri primi.
-\end{example}
-
 \begin{proposition}{Unicità della base in un semigruppo (monoide) libero}
   Sia \(S\) un semigruppo libero, allora l'unica base di \(S\) è \(S \setminus S^2\), ovvero l'insieme degli elementi di \(S\) che non sono esprimibili come prodotto di altri elementi di \(S\).
   Analogamente, sia \(M\) un monoide libero, allora l'unica base di \(M\) è \((M\setminus \{1_M\}) \setminus {(M\setminus \{1_M\})}^2\).
@@ -242,8 +218,8 @@ Dato un monoide libero \(M\) è possibile definire un morfismo di lunghezza dell
         \draw[thick] (P\x) -- ++(0,0.3);
       }
       \node[left] at (A) {\(w\)};
-      \draw[thick, blue,bend right] (A) to node[midway, below, blue] {\(m_1\)} (P2);
-      \draw[thick, blue,bend right] (P2) to node[midway, below, blue] {\(m_2\)} (P6);
+      \draw[thick, blue,bend right] (A) to node[midway, below, blue] {\(m_3\)} (P2);
+      \draw[thick, blue,bend right] (P2) to node[midway, below, blue] {\(m_4\)} (P6);
     \end{tikzpicture}
   \end{figure}
   Se \(\abs{m_1} = \abs{m_3}\), dall'ipotesi che \(M\) è libero segue che \(m_1 = m_3\) e \(m_2 = m_4\).
@@ -291,24 +267,19 @@ Dato un monoide libero \(M\) è possibile definire un morfismo di lunghezza dell
       \draw[thick, ForestGreen, bend right=60] (P2) to node[midway, below, ForestGreen] {\(v\)} (P4);
     \end{tikzpicture}
   \end{figure}
-  
-  
 \end{proof}
-
 
 \begin{definition}[label=def:quotient_sets]{Insiemi quoziente}
   Siano \(Y,Z \subseteq M\) monoide. Definiamo gli insiemi quoziente destro e sinistro come:
   \begin{equation}
     \begin{aligned}
-      Y^{-1}Z &= \set{m \in M}[ \exists y \in Y, ym \in Z] = \set{m \in M}[Y\set{m} \cap Z \neq \emptyset]\\
-      ZY^{-1} &= \set{m \in M}[ \exists y \in Y, my \in Z] = \set{m \in M}[\set{m}Y \cap Z \neq \emptyset]
+      Y^{-1}Z &= \set{m \in M}[ \exists y \in Y, ym \in Z]\\
+      ZY^{-1} &= \set{m \in M}[ \exists y \in Y, my \in Z]
     \end{aligned}
   \end{equation}
 \end{definition}
 
-In altre parole possiamo vedere l'insieme quoziente sinistro (rispettivamente destro) come l'insieme delle parole di \(M\) che servono a completare a sinistra (rispettivamente destra) una parola di \(Y\) per ottenere una parola di \(Z\).
-
-Utilizzando tali insiemi è possibile formulare un importate teorema sui sottomonoidi liberi.
+In altre parole, possiamo vedere $Y^{-1}Z$ come l'insieme di quegli $m\in M$ che, messi a destra di un $y\in Y$, stanno in $Z$.
 
 \begin{theorem}[label=thm:schützenberger_monoids]{Schützenberger sui sottomonoidi liberi}
   Sia \(M\) libero e \(N \leq M\). Allora \(N \text{ è libero } \iff N^{-1}N \cap NN^{-1} \subseteq N\)
@@ -393,9 +364,7 @@ Tale formulazione può essere espressa formalmente come:
       Ma \(x_1 \in X \implies x_1 \in N\), e dunque \(x_1' = x_1 v \in {(N\setminus\set{1})}^2\), in contraddizione con la definizione di \(X\).
       Dunuque \(X\) è una base di \(N\), e \(N\) è libero.
   \end{description}
-      
 \end{proof}
-
 
 % Esempio di sottomonoide non libero è ad esempio qualsiasi monoide generato da un qualsiasi \(X \subseteq \N\setminus {1}\) ristpetto all'addizione.
 
@@ -407,5 +376,8 @@ Tale formulazione può essere espressa formalmente come:
 \end{definition}
 
 % se è unitario è libero non viceversa
-Da tale definizione e dal teorema~\ref{thm:schützenberger_monoids} segue che, dato \(M\) monoide libero, se  \(N \leq M\) è unitario, allora è libero
+Da tale definizione e dal teorema~\ref{thm:schützenberger_monoids} segue che, dato \(M\) monoide libero, se  \(N \leq M\) è unitario, allora è libero.
 
+
+Finita la parte introduttiva su gli strumenti matematici necessari,
+possiamo finalmente addentrarci nel primo capitolo: i codici.
