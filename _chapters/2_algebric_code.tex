@@ -1,16 +1,17 @@
 \chapter{Codici}
+In questo capitolo, affronteremo le nozioni di base della Teoria dei Codici.
 
-Finita la parte introduttiva su gli strumenti matematici necessari,
-possiamo finalmente addentrarci negli argomenti propri del corso.
+\section{Monoide delle parole, linguaggi, codici}
+\begin{definition}{Monoide delle parole}
+  Definiamo $(A, \cdot, \varepsilon)$ il monoide delle parole con alfabeto $A$. Dunque, $A^{+}$ è l'insieme di tutte le parole non vuote, mentre $A^{*}\cup \{\varepsilon\}$ è l'insieme di tutte le parole, inclusa quella vuota.
+\end{definition}
 
-In questo capitolo si inizieranno a trattare i \keyword{codici}.
-In particolare, questo capitolo si concentra sui codici da un punto di vista algebrico, studiandone le proprietà fondamentali e le strutture matematiche sottostanti.
+\begin{definition}{Linguaggio}
+  Dato \(A\) alfabeto finito, diremo che \(\emptyset \neq X \subseteq A^*\) è un \keyword{linguaggio}.
+\end{definition}
 
-Le loro proprietà legate alla teoria dell'informazione e alla crittografia verranno invece trattate nei capitoli successivi.
-
-\section{Definizione di Codice}
 \begin{definition}{Codice}
-  Dato \(A\) alfabeto finito, diremo che \(\emptyset \neq X \subseteq A^*\) è un \keyword{codice} se \(X\) è base di (un sottomonoide libero di) \(A^*\)
+  Dato \(A\) alfabeto finito, diremo che \(\emptyset \neq X \subseteq A^*\) è un \keyword{codice} se \(X\) è base.
 \end{definition}
 
 \begin{observation}{}
@@ -39,15 +40,17 @@ Il concetto di codice e di prefisso (suffisso) sono strettamente collegati.
   \end{enumerate}
 \end{theorem}
 
+\section{Insiemi Resto e Decisione dei Codici}
+Vedremo adesso dei criteri per determinare se un linguaggio $X$ è codice o meno. Un primo criterio derivante dal capitolo precedente è illustrato di seguito.
+
 \begin{corollary}{}
   \(\emptyset \neq X \subseteq A^+\) è codice se e solo se valgono entrambe le seguenti condizioni:
   \begin{itemize}
-    \item \({(X^*)}^{-1}X^* \cap X^*{(X^*)}^{-1} \subseteq X^* \)
-    \item \(X \cap XX^+ = \emptyset\)
+    \item \({(X^*)}^{-1}X^* \cap X^*{(X^*)}^{-1} \subseteq X^* \), ovvero $X^{*}$ rispetta \ref{thm:schützenberger_monoids} e quindi è libero;
+    \item \(X \cap XX^+ = \emptyset\), ovvero $X$ è la base di $X^{*}$.
   \end{itemize}
 \end{corollary}
-
-\section{Insiemi Resto e Decisione dei Codici}
+Tuttavia, verificare che $X^{*}$ sia libero mediante \ref{thm:schützenberger_monoids} risulta molto complicato. Pertanto, introdurremo dei metodi di più facile applicazione. Prima però, dobbiamo introdurre dei concetti.
 
 Dagli insiemi quozienti, definiti nella \Cref{def:quotient_sets}, è possibile definire gli insiemi \emph{resto} da essi derivati.
 \begin{definition}[label=def:remainder]{Insiemi resto}
@@ -58,33 +61,28 @@ Dagli insiemi quozienti, definiti nella \Cref{def:quotient_sets}, è possibile d
       X^{-1} R_{n-1}(X) \cup {R_{n-1}(X)}^{-1}X, & n > 1\\
     \end{cases}
   \end{equation}
-  I resti sinistri sono definiti in modo analogo usando il quoziente destro.
+  I resti sinistri possono essere definiti in modo analogo usando il quoziente destro.
 \end{definition}
 
-In altre parole, dato \(X \subseteq A^+\), il primo insieme dei resti destri \(R_1(X)\) è l'insieme delle parole che completano a destra una parola di \(X\) per formare un'altra parola di \(X\), escluse le parole vuote.
-I resti successivi sono invece le parole che completano a destra una parola di \(X\) per formare una parola del resto precedente o viceversa.
+In altre parole, dato \(X \subseteq A^+\), il primo insieme dei resti destri \(R_1(X)\) si ottiene come segue: si confrontano tra loro tutte le parole di $X$: se una parola $x_1 \in X$ è prefisso di un'altra parola $x_{2} \in X$, ovvero si ha $x_2=x_1 v$, con $v \in A^{*}$, allora si inserisce $v$ in $R_1(X)$.
+Insiemi di resto successivi si ottengono con lo stesso procedimento ma confrontando prima parole di $X$ con parole del resto precedente e poi parole del resto precedente con parole di $X$.
+
 Tali insiemi sono collegati a importanti proprietà dei codici, come vedremo a breve.
 \begin{note}{}
   Se \(X\) è chiaro dal contesto, indicheremo semplicemente con \(R_n\) i suoi insiemi resto.
 \end{note}
 
 \begin{example}{}
-  Sia \(A = \set{a,b}, X = \set{a,a^3b,abb,b^3}\).
-  Avremo dunque che gli insiemi resto di \(X\) sono:
-
-  \(R_1 = \set{a^2b, bb}\)
-  con \(a^2b\) che completa \(a\) per formare \(a^3b\) e \(bb\) che completa sempre \(a\) per formare \(abb\).
-
-  \(R_2 = \set{ab,b}\)
-  con \(ab\) che completa sempre \(a\) per formare \(a^2b\) e \(b\) che completa \(bb\) per formare \(b^3\).
-
-  \(R_3 = \set{b,bb}\)
-  con \(b\) che completa \(a\) per formare \(ab\) e \(bb\) che completa \(b\) per formare \(bbb\).
-  Da questo punto la successione si stabilizza, e dunque \(\forall n \geq 3, R_n = \set{b,bb}\)
+  Sia \(A = \set{a,b}, X = \set{a,a^3b,abb,b^3}\). Avremo dunque che gli insiemi resto di \(X\) sono: 
+  \begin{itemize}
+    \item \(R_1 = \set{a^2b, bb}\) con \(a^2b\) che completa \(a\) per formare \(a^3b\) e \(bb\) che completa sempre \(a\) per formare \(abb\).
+    \item \(R_2 = \set{ab,b}\) con \(ab\) che completa sempre \(a\) per formare \(a^2b\) e \(b\) che completa \(bb\) per formare \(b^3\).
+    \item \(R_3 = \set{b,bb}\) con \(b\) che completa \(a\) per formare \(ab\) e \(bb\) che completa \(b\) per formare \(bbb\). Da questo punto la successione si stabilizza, e dunque \(\forall n \geq 3, R_n = \set{b,bb}\)
+  \end{itemize}
 \end{example}
 
 È interessante notare che l'\(X\) scelto nell'esempio precedente è un codice, e che i suoi insiemi resto non contengono mai elementi di \(X\).
-Questa osservazione non è casuale, ma è in realtà il risultato di un teorema importante.
+Questa osservazione non è casuale, ma è in realtà il risultato del teorema di Sardinas-Patterson, che ci dà un metodo iterativo di facile applicazione per determinare se un linguaggio $X$ è codice.
 \begin{theorem}[label=thm:sardinas-patterson]{Sardinas-Patterson}
   Sia \(\emptyset \neq X \subseteq A^+\). Allora \(X\) è codice \(\iff \forall n\geq 1\st R_n(X) \cap X = \emptyset\)
 \end{theorem}
@@ -95,98 +93,64 @@ Per dimostrare questo teorema, è utile utilizzare un risultato intermedio per s
   Sia \(X \subseteq A^+\) e \(n\geq 1\). Allora, data \(w \in A^+\), \(w \in R_n \iff \exists i,j\geq 1, x_1,\ldots,x_i,x_1',\ldots,x_j' \in X\) tali che:
   \begin{itemize}
     \item \(i+j=n+1\)
-    \item \(x_1\ldots x_{i}w = x_1'\ldots x_j'\)
-    \item \(x_1 \neq x_1'\)
-    \item \(\abs{w} \leq \abs{x_j'}\)
+    \item \(x_1\ldots x_{i}w = x_1'\ldots x_j'\), ovvero $w$ è la parte che manca alla sequenza $x_{i}, \dots, x_{j}$ per essere uguale a $x_{i}^{'}, \dots, x_{j}^{'}$;
+    \item \(x_1 \neq x_1'\), per minimalità: se le due sequenze fossero uguali all'inizio, allora potremmo tagliarle e partire dai primi $x$,$x^{'}$ ad essere diversi. Questa condizione ci permette di prendere le due sequenze in modo minimale. Inoltre, se aggiungessimo una stessa sequenza a sinistra di ogni membro di (2), invalideremmo (1).
+    \item \(\abs{w} \leq \abs{x_j'}\), ovvero $w$ è contenuta nell'ultima parola $x_{j}^{'}$ della sequenza $x_{1}^{'}, \dots, x_{j}^{'}$. Se ciò non fosse vero, $w$ si potrebbe scrivere come $w=x_{i+1}w^{'}$, eludendo la condizione (1).
   \end{itemize}
 \end{lemma}
 
+\begin{observation}
+  Il lemma afferma che una parola $w$ appartiene al resto ennesimo $R_{n}$ se e solo se è possibile trovare $i$ parole di $X$ a cui, aggiungendo $w$, si ottengono $j$ parole di $X$, con $i+j=n+1$.
+
+  Riprendiamo l'esempio precedente:
+  \begin{itemize}
+    \item $ab \in R_{2}$ poiché trovo $i=2$, $j=1$ (e quindi $i+j=3=2+1=n+1$) tali per cui $x_{1}x_{2}w=(a)(a)(ab)=a^{3}b=x^{'}_{1}$ con $|ab|\leq|ab|$;
+    \item $b \in R_{2}$ poiché trovo $i=1$, $j=2$ tali per cui $x_{1}w=(ab^{2})(b)=(a)(b^{3})=x^{'}_{1}x^{'}_{2}$ con $|b|\leq|b^{3}|$.
+  \end{itemize}
+\end{observation}
+
 \begin{proof}
-  La dimostrazione procede per induzione su \(n\).
-  Il caso base \(n=1\) è vero per definizione di \(R_1\) con \(i = j = 1\).
-  Procediamo dunque col passo induttivo nelle due direzioni dell'implicazione.
+  La dimostrazione procede per induzione su \(n\). Il passo base è banale: sia $n = 1$: $w \in R_{1} \iff \exists x,x^{'} \in X: xw=x^{'}$. Trovo $i=j=1$ per cui valgono tutte e quattro le condizioni.
   \begin{description}
     \item[\q{\(\implies\)}] 
-      Sia \(w \in R_n, n>1\). Allora \(R_n = X^{-1}R_{n-1} \cup {R_{n-1}}^{-1}X\), dunque
-      \[\exists r_{n-1} \in R_{n-1}, x \in X: xw=r_{n-1} \lor r_{n-1}w=x\]
+      Avendo un resto, dobbiamo trovare $i$ e $j$ che soddisfano le quattro proprietà.
 
-      Per ipotesi induttiva, esistono \(i,j \geq 1, x_1\ldots x_i,x_1'\ldots x_j' \in X\) tali che:
+      \textbf{Passo induttivo}, $n > 1$:  $R_n = X^{-1}R_{n-1} \cup R_{n-1}^{-1}X$, quindi esistono $w \in X$ e $r_{n-1} \in R_{n-1}$ t.c. $xw=r_{n-1}$ (caso 1) oppure $r_{n-1}w=x$ (caso 2). Per $r_{n-1}$ vale la tesi: $\exists i, j \geq 1: x_{1}, \dots, x_{i}, x^{'}_{1}, \dots, x^{'}_{j} \in X$ con $i+j=n$ (1) e $x_{1}, \dots,x_{i}r_{n-1} = x^{'}_{1}, \dots, x^{'}_{j}$ (2) con $x_{1} \neq x^{'}_{1}$ (3) e $|r_{n-1}| \leq |x^{'}_{j}|$ (4).
+      
+      (Caso 1, $xw=r_{n-1}$) Sostituisco $r_{n-1}$ con $xw$ in $x_{1}, \dots,x_{i}r_{n-1} = x^{'}_{1}, \dots, x^{'}_{j}$ e ottengo $x_{1}, \dots,x_{i}xw = x^{'}_{1}, \dots, x^{'}_{j}$ per cui $i+1$ e $j$ verificano le quattro proprietà. 
+      
+      (Caso 2, $r_{n-1}w=x$) Moltiplico $w$ ad ambo i membri di $x_{1}, \dots,x_{i}r_{n-1} = x^{'}_{1}, \dots, x^{'}_{j}$, ottenendo $x_{1}, \dots,x_{i}r_{n-1}w = x^{'}_{1}, \dots, x^{'}_{j}w$ ma $r_{n-1}w = x$ per cui si ottiene $x_{1}, \dots,x_{i}x = x^{'}_{1}, \dots, x^{'}_{j}w$, ovvero ci siamo ritrovati nel caso 1 con l'unica differenza, non importante logicamente, che $w$ si trova all'altro membro. Quindi le quattro proprietà sono soddisfatte per $i+1$ e $j$.
+
+    \item[\q{\(\impliedby\)}] 
+      Abbiamo le due sequenze di parole con $i$ e $j$ t.c. valgono le quattro proprietà e dobbiamo far vedere che $w$ appartiene a $R_{n}$.
+      \textbf{Passo induttivo}, $n > 1$: supponiamo che esistano 
+      $i$ e $j$ t.c. le quattro proprietà siano soddisfatte.
+      
+      (Caso 1, $|x_{i}w| \leq |x_{j}^{'}|$) Si ha $i > 1$, poiché: 
       \begin{itemize}
-        \item \(i+j=n+1\)
-        \item \(x_1\ldots x_i r_{n-1} = x_1'\ldots x_j'\)
-        \item \(x_1 \neq x_1'\)
-        \item \(\abs{r_{n-1}} \leq \abs{x_j'}\)
+        \item se $i=j=1$, allora $n=1$. $\bot$.
+        \item se $i=1, j>1$, allora si ha $x_{1}w=x_{1}^{'}\dots x_{j}^{'}$. Affinché sia ancora vera l'ipotesi $x_{1}w=x^{'}_{1}\dots x^{'}_{j}$, poiché ciascuno degli $x_{1}^{'},\dots x_{j}^{'}$ ha lunghezza almeno $1$, deve verificarsi $|x_{1}w|>|x_{j}^{'}|$. $\bot$.  
       \end{itemize}
-      Ora, se \(xw = r_{n-1}\), si ha che \(x_1\ldots x_i xw= x_1\ldots x_i r_{n-1} = x_1'\ldots x_j'\), da cui \(i+1,j\), e scegliendo come \(x_{i+1} = x\) si ha che tutte le condizioni sono soddisfatte.
-      Le prime tre condizioni sono ovvie, e l'ultima è data da \(\abs{w}\leq\abs{r_{n-1}}\leq\abs{x_j'}\).
-      Se invece \(r_{n-1}w = x\), otteniamo \(x_1\ldots x_i r_{n-1} w = x_1'\ldots x_j' w\) concatenando \(w\) a destra di entrambi i membri.
-      Ma sapendo che \(r_{n-1}w = x\), possiamo riscrivere gli ultimi due fattori del primo membro come \(x\), ottenendo \(x_1\ldots x_i x = x_1'\ldots x_j' w\).
-      In questo caso, scegliendo \(j,i+1\) e \(x_j' = x\) otteniamo nuovamente tutte le condizioni.
-    \item[\q{\(\impliedby\)}]
-      In questa direzione dell'implicazione, supponiamo che esistano \(i,j \geq 1\), \(x_1\ldots x_i,x_1'\ldots x_j'\) parole di \(X\) e \(w\in A^+\) che soddisfano le condizioni elencate.
-      Possiamo dunque procedere per casi:
-      \begin{enumerate}
-        \item \(\abs{x_{i}w} \leq \abs{x_j'}\):
-          In questo caso, certamente si avrà che \(i>1\). Questo poiché, se \(i\) fosse uguale a \(1\), per \(j=1\) ci si riconduce al caso base trattato precedentemente e per \(j>1\) si ottiene una contraddizione.
-          Infatti, se \(i=1\) e \(j>1\), si avrebbe che \(x_{i=1} w = x_1'\ldots x_j'\), da cui \(\abs{x_{i}w} > x_j'\), in contraddizione con l'ipotesi.
+      
+      Sia $r_{n-1}=x_{i}w$. Abbiamo, per ipotesi, $x_{1}\dots x_{i-1}x_{i}w=x_{1}^{'}\dots x_{j}^{'}$, ovvero, sostituendo $x_{i}w$ con $r_{n-1}$, $x_{1}\dots x_{i-1}r_{n-1}=x_{1}^{'}\dots x_{j}^{'}$ con $i-1+j=n$ e, per ipotesi, si ha $x_{1}\neq x_{1}^{'}$, $|r_{n-1}|<|x_{j}^{'}|$. Quindi, $i-1$ e $j$ soddisfano la tesi e allora $r_{n-1} \in R_{n-1}$. Poiché $r_{n-1}=x_{i}w$, ovvero $w$ è il completamento di $x_{i}$ affinché $x_{i}w=r_{n-1}$, e $r_{n-1} \in R_{n-1}$, allora $w \in R_{n}$.
+    
+      (Caso 2, $|x_{i}w| > |x_{j}^{'}|$) Si ha $j>1$, poiché: per la condizione 4, si ha $|w|<|x_{j}^{'}|$. Abbiamo quindi, $|w|<|x_{j}^{'}| \wedge |x_{i}w|>|x_{j}^{'}|$, da cui si capisce che $w$ è suffisso di $x_{j}^{'}$ e che quindi esiste un $v \in A^{*}$ t.c. $x_{j}^{'}=vw$. 
 
-          Ciò ci permette di porre \(r_{n-1} = x_{i}w\). Dall'ipotesi induttiva, sappiamo che \(r_{n-1} \in R_{n-1}\), poiché:
-          \begin{enumerate}
-            \item \(x_1\ldots x_{i-1}r_{n-1} = x_1'\ldots x_j'\), sostituendo \(r_{n-1}\) a \(x_{i}w\)
-            \item \(i-1+j=n\)
-            \item \(x_1 \neq x_1'\)
-            \item \(\abs{r_{n-1}} = \abs{x_i w} \leq \abs{x_j'}\)
-          \end{enumerate}
-          Ma per com'è stato definito \(r_{n-1}\), si ha che \(w \in R_n\) poiché \(x_{i} w = r_{n-1}\) implica che \(w \in X^{-1} R_{n-1} \subseteq R_n\).
-        \item \(\abs{x_{i}w} > \abs{x_j'}\):
-          In questo caso, specularmente al caso precedente, possiamo escludere che \(j=1\).
-          Sappiamo infatti per ipotesi dell'implicazione che \(\abs{w} \leq \abs{x_j'}\) e che \(x_1\ldots x_i w = x_1'\ldots x_j'\). Usando il \Cref{lem:levi}, ponendo come \(m_1 = x_1\ldots x_i\), \(m_2 = w\), \(m_3 = x_1'\ldots x_{j-1}'\) e \(m_4 = x_j'\), otteniamo che esiste \(v \in A^*\) tale che \(vw=x_j'\).
-          Possiamo sostituire \(vw\) a \(x_j'\) nell'uguaglianza di parole ottenendo:
-          \[x_1\ldots x_i w = x_1'\ldots x_{j-1}' vw \implies x_1\ldots x_i = x_1'\ldots x_{j-1}' v \]
-          Ora, se \(j=1\), si avrebbe che 
-            \[x_1\ldots x_i = v \implies \abs{x_i} \leq \abs{v} \implies \abs{x_i w} \leq \abs{vw} = \abs{x_j'} \]
-          che contraddice l'ipotesi che \(\abs{x_{i}w} > \abs{x_j'}\).\footnote{L'implicazioni seguono dal fatto che \(||\) è un morfismo in \((\N,+,0)\), dunque \(\abs{vw} = \abs{v}+\abs{w} \forall v,w \in A^*\). Di conseguenza, sommando \(\abs{w}\) a entrambe i membri dell'ultima disuguaglianza il verso non cambia.}
-          Da questa costruzione, possiamo notare come, per ipotesi induttiva, \(v\) debba appartenere a \(R_{n-1}\), infatti:
-          \begin{enumerate}
-            \item \(x_1'\ldots x_{j-1}' v = x_1\ldots x_i\)
-            \item \(i + (j-1) = n\)
-            \item \(x_1 \neq x_1'\)
-            \item \(\abs{v} \leq \abs{x_i}\), poiché da \(vw = x_j'\) e \(\abs{x_{i}w} > \abs{x_j'}\) si ha:
-            \[\abs{x_{i}w}  > \abs{vw} \implies \abs{x_{i}} > \abs{v}\]
-        \end{enumerate}
-        Similmente a prima, per come è stato definito \(v\), si ha che \(w \in R_n\) poiché \(vw = x_j'\) implica che \(w \in {R_{n-1}}^{-1} X \subseteq R_n\).
-      \end{enumerate}
+      Per ipotesi si ha $x_{1}\dots x_{i}w=x_{1}^{'}\dots x_{j}^{'}$ da cui, sostituendo $x_{j}^{'}=vw$, si ottiene $x_{1}\dots x_{i}\bcancel{w}=x_{1}^{'}\dots x_{j-1}^{'}v\bcancel{w}$. A questo punto, se $j=1$, si ha $x_{1}\dots x_{i}=v$ e, poiché ciascuno degli $x_{1},\dots x_{i-1}$ ha lunghezza almeno $1$, si ha $|x_{i}|<|v|$, che implica $|x_{i}w|<|vw|=|x_{j}^{'}|$. $\bot$
+
+      Consideriamo nuovamente $x_{1}\dots x_{i}=x_{1}^{'}\dots x_{j-1}^{'}v$. Per $i$ e $j-1$ vale la tesi, quindi $v \in R_{n-1}$. Poichè $vw=x_{j}^{'}$, ovvero $w$ è il completamento di $v$ affinchè $vw=x_{j}^{'}$, e $v \in R_{n-1}$, allora $w \in R_{n}$.
   \end{description}
 \end{proof}
 
 Conclusa la dimostrazione del lemma, possiamo procedere con la dimostrazione del Teorema di Sardinas-Patterson.
 \begin{proof}[Dimostrazione (\ref{thm:sardinas-patterson})]
-  Per questa dimostrazione, procederemo mostrando come la condizione equivalente ottenuta negando entrambe le parti della doppia implicazione sia vera.
-  In altre parole, mostreremo che l'equivalenza:
-  \[X \text{ non è codice } \iff \exists n \geq 1 \st R_n \cap X \neq \emptyset\]
-  è valida.
-
-  Dalla definizione di codice, sappiamo che 
-  \[X \text{ non è codice } \iff \exists x_1, \ldots, x_h,x_1',\ldots,x_k' \in X \st x_1\ldots x_h = x_1'\ldots x_k' \land x_1 \neq x_1'\]
-  
-  Possiamo scegliere \(x_1\) e \(x_1'\) come parole diverse nella fattorizzazione senza perdita di generalità per minimalità.
-  Non fossero diverse, potremmo \qi{cancellarle} da entrambi i membri della fattorizzazione, ottenendo una nuova parola con multipla fattorizzazione più corta.
-  
-  Di conseguenza, necessariamente \(h\) e \(k\) non possono essere entrambi uguali a \(1\), o equivalentemente \(h>1 \lor k>1\).
-  Supponiamo, sempre senza perdita di generalità, che \(h>1\).
-  Dal \Cref{lem:sardinas-patterson-intermediate}, abbiamo che \(x_h \in R_n\), dove \(n = h + k - 2 \geq 1\).
-  Infatti, ponendo \(w = x_h\), si ha che:
-  \begin{enumerate}
-    \item \(i = h - 1, j = k\) soddisfano \(i + j = n + 1\)
-    \item \(x_1\ldots x_{h-1} x_h = x_1'\ldots x_k'\) per ipotesi
-    \item \(x_1 \neq x_1'\) per scelta
-    \item \(\abs{w} = \abs{x_h} \leq \abs{x_k'}\) poiché, essendo \(h>1\) è sempre possibile scegliere come \(x_k'\) una parola più lunga di \(x_h\) nella fattorizzazione, concatenando a destra parole di \(X\) fino a superarne la lunghezza.
-      Se infatti \(\abs{x_h} > \abs{x_k'}\), possiamo prendere come \(x_k'' =  x_{k-1}'x_k'\) che sostituito a \(x_k'\) nella fattorizzazione mantiene l'uguaglianza, ma ha lunghezza maggiore di \(x_k'\). Non fosse sufficiente, possiamo ripetere il procedimento concatenando altre parole di \(X\) a sinistra fino a superare la lunghezza di \(x_h\), la quale è necessariamente inferiore alla lunghezza dell'intera parola dell'uguaglianza.
-      Al limite, è possibile scegliere \(k=1\), per cui \(x_{k=1}' = x_1\ldots x_h \implies \abs{x_h}\leq\abs{x_k} \)
-  \end{enumerate}
-  Essendo \(x_h\) appartenente sia a \(X\) che a \(R_n\) sopra definito, abbiamo che \(X\) non codice \(\implies \exists n \geq 1 \st R_n \cap X \neq \emptyset\).
-  Viceversa, \(\exists n \geq 1 \st R_n \cap X \neq \emptyset \implies \exists x \in R_n \cap X\).
-  Tale \(x\) appartiene a \(R_n\), dunque per il \Cref{lem:sardinas-patterson-intermediate} esistono opportuni \(i,j \geq 1\) e \(x_1,\ldots,x_i,x_1',\ldots,x_j' \in X\) tali che valgano le condizioni elencate, in particolare che \(x_1\ldots x_i x = x_1'\ldots x_j'\) e \(x_1 \neq x_1'\), ovvero che \(X\) non è codice.
+  Vogliamo dimostrare l'asserto negato, ovvero: $X$ non è codice $\iff \exists n \geq 1:  R_{n} \cap X \neq \emptyset$.
+  \begin{description}
+    \item[\q{\(\implies\)}] 
+      Se $X$ non è codice, allora non rispetta la proprietà di univoca fattorizzazione, quindi esistono due sequenze $x_{1},\dots x_{h},x_{1}^{'},\dots x_{k}^{'} \in X$ t.c. $x_{1}\dots x_{h}=x_{1}^{'}\dots x_{k}^{'}$, con $x_{1}\neq x_{1}^{'}$ per minimalità e quindi $h>1 \vee k>1$ necessariamente. Allora, si verifica la tesi del lemma scegliendo $i=h-1$ e $j=k$ t.c. $n=h-1+k-1$. Poichè uno tra $h$ e $k$ è maggiore di $1$, si ha $n\geq1$. Quindi il lemma garantisce $x_{k} \in R_{n}$.
+    \item[\q{\(\impliedby\)}] 
+      Se $\exists n:R_{n} \cap X \neq \emptyset$, allora esiste un $x \in R_{n}\cap X$ ed in particolare $x \in X$. Allora, per $x$ vale il lemma con $w=x$, ovvero il lemma garantisce l'esistenza di due sue fattorizzazioni. Quindi $X$ vìola la proprietà di univoca fattorizzazione, quindi non è codice.
+  \end{description}
 \end{proof}
 
 \begin{observation}{}
@@ -202,41 +166,35 @@ Conclusa la dimostrazione del lemma, possiamo procedere con la dimostrazione del
 \begin{example}{}
   Sia \(X_2 = \set{a,ab,bb}\). Calcoliamo gli insiemi resto di \(X_2\):
 
-  \(R_1 = X_2^{-1}X_2 \setminus \set{\varepsilon} = \set{b}\)
-  poiché \(b\) completa \(a\) per formare \(ab\).
+  \(R_1 = X_2^{-1}X_2 \setminus \set{\varepsilon} = \set{b}\) poiché \(b\) completa \(a\) per formare \(ab\).
 
-  \(R_2 = X_2^{-1}R_1 \cup R_1^{-1}X_2 = \set{b}\)
-  poiché \(b\) completa \(a\) per formare \(ab\) e \(b\) completa \(bb\) per formare \(bb\).
+  \(R_2 = X_2^{-1}R_1 \cup R_1^{-1}X_2 = \set{b}\) poiché \(b\) completa \(a\) per formare \(ab\) e \(b\) completa \(bb\) per formare \(bb\).
 
-  Da questo punto in poi, la successione si stabilizza, dunque \(\forall n \geq 1, R_n = \set{b}\).
-  Poiché \(b \not\in X_2\), per il \Cref{thm:sardinas-patterson}, \(X_2\) è codice.
+  Da questo punto in poi, la successione si stabilizza, dunque \(\forall n \geq 1, R_n = \set{b}\). Poiché \(b \not\in X_2\), per il \Cref{thm:sardinas-patterson}, \(X_2\) è codice.
 
   Sia \(X_4 = \set{a,aba,bb}\). Calcoliamo gli insiemi resto di \(X_4\):
   
-  \(R_1 = X_4^{-1}X_4 \setminus \set{\varepsilon} = \set{ba}\)
-  poiché \(ba\) completa \(a\) per formare \(aba\).
+  \(R_1 = X_4^{-1}X_4 \setminus \set{\varepsilon} = \set{ba}\) poiché \(ba\) completa \(a\) per formare \(aba\).
 
-  \(R_2 = X_4^{-1}R_1 \cup R_1^{-1}X_4 = \emptyset\)
-  poiché nessuna parola di \(X_4\) può essere usata per completare \(ba\) e viceversa.
+  \(R_2 = X_4^{-1}R_1 \cup R_1^{-1}X_4 = \emptyset\) poiché nessuna parola di \(X_4\) può essere usata per completare \(ba\) e viceversa.
   
-  Da questo punto in poi, la successione si stabilizza, dunque \(\forall n \geq 2, R_n = \emptyset\).
-  Anche in questo caso, \(X_4\) è codice per il \Cref{thm:sardinas-patterson}.
+  Da questo punto in poi, la successione si stabilizza, dunque \(\forall n \geq 2, R_n = \emptyset\). Anche in questo caso, \(X_4\) è codice per il \Cref{thm:sardinas-patterson}.
 
   Sia infine \(X' = \set{a,ab,ba}\). Calcoliamo gli insiemi resto di \(X'\):
 
-  \(R_1 = {(X')}^{-1}X' \setminus \set{\varepsilon} = \set{b}\)
-  poiché \(b\) completa \(a\) per formare \(ab\).
+  \(R_1 = {(X')}^{-1}X' \setminus \set{\varepsilon} = \set{b}\) poiché \(b\) completa \(a\) per formare \(ab\).
   
-  \(R_2 = {(X')}^{-1}R_1 \cup R_1^{-1}X' = \set{a}\)
-  poiché \(a\) completa \(b\) per formare \(ba\).
+  \(R_2 = {(X')}^{-1}R_1 \cup R_1^{-1}X' = \set{a}\) poiché \(a\) completa \(b\) per formare \(ba\).
   Dunque, essendo che \(a \in X'\), per il \Cref{thm:sardinas-patterson}, \(X'\) non è codice.
 \end{example}
 
-Da questi risultati, si potrebbe evincere che il teorema di Sardinas-Patterson (\ref{thm:sardinas-patterson}) fornisca una procedura di decisione per stabilire se un insieme \(X \subseteq A^+\) \textbf{finito} sia codice o meno.
-Tuttavia, in linea di principio, il teorema fornisce solo una procedura di semi-decisione poiché, se \(X\) non è codice, esisterà sempre un \(n\) tale che \(R_n \cap X \neq \emptyset\) portando alla terminazione dell'algoritmo, ma se \(X\) è codice, non è detto che la successione degli insiemi resto si stabilizzi mai, costringendo l'algoritmo a verificare indefinitamente.
+Come detto, \ref{thm:sardinas-patterson} fornisce un metodo iterativo per verificare se un linguaggio è un codice. Adesso, vogliamo assicurarci questo metodo abbia terminazione.
 
-In realtà, è possibile definire una procedura di decisione basata sul Teorema di Sardinas-Patterson.
-I risultati seguenti saranno necessari a questo scopo.
+Definiamo prima cosa si intende per insieme dei suffissi.
+\begin{definition}[label=def:suffix-set]{Insieme Suffisso}
+  $Suff(X)$ è l'insieme di tutti i suffissi delle parole di $X$, incluse le parole stesse di $X$.
+\end{definition}
+
 \begin{proposition}[label=prop:rest_sets_subset_suffix]{}
   Sia \(X \subseteq A^*\). Allora \(\forall n \geq 1, R_n(X) \subseteq Suff(X)\), ovvero ogni insieme resto è contenuto nell'insieme dei suffissi di \(X\).
 \end{proposition}
@@ -246,24 +204,27 @@ I risultati seguenti saranno necessari a questo scopo.
 
   Per \(n>1, R_n(X)=X^{-1}R_{n-1}(X) \cup {R_{n-1}(X)}^{-1}X\); quindi, \(r_n \in R_n \implies \exists x \in X, r_{n-1}\in R_{n-1}(X) \st r_{n-1}r_n = x \lor xr_n = r_{n-1}\).
   Nel primo caso, \(r_n\) è suffisso di \(x \in X\) per definizione di suffisso.
-  Nel secondo caso, \(r_{n}\) è suffisso di \(r_{n-1}\), che per ipotesi induttiva è suffisso di una parola di \(X\), dunque anche \(r_n\) è suffisso di una parola di \(X\) essendo la relazione di suffisso una relazione d'ordine, e in particolare transitiva.
+  Nel secondo caso, \(r_{n}\) è suffisso di \(r_{n-1}\), che per ipotesi induttiva è suffisso di una parola di \(X\), dunque anche \(r_n\) è suffisso di una parola di \(X\), poiché un suffisso di un suffisso è un suffisso.
 \end{proof}
 
-Questo risultato implica che, dato un insieme finito \(X\), la procedura di decisione descritta precedentemente avrà sempre termine poiché gli insiemi resto \(R_n\) potranno assumere solo un numero finito di valori, essendo contenuti nell'insieme, anch'esso finito, \(Suff(X)\).
+Questo ci dice che \ref{thm:sardinas-patterson} termina per $X$ finito, poichè:
+\begin{enumerate}
+  \item $Suff(X)$ è un insieme finito per $X$ finito.
+  \item Gli $R_{n}$ sono sottoinsiemi di $Suff(X)$ e il numero di sottoinsiemi di un insieme finito è finito.
+  \item Denotando \(K = \# X\) e \(L = \max_{x \in X} \abs{x}\), si ha che \(\# Suff(X) \leq KL+1\). Infatti, ogni \( x \in X \setminus \set{\varepsilon}\) ha esattamente \(\abs{x}\) suffissi non vuoti distinti e quindi \(X\), che ha \(K\) parole di lunghezza al più \(L\), avrà al più \(KL\) suffissi non vuoti distinti, a cui si deve aggiungere la parola vuota \(\varepsilon\) come suffisso banale. Di conseguenza, \(Suff(X)\) ha al più \(k=2^{KL+1}\) sottoinsiemi\footnote{\(\#(\mathcal{P}(S)) = 2^{\#S}\) è un risultato noto in combinatoria}. 
+  Detto $k$ il numero di sottoinsiemi di $Suff(X)$, superato $k$ durante l'esecuzione dell'algoritmo, si troverà necessariamente un sottoinsieme $R_{n>k}$ uguale ad uno trovato in precedenza. 
+  Pertanto, se dopo aver calcolato $k$ resti, non si è trovata un'intersezione tra i resti e $X$, ci si può fermare.
+  Questo ci dice che il metodo è esponenziale in \(K\) e \(L\).
+\end{enumerate}
 
-Inoltre, denotando \(K = \# X\) e \(L = \max_{x \in X} \abs{x}\), si ha che \(\# Suff(X) \leq KL+1\).
-Infatti, ogni \( x \in X \setminus \set{\varepsilon}\) ha esattamente \(\abs{x}\) suffissi non vuoti distinti e quindi \(X\), che ha \(K\) parole di lunghezza al più \(L\), avrà al più \(KL\) suffissi non vuoti distinti, a cui si deve aggiungere la parola vuota \(\varepsilon\) come suffisso banale.
-
-Di conseguenza, \(Suff(X)\) ha al più \(2^{KL+1}\) sottoinsiemi\footnote{\(\#(\mathcal{P}(S)) = 2^{\#S}\) è un risultato noto in combinatoria}, per cui \(\exists n \leq 2^{KL+1} \st R_n = R_m, m < n\), e conseguentemente \(R_{n+i} = R_{m+i}, \forall i \geq 0\), ovvero la successione degli insiemi resto si stabilizza entro un numero finito di passi, esponenziale in \(K\) e \(L\).
-Chiaramente tale limite è molto elevato, portando a complessità esponenziale nell'algoritmo di decisione basato sul Teorema di Sardinas-Patterson.
-Fortunatamente, è possibile mostrare come tale limite possa essere notevolmente ridotto, portando la complessità dell'algoritmo a essere lineare in \(K\) e \(L\).
+Il seguente teorema mostra che, in realtà, \ref{thm:sardinas-patterson} è lineare in \(K\) e \(L\).
 
 \begin{theorem}{Levenshtein}
   Sia \(\emptyset \neq X \subseteq A^+\) finito e siano \(K = \# X\) e \(L = \max_{x \in X} \abs{x}\).
   Allora, \(X \text{ è codice } \iff \forall n \leq KL +1, R_n \cap X = \emptyset\)
 \end{theorem}
 
-In poche parole, questo teorema afferma che, nel caso di insiemi finiti, se le condizioni del Teorema di Sardinas-Patterson sono verificate per i primi \(KL+1\) insiemi resto, allora lo saranno per tutti gli insiemi resto successivi.
+Questo teorema afferma che, nel caso di insiemi finiti, se le condizioni di \ref{thm:sardinas-patterson} sono verificate per i primi \(KL+1\) insiemi resto, allora lo saranno per tutti gli insiemi resto successivi.
 
 \begin{proof}
   Per questa dimostrazione, sarà sufficiente dimostrare esclusivamente la direzione \(\impliedby\) della doppia implicazione, poiché l'altra direzione è ovvia per il \Cref{thm:sardinas-patterson}.
@@ -289,8 +250,6 @@ In poche parole, questo teorema afferma che, nel caso di insiemi finiti, se le c
   Prendendo invece \(X' = \set{a,ab,ba}\) come nell'esempio precedente, avevamo che \(a \in R_2\), ma in ogni caso sarebbe stato sufficiente calcolare i primi \(KL+1 = 3\cdot 2 + 1 = 7\) insiemi resto.
 \end{example}
 
-Questi esempi servono a mostrare come in molti caso questo nuovo limite sia comunque più grande del necessario, ma in ogni caso fornisce una procedura di decisione efficiente per stabilire se un insieme finito sia codice o meno.
-
 \section{Distribuzioni e Disuguaglianza di Kraft-McMillan}
 
 Un modo ulteriore di discriminare tra codici e non, anche se rappresentando una condizione solo necessaria e non sufficiente, è dato dalla Disuguaglianza di Kraft-McMillan.
@@ -299,7 +258,7 @@ Un modo ulteriore di discriminare tra codici e non, anche se rappresentando una 
     \[X \text{ codice } \implies \sum_{x \in X} d^{-\abs{x}} \leq 1\]
 \end{corollary}
 
-Tale disuguaglianza è riportata come corollario poiché, come vedremo a breve, la sua dimostrazione segue direttamente da un teorema più generale.
+Tale disuguaglianza è riportata come corollario poiché, come vedremo, la sua dimostrazione segue direttamente da un teorema più generale.
 
 \begin{example}[label=ex:kraft-mcmillan]{}
   Come già anticipato, questa disuguaglianza fornisce una condizione solo necessaria per essere codice. Infatti, esistono insiemi \(X\) che soddisfano la disuguaglianza ma non sono codici.
@@ -322,7 +281,7 @@ Un modo alternativo di esprimere la Disuguaglianza di Kraft-McMillan è dato dal
       n &\mapsto \#(X \cap A^n)
     \end{aligned}
   \end{equation*}
-  ovvero la funzione che associa a ogni possibile lunghezza di parola \(n\) il numero di parole di tale lunghezza appartenenti a \(X\).
+  ovvero la funzione che, dato un $n$ restituisce il numero di parole di lunghezza $n$ all'interno di $X$.
 \end{definition}
 
 A questo punto, possiamo riscrivere la Disuguaglianza di Kraft-McMillan (\ref{cor:kraft-mcmillan_inequality}) come:
@@ -331,7 +290,7 @@ A questo punto, possiamo riscrivere la Disuguaglianza di Kraft-McMillan (\ref{co
     \[X \text{ codice } \implies \sum_{n=1}^{\infty} f_X(n) d^{-n} \leq 1\]
 \end{corollary}
 
-Per la dimostrazione di questa disuguaglianza sarà necessario attendere un po', poiché richiede diversi risultati intermedi, oltre che all'introduzione di un nuovo concetto, che ci tornerà utile anche in passaggi futuri: le \emph{distribuzioni}.
+Introduciamo adesso le distribuzioni ed alcuni risultati annessi che ci consentiranno di dimostrare la disuguaglianza di Kraft-McMillan in forma generale e, di conseguenza, anche le due disuguaglianze appena menzionate. 
 \subsection{Distribuzioni}
 
 \begin{definition}{Distribuzione su simboli di un alfabeto}
@@ -348,32 +307,28 @@ Dalla proprietà universale dei monoidi liberi, possiamo estendere in maniera un
 \begin{definition}{Distribuzione su parole di un monoide libero}
   Sia \(\mu: A \to \R_{\geq 0}\) una distribuzione su un alfabeto \(A\).
   Allora, esiste un unico morfismo di monoidi
-    \[\mu: A^* \to (\R_{\geq 0}, \cdot, 1)\]
+    \[\mu: (A^{*}, \circ, \varepsilon) \rightarrow (\mathbb{R}_{\geq 0}, \cdot,1)\]
 \end{definition}
 
-Dalla definizione di morfismo di monoidi, necessariamente si avrà che \(\mu(\varepsilon) = 1\) e che \(\mu(a_1\ldots a_n) = \mu(a_1)\cdot\ldots\cdot \mu(a_n), \forall a_1\ldots a_n \in A\)
+Poiché $\mu$ è un morfismo di monoidi, si avrà che \(\mu(\varepsilon) = 1\) e che \(\mu(a_1\ldots a_n) = \mu(a_1)\cdot\ldots\cdot \mu(a_n), \forall a_1\ldots a_n \in A\)
 
 \begin{note}{}
   Queste distribuzioni sono interpretabili da un punto di vista probabilistico.
-  Infatti una distribuzione su un alfabeto \(A\) può essere vista come una distribuzione di probabilità discreta su \(A\),
-  mentre il morfismo esteso a \(A^*\) può essere visto come la distribuzione di probabilità su parole ottenute da esperimenti indipendenti e identicamente distribuiti (i.i.d.) con distribuzione di probabilità data dalla distribuzione su \(A\).
+  Infatti una distribuzione su un alfabeto \(A\) può essere vista come una distribuzione di probabilità discreta su \(A\), mentre il morfismo esteso a \(A^*\) può essere visto come la distribuzione di probabilità su parole ottenute da esperimenti indipendenti e identicamente distribuiti (i.i.d.) con distribuzione di probabilità data dalla distribuzione su \(A\).
   
   Per il momento però, l'interpretazione probabilistica non ci interessa, e ci concentreremo sugli aspetti puramente algebrici delle distribuzioni.
   Analizzeremo l'interpretazione probabilistica in seguito.
 \end{note}
 
-\begin{definition}{Distribuzione su insiemi di parole}
-  Data una distribuzione \(\mu\) su un alfabeto \(A\), definiamo la \keyword{distribuzione su insiemi di parole} come la funzione:
-  \begin{equation*}
-    \begin{aligned}
-      \mu: \mathcal{P}(A^*) &\to \R_{\geq 0} \cup \set{\infty} \\
-                  X \subseteq A^* &\mapsto \begin{cases}
-                      0 & ,X = \emptyset \\
-                      \sum_{w \in X} \mu(w) & ,X \neq \emptyset
-                    \end{cases}
-    \end{aligned}
-  \end{equation*}
-  Dove \(\mu\) usata nella somma è il morfismo di monoidi esteso dalla distribuzione su \(A\).  
+A questo punto, possiamo estendere $\mu$ sui linguaggi.
+\begin{definition}{Distribuzione su linguaggi}
+  Data una distribuzione \(\mu\) su un alfabeto \(A\), definiamo la \keyword{distribuzione su linguaggi} con il morfismo $\mu: (\cal{P}(A^{*}), \cup, \emptyset) \rightarrow (\R_{\geq 0} \cup \set{\infty})$ tale per cui:
+  $$X \subseteq A^* \mapsto
+  \begin{cases}
+    0 ,X = \emptyset \\
+    \sum_{w \in X} \mu(w) ,X \neq \emptyset
+  \end{cases}$$
+  Dove \(\mu\) usata nella somma è il morfismo di monoidi esteso dalla distribuzione su \(A\).
 \end{definition}
 
 \begin{note}{}
@@ -392,9 +347,8 @@ Analizziamo ora alcune proprietà delle distribuzioni su insiemi di parole.
   La dimostrazione è ovvia, dal fatto che nella somma degli elementi di \(\mu(Y)\) sono presenti tutti gli addendi di \(\mu(X)\), più eventualmente altri addendi non negativi.
 \end{proof}
 
-\begin{proposition}[label=prop:dist_union_leq_sum_dist]{}
-  Sia \(Y_j \subseteq A^*\) una famiglia di insiemi di parole indicizzati da \(j \in J\). 
-  Allora
+\begin{proposition}[label=prop:sub-additivity]{}
+  Sia \(Y_j \subseteq A^*\) una famiglia di linguaggi indicizzati da \(j \in J\). Allora
   \[\mu(\bigcup_{j \in J}Y_j) \leq \sum_{j\in J} \mu(Y_j)\]
 
   Inoltre, vale l'uguaglianza se gli insiemi \(Y_j\) sono a due a due disgiunti.
@@ -402,30 +356,40 @@ Analizziamo ora alcune proprietà delle distribuzioni su insiemi di parole.
   Viceversa, se \(\mu(\bigcup_{j \in J}Y_j) = \sum_{j\in J} \mu(Y_j) < \infty\), e \(\mu\) è una distribuzione positiva, allora gli insiemi \(Y_j\) sono a due a due disgiunti.
 \end{proposition}
 
-Questa proposizione sarà la prima di una serie di risultati di quasi equivalenze, in cui una delle due direzioni richiederà delle ipotesi aggiuntive, in particolare che la distribuzione sia positiva e che la somma delle misure degli insiemi sia finita.
-Tali risultati sono utili a caratterizzare meglio le distribuzioni e le loro proprietà, in funzione delle successive applicazioni, prima tra tutte la dimostrazione della Disuguaglianza di Kraft-McMillan.
+\begin{note}{}
+Questa proposizione sarà la prima di una serie di risultati di quasi equivalenze, in cui una delle due direzioni richiederà delle ipotesi aggiuntive.
+\end{note}
 
 \begin{proof}
   Che valga la disuguaglianza è ovvio, poiché ogni elemento di \(\bigcup_{j \in J}Y_j\) compare almeno una volta nella somma a destra.
   Se gli insiemi sono a due a due disgiunti, ogni elemento compare esattamente una volta, dunque la somma a destra è esattamente uguale alla misura dell'unione a sinistra.
-  Il viceversa è analogo, ma le ipotesi aggiuntive sono necessarie.
-  In primo luogo, poiché elementi nulli potrebbero essere presenti in più insiemi senza alterare la somma.
-  Inoltre, se la somma fosse infinita, un elemento presente in più di un insieme potrebbe non alterare la somma.
-  Ad esempio, se gli insiemi \(Y_1,Y_2\) sono disgiunti e hanno misura infinita, aggiungendo un elemento \(w\) a entrambi gli insiemi non si altera la somma, ma gli insiemi non sono più disgiunti.
+  Il viceversa è analogo, ma le ipotesi aggiuntive sono necessarie:
+  \begin{itemize}
+    \item ($\mu$ positiva) Se esiste un $x \in X,Y$ t.c. $\mu(x)=0$, allora si avrebbe l'uguaglianza sarebbe vera, ma con $X$ e $Y$ non disgiunti.
+    \item (Somma finita) Se la somma fosse infinita, allora si potrebbe aggiungere un $x$ con misura nulla a due insiemi $X$ e $Y$ senza alterare la somma. Tuttavia, $X$ e $Y$ non sarebbero disgiunti.
+  \end{itemize}
 \end{proof}
 
 \begin{definition}{Prodotto cartesiano non ambiguo}
   Dati \(Y,Z \subseteq A^*\), diremo che il loro prodotto cartesiano \(Y\times Z\) è \keyword{non ambiguo} se
     \[\forall w \in YZ, \exists! (y,z) \in Y \times Z : w = yz\]
-  In altre parole, ogni parola ottenuta concatenando una parola di \(Y\) con una parola di \(Z\) ammette un'unica fattorizzazione di questo tipo.
 \end{definition}
 
 \begin{example}[label=ex:non_ambiguos_prod]{}
   Consideriamo gli insiemi \(Y = \set{a,ab}\) e \(Z = \set{a,ba}\).
   Il loro prodotto cartesiano \(\set{a,ab}\times\set{a,ba}\) è ambiguo, poiché \(ab\cdot a = a\cdot ba\).
-
-  Invece, \(A^h\times A^k\) è non ambiguo \(\forall h,k \in \N\), poiché ogni parola di \(A^{h+k}\) può essere scritta in un unico modo come concatenazione di una parola di lunghezza \(h\) e una di lunghezza \(k\).
 \end{example}
+
+\begin{observation}[label=obs:AhAk-non-ambiguity]{}
+  Siano $\forall h,k \in \mathbb{N}: A^{h},A^{k} \subseteq A^{*}$. 
+  Allora, sicuramente il prodotto $A^{h}\times A^{k}$ è non ambiguo. 
+  Questo è chiaro poiché:
+  \begin{itemize}
+    \item una parola in $A^{h}A^{k}$ può essere scritta solamente come concatenazione di una parola di lunghezza $h$ e di una di lunghezza $k$. 
+    \item sia $A^{h}$ che $A^{k}$, in quanto insiemi, non contengono elementi duplicati.
+  \end{itemize}
+\end{observation}
+
 \begin{proposition}[label=prop:distribution_distributivity_over_product]{}
   \(\forall Y,Z \subseteq A^*, \mu(YZ) \leq \mu(Y)\mu(Z)\), e vale l'uguaglianza se \(Y\times Z\) è non ambiguo.
   Viceversa, se \(\mu(YZ) = \mu(Y)\mu(Z) < \infty\) e \(\mu\) è una distribuzione positiva, allora \(Y\times Z\) è non ambiguo.
@@ -448,7 +412,7 @@ Tali risultati sono utili a caratterizzare meglio le distribuzioni e le loro pro
 
   Inoltre, come ulteriore caso base, per \(n=1\), si ha che \(\mu(A^1) = \mu(A) = 1\) per definizione di distribuzione.
   Ora, procedendo per induzione, abbiamo che \(\mu(A^{n+1}) = \mu(AA^n)\).
-  Come visto nell'esempio~\ref{ex:non_ambiguos_prod}, \(A \times A^n\) è non ambiguo, dunque:
+  Come visto in \ref{obs:AhAk-non-ambiguity}, \(A \times A^n\) è non ambiguo, dunque:
   \[\mu(A^{n+1}) = \mu(AA^n) = \mu(A)\mu(A^n) = 1 \cdot 1 = 1 \]
 
   Dalla definizione di \(A^*\) inoltre, segue che:
@@ -460,24 +424,26 @@ Tali risultati sono utili a caratterizzare meglio le distribuzioni e le loro pro
   \[X \text{ codice } \iff X\times X^n \text{ è non ambiguo},\forall n \geq 1\]
 \end{proposition}
 \begin{proof}
-  Se \(X\) è codice, la proposizione è ovvia, poiché se \(X\) è codice, ogni parola di \(X^*\) ha un'unica fattorizzazione in parole di \(X\), dunque anche ogni parola ottenuta concatenando una parola di \(X\) con \(n\) parole di \(X\) avrà un'unica fattorizzazione di questo tipo.
-  Viceversa, se \(X\) non è codice, \(\exists x_1,\ldots,x_h,x_1',\ldots,x_k' \in X \st x_1\ldots x_h = x_1'\ldots x_k' \land x_1 \neq x_1'\).
-  I due membri dell'uguaglianza appartengono rispettivamente a \(X^h\) e \(X^k\).
-  Concatenando a destra dell'elemento di \(X^h\) la parola di \(X^k\) e viceversa otteniamo:
-  \[x_1\ldots x_h x_1'\ldots x_k' = x_1'\ldots x_k' x_1\ldots x_h\]
-  Dove entrambi i membri appartengono a \(X^{h+k} = X \times X^{h+k-1}\), ma ammettono due fattorizzazioni distinte, dunque \(X \times X^{h+k-1}\) è ambiguo.
+  \begin{description}
+    \item[\q{\(\implies\)}]
+      Se \(X\) è codice, la proposizione è ovvia, poiché se \(X\) è codice, ogni parola di \(X^*\) ha un'unica fattorizzazione in parole di \(X\), dunque anche ogni parola ottenuta concatenando una parola di \(X\) con \(n\) parole di \(X\) avrà un'unica fattorizzazione di questo tipo.
+    \item[\q{\(\impliedby\)}] Consideriamo l'asserto negato.
+      Se \(X\) non è codice, \(\exists x_1,\ldots,x_h,x_1',\ldots,x_k' \in X \st x_1\ldots x_h = x_1'\ldots x_k' \land x_1 \neq x_1'\).
+      I due membri dell'uguaglianza appartengono rispettivamente a \(X^h\) e \(X^k\).
+      Concatenando a destra dell'elemento di \(X^h\) la parola di \(X^k\) e viceversa otteniamo:
+      \[x_1\ldots x_h x_1'\ldots x_k' = x_1'\ldots x_k' x_1\ldots x_h\]
+      Dove entrambi i membri appartengono a \(X^{h+k} = X \times X^{h+k-1}\), ma ammettono due fattorizzazioni distinte, dunque \(X \times X^{h+k-1}\) è ambiguo. Abbiamo trovato $n=h+k-1$ t.c. $X\times X^{n}$ è ambiguo.
+  \end{description}
 \end{proof}
 
 \begin{proposition}[label=prop:code_implies_equal_mesures_of_powers]{}
-  Sia \(X \subseteq A^+\) e \(\mu\) una distribuzione su \(A\). Allora:
-  \begin{enumerate}
-    \item \(X \text{ codice } \implies \mu(X^n) = {\mu(X)}^n, \forall n \geq 1\)\label{item:code_implies_measure_product}
-    \item \((\mu \text{ positiva } \land \mu(X) < \infty \land \forall n \geq 1, \mu(X^n) = {\mu(X)}^n )\implies X \text{ codice}\)\label{item:measure_product_implies_code}
-  \end{enumerate}
+  Sia \(X \subseteq A^+\) e \(\mu\) una distribuzione su \(A\). Allora \(X \text{ codice } \implies \mu(X^n) = {\mu(X)}^n, \forall n \geq 1\)\label{item:code_implies_measure_product}.
+  Viceversa, se $\mu$ è positiva e $\mu(X)<\infty$, allora \((\forall n \geq 1, \mu(X^n) = {\mu(X)}^n )\implies X \text{ codice}\)\label{item:measure_product_implies_code}
 \end{proposition}
 
-Tale proposizione dunque fornisce una caratterizzazione dei codici in termini di distribuzioni, se queste sono positive e finite.
-Infatti, in altre parole, ci dice che un insieme \(X\) è codice se e solo se, data una qualsiasi distribuzione positiva e finita su \(A\), la misura di \(X^n\) è il prodotto della misura di \(X\) per sé stessa \(n\) volte.
+Questa proposizione fornisce una caratterizzazione dei codici in termini di distribuzioni, se queste sono positive e finite.
+Infatti, ci dice che un insieme \(X\) è codice se e solo se, data una qualsiasi distribuzione positiva e finita su \(A\), la misura di \(X^n\) è il prodotto della misura di \(X\) per sé stessa \(n\) volte.
+
 \begin{proof}
   Procediamo a dimostrare i due punti separatamente.
   \begin{description}
@@ -490,33 +456,29 @@ Infatti, in altre parole, ci dice che un insieme \(X\) è codice se e solo se, d
       Dunque, dalla \Cref{prop:distribution_distributivity_over_product}, segue che:
       \[\mu(X^n)=\mu(XX^{n-1}) = \mu(X)\mu(X^{n-1}) = \mu(X) {\mu(X)}^{n-1} = {\mu(X)}^n\]
 
-    \item[\ref{item:measure_product_implies_code}] Dalle ipotesi di questo caso è ovvio che ogni potenza di \(\mu(X)\) è finita, così come ogni \(\mu(X^n)\) è finita.
-    Formalmente:
-    \[\mu(X)<\infty \land \mu(X^n) = {\mu(X)}^n, \forall n \geq 1 \implies \land \mu(X^n) = {\mu(X)}^n < \infty, \forall n \geq 1\]
-    Dunque si ha che
-    \[\mu(XX^n) = \mu(X^{n+1}) = {\mu(X)}^{n+1} = \mu(X){\mu(X)}^n < \infty\]
-    Essendo che \(\mu\) è positiva, sono verificate tutte le ipotesi aggiuntive del viceversa della \Cref{prop:distribution_distributivity_over_product}, dunque \(X \times X^n\) è non ambiguo \(\forall n \geq 1\).
-    Tali ipotesi aggiuntive sono le stesse richieste dal viceversa della \Cref{prop:code_iff_not_ambiguos}, dunque \(X\) è codice.
+    \item[\ref{item:measure_product_implies_code}]
+      Per ipotesi, $\forall n \geq 1, \mu(X^{n})=\mu(X)^{n}$.
+      Quindi, è anche vero, $\forall n \geq 1, \mu(XX^{n-1})=\mu(X)^{n}$. Quindi, $X\times X^{n}$ non è ambiguo.
+      Quindi $X$ è codice. 
   \end{description}
 \end{proof}
-Definite queste proprietà delle distribuzioni, e il loro rapporto coi codici e i prodotti non ambigui, possiamo finalmente andare a dimostrare il Teorema di Kraft-McMillan, di cui la Disuguaglianza di Kraft-McMillan (\ref{cor:kraft-mcmillan_inequality}) è un corollario diretto.
+
+Adesso, possiamo finalmente enunciare e dimostrare il Teorema generale di Kraft-McMillan.
 
 \begin{theorem}[label=thm:kraft-mcmillan]{Kraft-McMillan}
-  Sia \(X \subseteq A^+\) un codice e sia \(\mu\) una distribuzione su \(A\).
-  Allora \(\mu(X) \leq 1\).
+  Sia \(X \subseteq A^+\) un codice e sia \(\mu\) una distribuzione su \(A\). Allora \(\mu(X) \leq 1\).
 \end{theorem}
 
-L'enunciato di questo teorema è una proprietà dei codici molto forti, poiché afferma che la misura di un codice non può superare \(1\), qualsiasi sia la distribuzione \(\mu\).
-Inoltre, il teorema non si limita al finito, implicando dunque che anche codici infiniti hanno misura al più \(1\) per qualsiasi distribuzione, e di conseguenza le serie associate alla funzione di struttura di tali codici convergono sempre a un valore al più \(1\) per qualsiasi distribuzione.
 \begin{proof}
   Iniziamo a dimostrare il teorema nel caso di \(X\) finito.
-  In tal caso, è possibile definire una lunghezza massima delle parole di \(X\), poniamo \(L = \max_{x \in X} \abs{x}\).
-  Allora, essendo che ogni parola di \(X\) ha lunghezza al più \(L\), si ha che:
+  In tal caso, è possibile definire una lunghezza massima delle parole di \(X\), poniamo \(L = \max_{x \in X} 
+  \abs{x}\).
+  Allora, poiché ogni parola di \(X\) ha lunghezza al più \(L\), si ha che:
   \[\forall n \geq 1, X^n \subseteq \bigcup_{i=1}^{nL} A^i\]
   poiché concatenando \(n\) parole di lunghezza al più \(L\) si ottiene una parola di lunghezza al più \(nL\).
   Dunque, per la \Cref{prop:distribution_monotonicity}, segue che:
   \[\mu(X^n) \leq \mu(\bigcup_{i=1}^{nL} A^i) = \sum_{i=1}^{nL} \mu(A^i) = \sum_{i=1}^{nL} 1 = nL\]
-  Poiché \(\mu(A^i) = 1\) per ogni \(i\) dalla \Cref{prop:A_power_mesure_1} e che vale l'uguaglianza nella \Cref{prop:dist_union_leq_sum_dist} essendo che gli insiemi \(A^i\) sono disgiunti.
+  Poiché \(\mu(A^i) = 1\) per ogni \(i\) dalla \Cref{prop:A_power_mesure_1} e che vale l'uguaglianza nella \Cref{prop:sub-additivity} poiché gli insiemi \(A^i\) sono disgiunti.
 
   Essendo \(X\) codice, dalla Proposizione precedente sappiamo che \({\mu(X)}^n = \mu(X^n) \leq nL \implies \mu(X) \leq \sqrt[n]{nL}\).
 
@@ -530,7 +492,7 @@ Inoltre, il teorema non si limita al finito, implicando dunque che anche codici 
   \[\forall k \geq 1, X_{k+1}\setminus X_k \land X = X \cap A^{k+1} \land X_k = X_1 \cup (X_2 \setminus X_1) \cup \ldots \cup (X_k \setminus X_{k-1}) = X_1 \cup \bigcup_{i=2}^{k} (X_i \setminus X_{i-1})\]
   Ovvero, che per ogni \(k\), ciò che viene aggiunto a \(X_k\) per ottenere \(X_{k+1}\) sono esattamente le parole di \(X\) di lunghezza \(k+1\), e che dunque ogni \(X_k\) è l'unione disgiunta di queste aggiunte incrementali all'insieme di parole di lunghezza \(1\).
   Infine, si ha che \(X = X_1 \bigcup_{i=2}^{\infty} (X_i \setminus X_{i-1})\), unioni disgiunte.
-  Dunque, dalla \Cref{prop:dist_union_leq_sum_dist}, segue che:
+  Dunque, dalla \Cref{prop:sub-additivity}, segue che:
   \[\mu(X_k) = \mu(X_1) + \sum_{i=2}^{k} \mu(X_i \setminus X_{i-1}) \text{ e }\]
   \[\mu(X) = \mu(X_1) + \sum_{i=2}^{\infty} \mu(X_i \setminus X_{i-1})\]
 
@@ -552,11 +514,7 @@ Finalmente, possiamo dimostrare la Disuguaglianza di Kraft-McMillan (\ref{cor:kr
   \[1 \geq\mu(X) = \sum_{x \in X} \mu(x) = \sum_{x \in X} d^{-\abs{x}}\]
 \end{proof}
 
-Come già mostrato nell'esempio~\ref{ex:kraft-mcmillan}, tale disuguaglianza fornisce una condizione necessaria per essere codice, ma non sufficiente.
-
-Si potrebbe dunque pensare che il teorema di Kraft-McMillan (\ref{thm:kraft-mcmillan}) possa invece esprimere una condizione necessaria e sufficiente per essere codice, ma ciò non è vero in generale.
-Ciò che il teorema afferma è che, per ogni codice \(X \subseteq A\) e ogni distribuzione \(\mu\) su \(A\), si ha che \(\mu(X) \leq 1\).
-Dunque, il teorema fornisce una condizione necessaria per essere codice, ovvero se esiste una distribuzione \(\mu\) su \(A\) tale che \(\mu(X) > 1\), allora \(X\) non è codice, ma non fornisce una condizione sufficiente, poiché non è detto che per ogni insieme \(X\) non codice esista una distribuzione \(\mu\) su \(A\) tale che \(\mu(X) > 1\).
+Come già mostrato nell'esempio~\ref{ex:kraft-mcmillan}, tale disuguaglianza fornisce una condizione necessaria per essere codice, ma non sufficiente. Ebbene, anche il teorema generale \ref{thm:kraft-mcmillan} rappresenta una condizione necessaria, ma non sufficiente, per i codici. Ovvero, se $X$ è codice allora sicuramente rispetta il Teorema. Se $X$ non rispetta il Teorema, allora sicuramente non è codice.
 
 \begin{example}{}
   
@@ -612,7 +570,7 @@ Continuando a esplorare nozioni di teoria dei codici, andiamo ad analizzare altr
 Vedremo come la massimalità di un codice sarà collegata a proprietà di ottimalità di codifica di una sorgente nei capitoli successivi.
 Prima di allora però ci soffermeremo sull'analizzare altre nozioni a essa collegate, ovvero la \keyword{completezza} e la \keyword{densità}.
 
-\begin{definition}{Insiemi di parole densi}
+\begin{definition}{Linguaggi densi}
   Sia \(X \subseteq A^*\) è \keyword{denso} se, 
   \[\forall w \in A^*,A^*\set{w}A^* \cap X \neq \emptyset \text{ o equivalentemente}\]
   \[\forall w \in A^*, \exists \lambda,\rho\in A^* \st \lambda w \rho \in X\]
@@ -624,12 +582,13 @@ Una prima osservazione che è possibile fare a riguardo degli insiemi densi è c
 Formalmente:
 \[X \text{ denso } \implies X \text{ infinito}\]
 \begin{proof}
-  Se \(X\) fosse finito, esisterebbe una lunghezza massima delle parole di \(X\), poniamo \(L = \max_{x \in X} \abs{x}\).
-  Dunque, ogni parola di lunghezza maggiore di \(L\) non potrebbe essere completata in \(X\), poiché qualsiasi estensione a destra o sinistra la renderebbe ancora più lunga di \(L\), e quindi non appartenente a \(X\).
+  Dimostriamo l'asserto negato.
+  Sia \(X\) finito e \(L = \max_{x \in X} \abs{x}\) la lunghezza massima di una parola in $x$.
+  Dunque, ogni parola di lunghezza maggiore di \(L\) non può essere completata in \(X\), poiché qualsiasi estensione a destra o sinistra la renderebbe più lunga di \(L\), e quindi non appartenente a \(X\). Quindi $X$ non è denso.
 \end{proof}
 
 D'altra parte non tutti gli insiemi infiniti sono densi. Ad esempio, su alfabeto \(A = \set{a,b}\), l'insieme \(\set{a}^*\) è infinito ma non denso, poiché parole come \(b\) o \(ab\) non possono essere completate in \(\set{a}^*\).
-È però possibile mostrare un altro risultato che mettere in relazione la densità con la \qi{grandezza} di un insieme di parole, o più precisamente con la sua misura.
+È però possibile mostrare un altro risultato che mettere in relazione la densità con la sua misura.
 
 \begin{proposition}{}
   Sia \(X \subseteq A^*\) non denso e sia \(\mu\) una distribuzione positiva su \(A\), allora \(\mu(X) < \infty\).
@@ -638,7 +597,7 @@ D'altra parte non tutti gli insiemi infiniti sono densi. Ad esempio, su alfabeto
 Il viceversa di tale proposizione non vale, poiché esistono insiemi a misura finita che sono densi. Addirittura esistono codici densi, che quindi hanno misura minore o uguale a \(1\).
 
 \begin{example}[label=ex:dense_code]{}
-  Un esempio di ciò è l'insieme \(Z = \set{a^{\abs{u}+1}bu}[u \in \set{a,b}^*]\). Questo insieme è codice prefisso, poiché nessuna parola della forma \(a^{\abs{u}+1}bu\) è prefisso proprio di un'altra,
+  Il linguaggio \(Z = \set{a^{\abs{u}+1}bu}[u \in \set{a,b}^*]\) è un codice prefisso, poiché nessuna parola della forma \(a^{\abs{u}+1}bu\) è prefisso proprio di un'altra,
   poiché se \(u \in \set{a}^*\) la singola \(b\) evita che ciò accada, mentre se \(u\) contiene almeno una \(b\), per avere un prefisso proprio è necessario che il numero di \(a\) sia lo stesso, il che implica che le due parole \(u, u'\) siano della stessa lunghezza, e che dunque non possano essere prefissi propri l'una dell'altra.
   Tale insieme è però banalmente anche denso, poiché ogni parola \(u \in A^*\) si completa in \(Z\) come \(a^{\abs{u}+1}bu\). In altre parole, \(\forall u \in A^*, \lambda u \rho \in Z\), con \(\lambda = a^{\abs{u}+1}b\) e \(\rho = \varepsilon\).
 \end{example}
@@ -653,7 +612,7 @@ L'ultima nozione che andiamo a definire è quella di completezza, che è stretta
 \begin{definition}{Insiemi di parole completi}
   Sia \(X \subseteq A^*\). Diremo che \(X\) è \keyword{completo} se \(X^*\) è denso.
 
-  Ovvero, \(X\) è completo se ogni parola di \(A^*\) può essere completata nel sottomonoide generato da \(X\), ovvero \(X^*\).
+  Ovvero, \(X\) è completo se ogni parola di \(A^*\) può essere completata in \(X^*\).
 \end{definition}
 
 Date queste definizioni, ci approcciamo a un altro importante teorema dovuto a Schützenberger, la cui dimostrazione ci sarà possibile solo a seguito di ulteriori utili risultati che andremo a dimostrare successivamente.
@@ -667,15 +626,15 @@ Date queste definizioni, ci approcciamo a un altro importante teorema dovuto a S
   \end{enumerate}
 \end{theorem}
 
-Dunque, per i codici non densi, che include come caso particolare i codici finiti, ovvero quello di maggior interesse per questo corso, la completezza e la massimalità sono proprietà equivalenti.
+Dunque, per i codici non densi, che include come caso particolare i codici finiti, la completezza e la massimalità sono proprietà equivalenti.
 
-Per iniziare a mostrare i risultati intermedi necessari alla dimostrazione di tale teorema, è necessario introdurre un ulteriore definizione.
+Prima di dimostrare questo teorema, dobbiamo introdurre il concetto di bordo e dimostrare due lemmi.
 \begin{definition}{Bordo di una parola}
   Siano \(\alpha,x \in A^+\). Diremo che \(\alpha\) è un \keyword{bordo} di \(x\) se \(\alpha\) è sia prefisso che suffisso proprio di \(x\), ovvero:
   \[\alpha \text{ è bordo di } x \iff \exists u,v \in A^+ \st x = \alpha u = v \alpha\]
 \end{definition}
 
-Un importante risultato riguardo i bordi è che se una parola ammette bordi ammette bordi di lunghezza inferiore alla metà della parola.
+Un importante risultato riguardo ai bordi è che se una parola ammette bordi, allora sicuramente esiste un bordo di lunghezza inferiore alla metà della parola.
 
 \begin{proposition}[label=prop:if_border_exists_border_half_length]{}
   Sia \(w \in A^+\). Se \(w\) ha bordi, allora \(\exists \beta\) bordo di \(w \st \abs{\beta}\leq\frac{\abs{w}}{2}\)
@@ -702,7 +661,7 @@ Un importante risultato riguardo i bordi è che se una parola ammette bordi amme
       \draw[thick, blue] (P2) to node[midway, above, blue,font=\small]{\(\alpha'\)} (P4);
     \end{tikzpicture}
   \end{figure}
-  Infatti, essendo che \(\abs{\alpha} > \frac{\abs{w}}{2}\) e \(\alpha\) è sia prefisso che suffisso di \(w\), necessariamente deve esistere una sovrapposizione \(\alpha'\) non vuota.
+  Infatti, poiché \(\abs{\alpha} > \frac{\abs{w}}{2}\) e \(\alpha\) è sia prefisso che suffisso di \(w\), necessariamente deve esistere una sovrapposizione \(\alpha'\) non vuota.
   Inoltre \(\alpha'\neq\alpha\), poiché essendo \(\alpha\) bordo dev'essere prefisso e suffisso proprio di \(w\) e l'unico caso in cui \(\alpha' = \alpha\) è quello in cui le due occorrenze di \(\alpha\) coincidono, portando a \(\alpha = w\).
   In più, com'è evidente dalla figura, \(\alpha'\) è sia prefisso che suffisso di \(\alpha\), dunque è un bordo di \(\alpha\).
 
@@ -710,7 +669,7 @@ Un importante risultato riguardo i bordi è che se una parola ammette bordi amme
   Inoltre, si ha che \(\abs{\alpha'} < \abs{\alpha}\), dunque, ripetendo questo ragionamento, si arriva necessariamente a un bordo \(\beta\) di \(w \st \abs{\beta} \leq \frac{\abs{w}}{2}\).
 \end{proof}
 
-Questa proposizione fa si che sia sufficiente analizzare prefissi e suffissi fino alla metà della lunghezza di una parola per scoprire se essa ammette bordi.
+Questo risultato ci suggerisce che per verificare che una parola ammetta bordi, è sufficiente verificare l'esistenza di bordi lunghi al più la metà della parola.
 
 \begin{lemma}[label=lem:marcus-schutzenberger]{Marcus-Schützenberger}
   Sia \(X \subseteq A^+\) completo e non denso e \(\mu\) una distribuzione positiva su \(A\).
@@ -719,7 +678,7 @@ Questa proposizione fa si che sia sufficiente analizzare prefissi e suffissi fin
 \begin{proof}
   Dato che \(X\) è non denso, esiste una parola \(w \in A^*\) che non si completa in \(X\).
   Sia \(y \in A^*\) qualsiasi.
-  Essendo che \(X\) è completo, la parola \(wyw\) si completa in \(X^*\), ovvero:
+  Poiché \(X\) è completo, la parola \(wyw\) si completa in \(X^*\), ovvero:
   \[\exists \lambda,\rho \in A^*\st \lambda w y w \rho  = x_1x_2\ldots x_n\in X^*\]
   \begin{figure}[H]
     \centering
@@ -749,29 +708,28 @@ Questa proposizione fa si che sia sufficiente analizzare prefissi e suffissi fin
     \end{tikzpicture}
   \end{figure}
 
-  Tale concatenazione è ottenibile come concatenazione di parole di \(X\), ma essendo che \(w\) non si completa in \(X\), nessuna delle occorrenze di \(w\) può essere contenuta interamente in una parola di \(X\).
+  Poiché \(w\) non si completa in una parola di \(X\), allora nessuna delle occorrenze di \(w\) può essere contenuta interamente in una parola di \(X\).
   Dunque entrambe le occorrenze di \(w\) contengono almeno una \qi{linea di parsing} tra due parole di \(X\), ovvero un punto in cui termina una parola della fattorizzazione e inizia la seguente.
   Formalmente, esistono \(i,j \st 1 \leq i \leq j \leq n\) tali che \(x_i\) inizia all'interno della prima occorrenza di \(w\) e \(x_j\) termina all'interno della seconda occorrenza di \(w\).
 
-  Dunque \(wyw \in Pref(w)\cdot X^* \cdot Suff(w)\), poiché la parte iniziale fino alla fine di \(x_i\) è un prefisso di \(w\), la parte finale da inizio di \(x_j\) alla fine è un suffisso di \(w\), e la parte centrale è ottenuta concatenando parole di \(X\).
-  Essendo che \(y\) è arbitrario, si ha che \(\set{w}A^*\set{w} \subseteq Pref(w)\cdot X^* \cdot Suff(w)\)
+  A questo punto notiamo che \(wyw \in Pref(w)\cdot X^* \cdot Suff(w)\), poiché $wyw$ corrisponde alla parte di $x_{2}$ (vedi figura) che sta nella prima occorrenza di $w$, una sequenza di parole di $X$ (in figura, $x_i\ldots x_{j+1}$), la parte di $x_{j+2}$ che sta nella seconda occorrenza di $w$. 
+  Poiché \(y\) è arbitrario, si ha che \(\set{w}A^*\set{w} \subseteq Pref(w)\cdot X^* \cdot Suff(w)\)
   Dalle Proposizioni~\ref{prop:distribution_monotonicity} e~\ref{prop:distribution_distributivity_over_product}, segue che:
   \[\mu(\set{w}A^*\set{w}) \leq \mu(Pref(w)\cdot X^* \cdot Suff(w)) \leq \mu(Pref(w))\cdot \mu(X^*)\cdot \mu(Suff(w))\]
-  Inoltre il prodotto \(\set{w}\times A^* \times \set{w}\) è chiaramente non ambiguo, dunque dal viceversa della \Cref{prop:distribution_distributivity_over_product}, segue che:
+  Inoltre il prodotto \(\set{w}\times A^* \times \set{w}\) è chiaramente non ambiguo: dovrebbero esistere due triple distinte appartenenti a \(\set{w}\times A^* \times \set{w}\) corrispondenti alla stessa parola. L'unica parola che può variare in queste triple è il termine appartenente a $A^{*}$. Pertanto, due triple corrispondenti alla stessa parola devono essere uguali.
+  Dunque dal viceversa della \Cref{prop:distribution_distributivity_over_product}, segue che:
   \[{\mu(\set{w})}^2\mu(A^*)=\mu(\set{w}A^*\set{w}) \leq \mu(Pref(w)\cdot X^* \cdot Suff(w)) \leq \mu(Pref(w))\cdot \mu(X^*)\cdot \mu(Suff(w))\]
 
-  Essendo che \(\mu\) è positiva, si ha che \({\mu(\set{w})}^2 > 0\), e dalla \Cref{prop:A_power_mesure_1} sappiamo che \(\mu(A^*) = \infty\).
+  Poiché \(\mu\) è positiva, si ha che \({\mu(\set{w})}^2 > 0\), e dalla \Cref{prop:A_power_mesure_1} sappiamo che \(\mu(A^*) = \infty\).
   Dunque, per la disuguaglianza precedente, abbiamo che:
   \[\infty = {\mu(\set{w})}^2\mu(A^*) \leq \mu(Pref(w))\cdot \mu(X^*)\cdot \mu(Suff(w))\]
   E di conseguenza \(\mu(Pref(w))\cdot \mu(X^*)\cdot \mu(Suff(w)) = \infty\).
   Me essendo \(Pref(w)\) e \(Suff(w)\) finiti la loro misura è finita, dunque deve essere \(\mu(X^*) = \infty\).
-  Abbiamo dunque dalla \Cref{prop:dist_union_leq_sum_dist} che:
+  Abbiamo dunque dalla \Cref{prop:sub-additivity} che:
   \[\infty = \mu(X^*) = \mu(\bigcup_{k \geq 0}^{\infty} X^k) \leq \sum_{k \geq 0}^{\infty} \mu(X^k)\]
   Inoltre dalla \Cref{prop:distribution_distributivity_over_product}, segue che:
   \[\infty = \mu(X^*) = \mu(\bigcup_{k \geq 0}^{\infty} X^k) \leq \sum_{k \geq 0}^{\infty} \mu(X^k)\leq \sum_{k \geq 0}^{\infty} {\mu(X)}^k\]
-  In particolare, l'ultimo membro è una serie geometrica, che essendo maggiore o uguale a \(\infty\) diverge.
-  Per far si che la serie geometrica diverga, è necessario che il suo ragione (in questo caso \(\mu(X)\)) sia maggiore o uguale a \(1\).
-  Da cui segue che \(\mu(X) \geq 1\).
+  Dunque, $\mu(X^{*})$ è maggiorata da una serie geometrica divergente. Affinché una serie geometrica sia divergente, la sua ragione dev'essere maggiore o uguale a $1$. Quindi, \(\mu(X) \geq 1\).
 \end{proof}
 
 \begin{lemma}[label=lem:code_not_complete_boredless_word]{\infosymbol{} Estrapolato dalla dimostrazione del \Crefalt[yellow]{thm:schutz_maximality_completeness}}
@@ -779,13 +737,12 @@ Questa proposizione fa si che sia sufficiente analizzare prefissi e suffissi fin
   Allora esiste una parola \(y \in A^*\) senza bordi che non si completa in \(X^*\).
 \end{lemma}
 \begin{proof}
-  Essendo che \(X\) non è completo, esiste una parola \(z \in A^*\) che non si completa in \(X^*\).
-  Se tale parola non ha bordi, allora abbiamo finito.
+  Poiché \(X\) non è completo, esiste una parola \(z \in A^*\) che non si completa in \(X^*\).
+  Se tale parola non ha bordi, allora abbiamo trovato la parola cercata.
   Altrimenti, supponiamo che \(z\) abbia bordi e inizi per \(a \in A\).
-  Sia dunque \(b \in A\setminus\set{a}\) (esistenza garantita dal fatto che \(\# A \geq 2\)) e consideriamo la parola \(y = zb^{\abs{z}}\).
-  Tale parola non può completarsi in \(X^*\), poiché se così fosse, essendo che \(z\) è prefisso di \(y\), anche \(z\) si completerebbe in \(X^*\), contraddicendo l'ipotesi.
-  Inoltre, \(y\) non può avere bordi, poiché dalla Preposizione~\ref{prop:if_border_exists_border_half_length} per valutare se \(y\) ha bordi è sufficiente considerare i prefissi e suffissi di lunghezza al più \(\frac{\abs{y}}{2} = \abs{z}\).
-  Si ha dunque che tutti i prefissi di \(y\) iniziano per \(a\) (poiché la prima metà di \(y\) è proprio \(z\)), mentre tutti i suffissi di lunghezza al più \(\abs{z}\) iniziano per \(b\) (poiché la seconda metà di \(y\) è composta di sole \(b\)), dunque non possono coincidere, e di conseguenza \(y\) non ha bordi.
+  Poiché \(\# A \geq 2\), sia \(b \in A\setminus\set{a}\). Consideriamo la parola \(y = zb^{\abs{z}}\).
+  Tale parola non può completarsi in \(X^*\): se $y$ si completasse in $X^{*}$, allora anche $z \in Pref(y)$ si completerebbe in $X^{*}$, ma ciò è impossibile per come abbiamo scelto $z$.
+  Notiamo che la prima metà di $y$ è costituita da $z$, che inizia per $a\in A$, mentre la seconda metà è costituita da una sequenza di $b$. Quindi per $y$ non possono esistere bordi di lunghezza \(\leq\frac{\abs{y}}{2} = \abs{z}\). La Proposizione~\ref{prop:if_border_exists_border_half_length} ci assicura che, allora, per $y$ non esistono bordi.
 \end{proof}
 
 A questo punto siamo in grado di dimostrare il Teorema di Schützenberger~\ref{thm:schutz_maximality_completeness}.
@@ -798,12 +755,15 @@ A questo punto siamo in grado di dimostrare il Teorema di Schützenberger~\ref{t
       Sia dunque \(\# A \geq 2\) e sia \(y \in A^*\) che non si completa in \(X^*\) (esistenza garantita dal fatto che \(X\) è assunto non completo).
       Possiamo scegliere senza perdita di generalità \(y\) senza bordi dal \Cref{lem:code_not_complete_boredless_word}.
 
-      Consideriamo dunque l'insieme \(Y=X\cup\set{y}\). Se tale insieme fosse codice, si avrebbe che \(X\) non è massimale, come volevamo dimostrare.
-      Supponiamo dunque per assurdo che \textbf{non} lo sia.
+      Consideriamo il linguaggio \(Y=X\cup\set{y}\). Vogliamo dimostrare che $Y$ è codice, ovvero che è $X$ non è massimale.
+      Supponiamo dunque per assurdo che $Y$ \textbf{non} sia codice.
       Allora esiste una parola di \(Y^*\) con multipla fattorizzazione, ovvero esistono \(y_1,y_2,\ldots y_m,y_1',y_2',\ldots,y_n' \in Y\) tali che \(y_1y_2\ldots y_m = y_1y_2\ldots y_n'\), con \(y_1\neq y_1'\).
       Tra queste parole deve necessariamente esserci almeno una occorrenza di \(y\), poiché altrimenti tale parola apparterrebbe a \(X^*\), contraddicendo l'ipotesi che \(X\) è codice.
-      Inoltre, essendo che \(y\) non si completa in \(X^*\), dev'esserci almeno un occorrenza di \(y\) in entrambe le fattorizzazioni.
-      Questo poiché se fosse presente solo in una delle due, si potrebbe completare \(y\) in \(X^*\) prendendo la parola in cui è presente \(y\) come completamento e l'altro membro della uguaglianza come parola di \(X^*\).
+      Inoltre, poiché \(y\) non si completa in \(X^*\), dev'esserci almeno un occorrenza di \(y\) in entrambe le fattorizzazioni. Infatti:
+      \begin{itemize}
+        \item se non comparisse in nessuna delle due fattorizzazioni, allora avremmo trovato una doppia fattorizzazione con soli elementi di $X$, ovvero $X$ non dovrebbe essere codice;
+        \item se comparisse in una sola fattorizzazione, allora, affinché le due fattorizzazioni siano uguali, $y$ dovrebbe completarsi in una parola di $x$, ma $y$ non si completa in $X$.
+      \end{itemize}
       Dunque \(\exists i,j \st y_i=y_j'=y\). Scegliamo senza perdita di generalità \(i\) e \(j\) minimi con tale proprietà.
 
       Analizziamo dunque per casi i possibili posizionamenti delle due occorrenze di \(y\) nelle due fattorizzazione sovrapposte:
@@ -955,23 +915,22 @@ Un diretto corollario del Teorema di Schützenberger è il seguente:
 Vediamo dunque alcune proposizioni che seguono dai risultati appena dimostrati.
 
 \begin{proposition}{}
-  Sia \(X\subseteq A^*\) finito e completo, e \(\mu\) distribuzione positiva su \(A\) tale che \(\mu(X) = 1\). Allora \(X\) è un codice (massimale).
+  Sia \(X\subseteq A^*\) finito e completo, e \(\mu\) distribuzione positiva su \(A\) tale che \(\mu(X) = 1\). Allora \(X\) è un codice. Inoltre, $X$ è massimale.
 \end{proposition}
 
 \begin{proof}
-  \(\forall n \geq 1, X^n\) è completo. Infatti se \(w\) si completa in \(X^*\) allora si completa anche in \({(X^n)}^*\)
+  \(\forall n \geq 1, X^n\) è completo. Infatti se \(w\) si completa in \(X^*\) allora si completa anche in \({(X^n)}^*\).
   Essendo \(X\) finito, anche \(X^n\) è finito, e di conseguenza è anche non denso. Dunque per il \Cref{lem:marcus-schutzenberger} si ha che:
   \[1\leq \mu(X^n) \leq {\mu(X)}^n = 1^n = 1\]
   Quindi \(\forall n \geq 1: \mu(X^n) = 1 = {\mu(X)}^n\).
   Di conseguenza, per il viceversa della \Cref{prop:code_implies_equal_mesures_of_powers} si ha che \(X\) è un codice.
-  Essendo inoltre a codice con misura \(1\), è massimale.
+  Inoltre, poiché $\mu(X)=1$, allora $X$ è massimale.
 \end{proof}
 
-
-
 \begin{proposition}[label=prop:finite_complete_codes_contains_powers]{}
-  Sia \(X \subseteq A^*\) finito e completo. Allora \(\forall a \in A \exists n \geq 1 : a^n \in X\). Tale \(n\) è unico se \(X\) è un codice.
+  Sia \(X \subseteq A^*\) finito e completo. Allora \(\forall a \in A \exists n \geq 1 : a^n \in X\). Inoltre, se $X$ è codice, tale \(n\) è unico.
 \end{proposition}
+
 \begin{proof}
   Essendo \(X\) finito esiste una lunghezza di parola massima.
   Sia dunque \(L = \max_{x \in X}\abs{x}\) e \(a \in A\).
@@ -994,7 +953,7 @@ Vediamo dunque alcune proposizioni che seguono dai risultati appena dimostrati.
       \draw[thick] (P0) -- (P10);
 
       \node at ($(P0)!0.5!(P2)$) [above] {\(\lambda\)};
-      \node at ($(P2)!0.5!(P8)$) [above] {\(a^{2n}\)};
+      \node at ($(P2)!0.5!(P8)$) [above] {\(a^{2L}\)};
       \node at ($(P8)!0.5!(P10)$) [above] {\(\rho\)};
 
       \draw[thick, red, bend right=45] (P0) to node[midway, below, red] {\(x_1\)} (1,0);
@@ -1006,8 +965,7 @@ Vediamo dunque alcune proposizioni che seguono dai risultati appena dimostrati.
 
     \end{tikzpicture}
   \end{figure}
-  Essendo che ogni parola in \(X\) ha lunghezza al più \(L\), esiste un \(x_i\) della fattorizzazione di \(\lambda a^{2L} \rho\) sottoparola propria di \(a^{2L}\).
-  Non fosse così si avrebbero due parole \(x_i,x_{i+1}\in X\) che composte contengono propriamente \(a^{2L}\) e che iniziano e finiscono rispettivamente prima e dopo \(a^{2L}\), ottenendo una rappresentazione di questo tipo:
+  Poiché ogni parola in \(X\) ha lunghezza al più \(L\), esiste un \(x_i\) della fattorizzazione di \(\lambda a^{2L} \rho\) che è sottoparola propria di \(a^{2L}\). Infatti, se così non fosse si avrebbero due parole \(x_i,x_{i+1}\in X\) adiacenti tali per cui $x_i x_{i+1}$ inizia in $\lambda$ e finisce in $\rho$, ottenendo la seguente rappresentazione:
     \begin{figure}[H]
     \centering
     \begin{tikzpicture}
@@ -1026,7 +984,7 @@ Vediamo dunque alcune proposizioni che seguono dai risultati appena dimostrati.
       \draw[thick] (P0) -- (P10);
 
       \node at ($(P0)!0.5!(P2)$) [above] {\(\lambda\)};
-      \node at ($(P2)!0.5!(P8)$) [above] {\(a^{2n}\)};
+      \node at ($(P2)!0.5!(P8)$) [above] {\(a^{2L}\)};
       \node at ($(P8)!0.5!(P10)$) [above] {\(\rho\)};
 
       \draw[thick, red, bend right=45] (P0) to node[midway, below, red] {\(x_1\)} (0.5,0);
@@ -1039,18 +997,19 @@ Vediamo dunque alcune proposizioni che seguono dai risultati appena dimostrati.
 
     \end{tikzpicture}
   \end{figure}
-  Ma in questo scenario, si avrebbe che necessariamente \(\abs{x_i x_{i+1}} = \abs{x_i} + \abs{x_{i+1}} > 2L\), implicando che almeno una delle due parole ha lunghezza maggiore di \(L\), assurdo.
+  Ma allora si osserverebbe \(\abs{x_i x_{i+1}} = \abs{x_i} + \abs{x_{i+1}} > 2L\), implicando che almeno una delle due parole ha lunghezza maggiore di \(L\). Assurdo!
   
-  Da ciò segue che tale \(x_i\) è della forma \(a^n\). Se \(X\) è codice questo \(n\) è unico poiché se esistesse \(m\neq n\) tale che \(a^m \in X\), allora la parola \(a^{n+m}\) avrebbe due fattorizzazioni distinte in \(X^*\) portando all'assurdo.
+  Da ciò segue che tale \(x_i\) è della forma \(a^n\).
+  Inoltre, se \(X\) è codice, \(n\) è unico: se esistesse \(m\neq n\) tale che \(a^m \in X\), allora la parola \(a^{n+m}\) avrebbe due fattorizzazioni distinte in \(X^*\), portando ad un assurdo.
 \end{proof}
 
 \begin{definition}{Completamento di un codice}
   Sia \(X \subseteq A^*\) un codice.
   Un \emph{completamento} di \(X\) è un codice \(Y \supseteq X\) sullo stesso alfabeto che sia massimale.
 
-  In altre parole, un completamento di un codice \(X\) è un sovrainsieme massimale di \(X\) che sia ancora un codice.
+  In altre parole, un completamento di un codice \(X\) è un sovrainsieme di \(X\) massimale rispetto alla proprietà di essere codice.
 \end{definition}
-Da questa definizione sorgono alcune domande riguardo la completabilità dei codici:
+Da questa definizione sorgono alcune domande riguardo alla completabilità dei codici:
 \begin{enumerate}
   \item Dato un codice \(X\) qualsiasi, esiste sempre un completamento?
     Tale quesito ha risposta affermativa, e ne vedremo la dimostrazione più avanti.
@@ -1073,17 +1032,15 @@ Vediamo dunque la dimostrazione dell'esistenza di un completamento per ogni codi
 \begin{proposition}{}
   Sia \(X \subseteq A^*\) codice. Allora esiste un completamento di \(X\).
 \end{proposition}
+La proposizione afferma che per ogni $X$ esiste un completamento, finito o infinito.
 \begin{proof}
-  Se \(X\) è massimale, allora \(X = X_0\) è un completamento di sé stesso.
-  Altrimenti, esiste \(w_1 \in A^*\setminus X\) di lunghezza minima tale che \(X_1 = X \cup \{w_1\}\) è ancora un codice.
+  Se \(X\) è massimale, allora \(X\), che denotiamo con \(X_{0}\) è un completamento di sé stesso.
+  Altrimenti, esiste \(w_1 \in A^*\setminus X\) di lunghezza minima tale che \(X_1 = X_0 \cup \{w_1\}\) è ancora un codice.
   Se \(X_1\) è massimale, abbiamo finito.
   In generale, se iterando questo procedimento otteniamo \(X_k = X_{k-1} \cup \set{w_k}\) massimale, abbiamo finito.
-  Altrimenti, otteniamo una successione infinita di parole \(s = \set{w_n}\). Essendo però l'alfabeto finito, esistono parole in \(s\) arbitrariamente lunghe.
-  Mostriamo dunque che \(Y = \bigcup_{k = 0}^{\infty} X_k\) è un codice massimale.
-  È codice poiché se avessimo una doppia fattorizzazione \(y_1 y_2 \cdots y_n = y_1' y_2' \cdots y_m'\) avremmo che ogni \(y_i\) e \(y_j'\) appartengono a qualche \(X_k\). Essendo che \(X_0 \subseteq X_1 \subseteq X_2 \subseteq \cdots\), esiste \(n\) tale che tutti i \(y_i\) e \(y_j'\) appartengono a \(X_n\). Ma allora avremmo una doppia fattorizzazione in \(X_n\), assurdo.
-  Per quanto riguarda la massimalità, se avessimo \(w \in A^* \setminus Y\) tale che \(Y \cup \{w\}\) è ancora un codice, allora esisterebbe \(m\) tale che \(\abs{w_m} > \abs{w}\), poiché aggiungendo parole all'infinito dovrò necessariamente saturare tutte le parole di lunghezza minore di una certa soglia.
-  
-  Ma allora \(X_{m-1} \cup \set{w}\subseteq Y \cup \set{w}\) sarebbe ancora codice, contraddicendo la minimalità di \(w_m\).
+  Altrimenti, otteniamo una successione infinita di parole \(s = \set{w_n}\). Vogliamo mostrare che \(Y = \bigcup_{k = 0}^{\infty} X_k\), ottenuto applicando il procedimento, è un codice massimale.
+  $Y$ è codice, infatti: per assurdo $Y$ non è codice, quindi esiste una doppia fattorizzazione $x_{1}\ldots x_{i}=x_{1}'\ldots x_{j}'$ con $x_{1}\neq x_{1}'$. Vi sarà un $k$ t.c. $X_k$ contiene tutti gli elementi della doppia fattorizzazione. Quindi, $X_k$ non è codice. Assurdo!\\
+  $Y$ è anche massimale: per assurdo, esiste un \(w \in A^* \setminus Y\) tale che \(Y \cup \{w\}\) è ancora un codice. Allora, esiste sicuramente un \(m\) tale che \(\abs{w_m} > \abs{w}\), poiché, aggiungendo parole all'infinito, dovranno essere state aggiunte, secondo il procedimento, tutte le parole di lunghezza minore o uguale a $\abs{w}$. Ma, allora, il procedimento, al passo $m$, avrebbe scelto un $w_m$ non minimo. Assurdo!
 \end{proof}
 
 Con quest'ultimo risultato, si conclude la trattazione delle proprietà algebriche dei codici, che ci serviranno come presupposti teorici per la trattazione della codifica di sorgente nel capitolo successivo, che si addentrerà maggiormente sugli aspetti legati alla teoria dell'informazione.

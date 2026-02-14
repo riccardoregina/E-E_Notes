@@ -31,6 +31,7 @@
 \RequirePackage{amsthm}
 \RequirePackage{mathtools}
 \RequirePackage{centernot}
+\RequirePackage{cancel}
 
 % Graphics and colors
 \RequirePackage{graphicx}
