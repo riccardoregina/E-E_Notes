@@ -7,7 +7,7 @@ Ci inoltriamo finalmente nel cuore della teoria dell'informazione, ovvero la cod
 \begin{definition}{Sorgente (discreta e a memoria zero)}
   Chiamiamo \keyword{Sorgente discreta e a memoria zero} una variabile aleatoria discreta, identificabile come una coppia \(S = (\SCal,p)\), con \(\SCal\) alfabeto finito, e \(p\) distribuzione su \(\SCal\).
 \end{definition}
-$\SCal$ viene spesso detto \textit{alfabeto sorgente}.
+$\SCal$ viene spesso detto \textit{alfabeto sorgente}. Inoltre, se \(p\) è una distribuzione positiva, \(S\) viene detta \textbf{sorgente propria}.
 
 \begin{definition}{Codifica}
   Definiamo \keyword{codifica} un morfismo iniettivo \(\varphi: \SCal^* \to A^*\) con \(A\) alfabeto. Il morfismo $\varphi$ identifica il \keyword{codice} $X=\varphi(\SCal)$.
@@ -157,14 +157,17 @@ Possiamo dunque arrivare a un risultato fondamentale per la Teoria dell'Informaz
   \[H(S)\leq \sum_{s \in \SCal} p(s) \log\left(\frac{\pi(X)}{d^{-\abs{\varphi(s)}}}\right)= \sum_{s \in \SCal}p(s)\left(\log\left(\pi(X)\right)-\log\left(d^{-\abs{\varphi(s)}}\right)\right) = \]
   \[=\log\left(\pi(X)\right) + \sum_{s \in \SCal}p(s)\abs{\varphi(s)}\log\left(d\right) = \log\left(\pi(X)\right) + c(X,\varphi)\log\left(d\right)\]
   Da cui
-  \[H(S) \leq \log\left(\pi(X)\right) + c(X,\varphi)\log\left(d\right) \implies c(X,\varphi) \geq \frac{H(S)}{\log\left(d\right)} - \log_{d}(\pi(X))\]
+  \begin{align*}
+  H(S) \leq \log\left(\pi(X)\right) + c(X,\varphi)\log\left(d\right) &\implies c(X,\varphi) \geq \frac{H(S)}{\log\left(d\right)} - \frac{\log(\pi(X))}{\log(d)} \\
+  &\implies c(X,\varphi) \geq \frac{H(S)}{\log\left(d\right)} - \log_{d}(\pi(X))
+  \end{align*}
   Essendo \(X\) un codice, per la disuguaglianza di Kraft---McMillan (~\ref{cor:kraft-mcmillan_inequality}) si ha che \(\pi(X) \leq 1\).
   Dunque:
   \[\pi(X)\leq 1 \implies \log_{d}(\pi(X)) \leq 0 \implies -\log_{d}(\pi(X)) \geq 0\]
   Togliendo quindi tale quantità la disequazione è solo rafforzata, e dunque
   \[c(X,\varphi) \geq \frac{H(S)}{\log\left(d\right)}\]
 
-  Inoltre, per far si che valga l'uguaglianza è necessario in primo luogo che valga l'uguaglianza nella disuguaglianza di Gibbs~\eqref{eq:gibbs}, ovvero che \(p = q\).
+  Inoltre, per far sì che valga l'uguaglianza è necessario che valga l'uguaglianza per Gibbs~\eqref{eq:gibbs}, ovvero che \(p = q\).
   In questo caso si otterrebbe:
   \[c(X,\varphi) = \frac{H(S)}{\log\left(d\right)} - \log_{d}(\pi(X))\]
   A questo punto, è necessario che \(\log_{d}(\pi(X)) = 0\), ovvero che \(\pi(X) = 1\). Come osservato numerose volte, tale condizione è equivalente a dire che \(X\) è massimale.
@@ -172,9 +175,9 @@ Possiamo dunque arrivare a un risultato fondamentale per la Teoria dell'Informaz
   Inoltre, sapendo che \(p = q\), si ha che
   \[\forall s \in \SCal: p(s) = q(s) = \frac{d^{-\abs{\varphi(s)}}}{\pi(X)} = d^{-\abs{\varphi(s)}}\]
 
-  Viceversa\footnote{In questa dimostrazione non si farà uso dell'ipotesi che \(X\) sia massimale, poiché è sussunta dalla seconda condizione, che impone che \(\pi(X) = 1\) per la proprietà delle distribuzioni di sommare a \(1\), verificando l'uguaglianza nella disuguaglianza di Kraft-McMillan}, partendo dalla definizione di \(c(X,\varphi)\) si ha che:
+  Viceversa\footnote{In questa dimostrazione non si farà uso dell'ipotesi che \(X\) sia massimale, poiché è sussunta nella seconda condizione, che impone che \(\pi(X) = 1\) per la proprietà delle distribuzioni di sommare a \(1\), verificando l'uguaglianza nella disuguaglianza di Kraft-McMillan}, partendo dalla definizione di \(c(X,\varphi)\) si ha che:
   \[c(X,\phi) = \sum_{s \in \SCal} p(s)\abs{\phi(s)}\]
-  Inoltre, essendo che \(x = \log_{b}(b^x)\) possiamo riscrivere la somma come
+  \textbf{Inoltre}, sfruttando l'identità \(x = \log_{b}(b^x)\) dei logaritmi, possiamo riscrivere la somma come
   \[c(X,\phi) = \sum_{s \in \SCal} p(s)\log_{d}\left(d^{\abs{\varphi(s)}}\right) =\sum_{s \in \SCal} p(s)\log_{d}\left(\frac{1}{d^{-\abs{\varphi(s)}}}\right) \]
   Dato che per ipotesi \(p(s) = d^{-\abs{\varphi(s)}}\), si ha che
   \[c(X,\phi) = \sum_{s \in \SCal} p(s)\log_{d}\left(\frac{1}{p(s)}\right) \]
@@ -190,17 +193,17 @@ Possiamo dunque arrivare a un risultato fondamentale per la Teoria dell'Informaz
     \item \(X\) è massimale;
     \item \(\forall x \in X, \abs{x} = -\log_d (p(\varphi^{-1}(x)))\).
   \end{itemize}
-  Dove \(\varphi\) è un morfismo che realizza il costo assoluto di \(X\) (\(c(X,\varphi) = c(X)\)).
+  dove \(\varphi\) è un morfismo che realizza il costo assoluto di \(X\) (\(c(X,\varphi) = c(X)\)).
 \end{corollary}
-Infatti, \(p(s) = d^{-\abs{\varphi(s)}} \iff \abs{\varphi(s)} = -\log_d(p(s))\). Essendo \(\phi_{|_X}\) biettiva, è possibile riscrivere la condizione come da corollario.
+Infatti, \(p(s) = d^{-\abs{\varphi(s)}} \iff \abs{\varphi(s)} = -\log_d(p(s))\). Essendo \(\varphi_{|_X}\) biettiva, è possibile riscrivere la condizione come da corollario.
 
-Da questo corollario è chiaro che non è sempre possibile avere un codice assolutamente ottimale, poiché per fare ciò è necessario che \(-\log_d (p(\varphi^{-1}(x))) \in \N\) per ogni \(x \in X\), per poter rappresentare le lunghezze delle parole, è ciò accade se e solo se le probabilità sono potenze negative di \(d\).
-È però sempre possibile, per ogni sorgente e alfabeto di codice (con almento \(2\) lettere) avere un codice ottimale, e lo si può scegliere prefisso.
+Da questo corollario è chiaro che \textbf{non} è sempre possibile avere un codice assolutamente ottimale, poiché ciò vorrebbe dire imporre che \(\forall p, \forall x:-\log_d (p(\varphi^{-1}(x))) \in \N\), ovvero che le probabilità siano tutte potenze negative di \(d\) e che la somma di esse sia unitaria.
+Vedremo, però, che è sempre possibile, per ogni sorgente e alfabeto di codice con almeno \(2\) lettere, avere un codice ottimale, e che lo si potrà scegliere prefisso.
 
 \section{Codici prefissi}
 
 \paragraph{Terminologia}
-Essendo che la teoria dei codici è stata sviluppata in due comunità differenti, una più teorica e vicina alla matematica e una più applicativa e vicina all'ingegneria, stessi concetti possono assumere nomenclature differenti.
+Poiché la teoria dei codici è stata sviluppata in due comunità differenti, una più teorica e vicina alla matematica e una più applicativa e vicina all'ingegneria, stessi concetti possono assumere nomi differenti.
 Alcuni esempi sono:
 \begin{table}[H]
 \centering
@@ -273,17 +276,17 @@ Viceversa, il sottoalbero radicato in \(w\) contiene tutte e sole le parole che 
 L'albero \(d\)-ario generale è ovviamente infinito, rappresentando tutte le parole possibili sull'alfabeto \(A\), e dunque non ha foglie.
 Di conseguenza, qualsiasi albero \(d\)-ario può essere ottenuto dall'albero generale \qi{potando} opportunamente alcuni sottoalberi radicati in nodi che diventano foglie.
 
-Dalle ultime due osservazioni, deriva naturalmente la seguente proposizione
+Dalle ultime due osservazioni, deriva naturalmente la seguente proposizione.
 
 \begin{proposition}{}
-  Sia \(X \subseteq A^*\) un insieme di parole su un alfabeto \(A\). Allora
-  \[X \text{ prefisso } \iff X \text{è l'insieme delle (etichette delle) foglie di un albero d-ario}\]
+  Sia \(X \subseteq A^*\) un linguaggio su un alfabeto \(A\). Allora
+  \[X \text{ prefisso } \iff X \text{ è l'insieme di tutte e sole le (etichette delle) foglie di un albero d-ario}\]
   Inoltre, se l'albero ha profondità maggiore di \(0\), allora \(X\) è anche un codice.
 \end{proposition}
 
-Ovviamente tale rappresentazione non è univoca, poiché, ad esempio, è possibile potare l'albero generale sia \qi{quanto basta} per ottenere foglie etichettate con le parole di \(X\), sia potare l'albero affinché tutti i rami abbiano foglie etichettate con le parole di \(X\).
+Si noti che l'albero $d$-ario descritto potrebbe non essere unico: se il linguaggio $X$ lo consente, si potrebbe decidere di non potare, dall'albero generale, un ramo non contenente parole di $X$, ottenendo un albero a profondità infinita ma le cui (etichette delle) foglie sono tutte e sole le parole di $X$. 
 Se consideriamo infatti \(A=\set{a,b}\) e \(X=\set{a,bb}\), \(X\) etichetta le foglie di entrambi gli alberi in \Cref{fig:prefix_code_trees}.
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
   \begin{forest}
     for tree={
@@ -318,10 +321,10 @@ Se consideriamo infatti \(A=\set{a,b}\) e \(X=\set{a,bb}\), \(X\) etichetta le f
       ]
     ]
   \end{forest}
-  \caption{Albero di derivazione per l'alfabeto \(A = \set{a_1,\ldots,a_d}\)}\label{fig:prefix_code_trees}
+  \caption{Entrambi gli alberi binari (l'alfabeto è $A=\set{a,b}$) in figura hanno come (etichette delle) foglie tutte e sole le parole di $X=\set{a,bb}$.}\label{fig:prefix_code_trees}
 \end{figure}
 
-Tuttavia, è unico\footnote{A essere precisi è unico a meno di isomorfismi con scambio di etichettamento. In altre parole fissato il criterio di etichettamento dei nodi è unico. Cambiandolo si ottengono alberi isomorfi} l'albero \keyword{minimale} nel numero dei nodi \(T_X\) che rappresenta \(X\).
+Tuttavia, ad essere unico\footnote{Volendo essere pignoli, esso è unico se fissiamo un ordine di etichettamento dei figli di un nodo e.g. da sx verso dx, prima $a$, poi $b$...} è l'albero \keyword{minimale} nel numero dei nodi \(T_X\) che rappresenta \(X\).
 L'insieme dei nodi di \(T_X\) è esattamente \(Pref(X)\).
 
 \begin{definition}[label=def:complete_tree]{Albero completo}
@@ -343,6 +346,7 @@ L'insieme dei nodi di \(T_X\) è esattamente \(Pref(X)\).
   Sia \(X \subseteq A^+\) un codice prefisso. Diremo che \(X\) è \keyword{massimale (come prefisso)} se
   \[X \subseteq Y \subseteq A^+, Y \text{ codice prefisso} \implies Y = X\]
 \end{definition}
+In altre parole, un codice è prefisso massimale se non esistono altri codici prefissi, sullo stesso alfabeto, che lo contengono propriamente. 
 
 \begin{theorem}[label=thm:prefix_code_properties]{}
   Sia \(X \subseteq A^+\) un codice prefisso, con \(\# A = d \geq 2\). Allora le seguenti affermazioni sono equivalenti:
@@ -358,48 +362,25 @@ L'insieme dei nodi di \(T_X\) è esattamente \(Pref(X)\).
     \item[\(1 \implies 2\)]
       Supponiamo che \(T_X\) \textbf{non} sia completo, allora esiste un nodo interno che non ha grado massimo.
       Di conseguenza, esiste \(w \in Pref(X)\) che etichetta un nodo di \(T_X\) con meno di \(d\) figli.
-      Sia dunque \(a \in A\) tale che \(wa \not\in X\). Ma allora \(X' = X \cup \set{wa}\) corrisponde alle etichette di un albero \(d\)-ario, cioè è ancora prefisso.
+      Sia dunque \(a \in A\) tale che \(wa \not\in X\). Ma allora \(X' = X \cup \set{wa}\) è un codice le cui parole sono tutte e sole le (etichette delle) foglie di un albero \(d\)-ario, cioè è ancora prefisso.
       Dunque se \(T_X\) non è completo, \(X\) non è prefisso massimale.
     \item[\(2 \implies 3\)]
-      Sia \(T_X\) completo e sia \(w \in A^*\). Se \(w \in Pref(X)\), evidentemente si completa a destra in \(X\), e dunque in \(X^*\).
+      Sia \(T_X\) completo e sia \(w \in A^*\). Se \(w \in Pref(X)\), evidentemente si completa a destra in \(X\), e dunque anche in \(X^*\).
       Se invece \(w \not\in Pref(X)\), sia \(x\) il più lungo prefisso di \(w\) che appartiene a \(Pref(X)\).
       Tale \(x\) non può che essere foglia, poiché altrimenti, essendo \(T_X\) completo, \(xa\) apparterrebbe all'albero \(\forall a \in A\), e tra queste sarebbe presente necessariamente un altro prefisso di \(w\) più lungo di \(x\).
       Sia dunque \(w=xw_1\) per qualche \(w_1 \in A^+\). Se \(w_1\in Pref(X)\), allora \(w_1\) si completa in \(X\) e dunque \(w\) si completa in \(X^2\subseteq X^*\).
       Iterando tale ragionamento, si ottiene una successione di parole \(w, w_1, w_2, \ldots\) tali che \(w = x w_1 = x x_1 w_2 = \ldots\).
-      Di conseguenza \(\abs{w} > \abs{w_1} > \abs{w_2} > \ldots\), dunque, essendo \(\abs{w_i} \in \N\), tale successione deve terminare;
+      Di conseguenza \(\abs{w} > \abs{w_1} > \abs{w_2} > \ldots\). Poiché la successione è strettamente decrescente ed è a valori in $\N$, essa dovrà terminare una volta raggiunto il valore $0$.
       In particolare quando \(\abs{w_i}\leq \min_{x\in X}\abs{x}\), allora \(w_i \in Pref(X)\) necessariamente.
       Dunque \(w\) si completa in \(X^{i+1} \subseteq X^*\).
     \item[\(3 \implies 1\)]
-      Sia \(X\) non prefisso massimale, e sia \(w \in A^*\setminus X\) tale che \(X \cup \set{w}\) sia ancora prefisso.
-      Allora \(w\) \textbf{non} si completa a destra in \(X^*\).
-      Infatti se per assurdo \(\set{w}A^* \cap X^* \neq \emptyset\), allora esisterebbe \(\rho \in A^*\st w\rho \in X^*\).
-      Di conseguenza, esisterebbero \(x_1,\ldots,x_n \in X\) tali che \(w\rho = x_1 x_2 \ldots x_n\).
-      \begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-      \foreach \x in {0,2,4,5,7,10}{
-        \coordinate (P\x) at (\x,0);
-        }
-      \draw[thick] (P0) -- ++(0,-0.3);
-      \draw[thick] (P0) -- ++(0,0.3);
-      \draw[thick] (P4) -- ++(0,-0.3);
-      \draw[thick] (P4) -- ++(0,0.3);
-      \draw[thick] (P10) -- ++(0,-0.3);
-      \draw[thick] (P10) -- ++(0,0.3);
-      
-      \draw[thick] (P0) -- (P10);
-
-      \node at ($(P0)!0.5!(P4)$) [above] {\(w\)};
-      \node at ($(P4)!0.5!(P10)$) [above] {\(\rho\)};
-
-      \draw[thick, red, bend right=45] (P0) to node[midway, below, red] {\(x_1\)} (P2);
-      \draw[thick, red, bend right=45] (P2) to node[midway, below, red] {\(x_2\)} (P5);
-      \draw[thick, red, bend right=45] (P5) to node[midway, below, red] {\(\ldots\)} (P7);
-      \draw[thick, red, bend right=45] (P7) to node[midway, below, red] {\(x_n\)} (P10);
-      
-    \end{tikzpicture}
-  \end{figure}
-  Com'è chiaro dall'immagine però \(x_1\) sarebbe prefisso di \(w\), e dunque \(X\cup\set{w}\) non sarebbe prefisso.
+      Sia \(X\) non prefisso massimale e dunque sia \(w \in A^*\setminus X\) tale per cui \(X \cup \set{w}\) è ancora prefisso.
+      Per assurdo, $w$ si completa a destra in $X^{*}$, quindi si ha $w=x_{1}x_{2}\ldots x_{n}$ con $x_{1},x_{2},\ldots x_n \in X$. Poiché nessuna $x \in X$ è uguale a $w$, ci restano due casi: 
+      \begin{enumerate}
+        \item Se $|x_{1}|>|w|$, allora $x_{1}$ è prefisso di $w$: $X\cup \set{w}$ non è codice. Assurdo!
+        \item Se $|x_{1}|<|w|$, allora $w$ è prefisso di $x_{1}$: $X\cup \set{w}$ non è codice. Assurdo!
+      \end{enumerate}
+      Quindi $X$ non è completo a destra.
   \end{description}
 \end{proof}
 
@@ -415,47 +396,57 @@ L'insieme dei nodi di \(T_X\) è esattamente \(Pref(X)\).
   \end{enumerate}
 \end{corollary}
 
+Questo corollario ci mostra tanti modi in cui è possibile determinare se un codice prefisso è prefisso massimale.
+
 \begin{proof}
-  Si ha che \(1 \implies 2\) da \Cref{thm:prefix_code_properties}, e \(2 \implies 3\) è ovvio, \(3,4,5,6\) sono equivalenti da \Cref{cor:schutz_maximality_completeness} e \(6 \implies 1\) è ovvio.
+  Si ha che \(1 \implies 2\) da \Cref{thm:prefix_code_properties}, e \(2 \implies 3\) se $X$ è completo a destra, allora a maggior ragione è completo, \(3,4,5,6\) sono equivalenti per \Cref{cor:schutz_maximality_completeness} e \(6 \implies 1\) è ovvio.
 \end{proof}
 
-Riprendendo il concetto di funzione di struttura della \Cref{def:structure_function} e la disuguaglianza di Kraft---McMillan del \Cref{cor:kraft-mcmillan_inequality_alt}, possiamo mostrare come per qualsiasi codice, esiste un codice prefisso con la stessa funzione di struttura
+Riprendendo il concetto di funzione di struttura della \Cref{def:structure_function} e la disuguaglianza di Kraft---McMillan del \Cref{cor:kraft-mcmillan_inequality_alt}, possiamo mostrare come per qualsiasi codice, esiste un codice prefisso con la stessa funzione di struttura.
 
 \begin{theorem}[label=thm:kraft]{Kraft}
-  Sia \(d \geq 1\) un intero e sia \(f: \N \to \N\) tale che \(f(0) = 0\) e \(\sum_{n=0}^\infty f(n)d^{-n} \leq 1\). 
-  
-  Allora esiste \(X\) codice prefisso su alfabeto \(A\) con \(\#A = d\) tale che \(f_X = f\)
+  Sia \(d \geq 1\) un intero e sia \(f: \N \to \N\) tale che 
+  $$\begin{cases}
+    f(0) = 0 \\
+    \sum_{n=0}^\infty f(n)d^{-n} \leq 1
+  \end{cases}$$
+  Allora esiste \(X\) codice prefisso su alfabeto \(A\) con \(\#A = d\) tale che \(f_X = f\).
 \end{theorem}
 
 \begin{observation}{}
-  In particolare, se \(X\) è un codice non contiene \(\varepsilon\), e dunque \(f(0) = 0\).
-  Inoltre, per la disuguaglianza di Kraft---McMillan, si ha che \(\sum_{n=0}^\infty f(n)d^{-n} = \pi(X) \leq 1\).
-  Dunque, ogni funzione di struttura di codice rispetta le condizioni del teorema di Kraft, per cui sono vere:
-
+  Osserviamo che la funzione di struttura di un codice rispetta sempre le ipotesi di \Cref{thm:kraft}. Infatti, se $f$ è funzione di struttura di un codice $X$:
   \begin{itemize}
-    \item \(f: \N \to \N\) è funzione di struttura di un codice su alfabeto \(d\)-ario \textit{se e solo se} \(f(0) = 0\) e \(\sum_{n=0}^\infty f(n)d^{-n} \leq 1\)
-    \item Per ogni codice \(X\) su alfabeto \(A\) con \(\#A = d\), esiste un codice prefisso \(X'\) su \(A\) tale che \(f_X = f_{X'}\)
+    \item Poiché $X$ non contiene $\varepsilon$, si ha \(f(0) = 0\);
+    \item Poiché per $X$ vale \Cref{cor:kraft-mcmillan_inequality_alt}, si ha $\sum_{n=0}^\infty f(n)d^{-n} \leq 1$.
   \end{itemize}
-  
 \end{observation}
 
 \begin{proof}
-  Sia \(k \geq 1\). Allora 
-  \[\sum_{n=0}^{k}f(n)d^{-n} \leq \sum_{n=0}^{\infty}f(0)d^{-n} \leq 1 \]
-  \[ f(k)d^{-k} + \sum_{n=0}^{k-1}f(n)d^{-n} \leq 1\]
-  \[ f(k)\leq d^{k}-\sum_{n=0}^{k-1}f(n)d^{-n}\]
-  Definiamo dunque la funzione \(\nu: \N \to \N\) come:
-  \[v(k)=d^k-\sum_{n=0}^{k}f(n)d^{k-n} = d(d^{k-1}-\sum_{n=0}^{k}f(n)d^{k-n-1}) = \]
-  \[= d(d^{k-1}-\sum_{n=0}^{k-1}f(n)d^{k-n-1}-f(k)d^{0}) = d(\nu(k-1)-f(k))\]
+  Vogliamo trovare un procedimento iterativo per ottenere un codice prefisso con $f$ come funzione di struttura. Troviamo, per ogni possibile lunghezza $k$, il valore massimo di $f(k)$ affinché $f$ rispetti ancora \Cref{cor:kraft-mcmillan_inequality_alt}.
 
-  Si ha ovviamente per costruzione che \(f(n)\leq\nu(n), \forall n \in \N\)
-  In particolare si ha che \(f(1) \leq \nu(1) = d\).
-  Considerando dunque l'albero \(d\)-ario generico possiamo scegliere \(f(1)\) nodi al primo livello per potarne i sottolaberi corrispondenti rendendoli foglie.
-  Ognuno dei rimanenti \(d - f(1)\) nodi al primo livello ha \(d\) figli al secondo, e \(d(d-f(1))=d(\nu(1)- f(1)) = \nu(2)\).
-  Dunque possiamo scegliere \(f(2) \leq \nu(2)\) nodi al secondo livello e potarne i sottolaberi corrispondenti rendendoli foglie.
+  Sia \(k \geq 1\), allora: 
+  \begin{align*}
+    &\sum_{n=0}^{k}f(n)d^{-n} \leq \sum_{n=0}^{\infty}f(n)d^{-n} \leq 1 \\
+    &f(k)d^{-k} + \sum_{n=0}^{k-1}f(n)d^{-n} \leq 1 &&\text{ estraiamo il termine $k$-esimo} \\
+    &f(k)\leq d^{k}-\sum_{n=0}^{k-1}f(n)d^{k-n} := \nu(k)
+  \end{align*}
+  Quindi, $\nu(k)$ è il valore massimo consentito per $f(k)$. Definiamo adesso $\nu$ in modo ricorsivo:
+  \begin{align*}
+    \nu(k+1)&= d^{k+1}-\sum^{k}_{n=0}f(n)d^{k-n+1} \\
+    &=d\left(d^{k} - \sum^{k}_{n=0}f(n)d^{k-n}\right) \\
+    &=d\left(d^{k} - \sum^{k-1}_{n=0}f(n)d^{k-n} - f(k)\cdot \bcancel{d^{k-k}}\right) \\
+    &=d\left(\nu(k) - f(k)\right)
+  \end{align*}
+  Il passo base è $\nu(1) = d^{1} - \bcancel{\sum^{0}_{n=0}f(n)d^{1-n}}$.
+  Quindi, la definizione ricorsiva di $\nu$ è:
+  $$\nu(k)=\begin{cases}
+    d \text{ se } k=1 \\
+    d(\nu(k-1)-f(k-1)) \text{ altrimenti}
+  \end{cases}$$
+  Costruiamo un albero di rappresentazione $T_X$ seguendo il vincolo $f(k)\leq\nu(k), \forall k$ e vediamo se il codice corrispondente è prefisso.
+  Partendo dall'albero $d$-ario generale, al livello $1$, scelgo $f(1)$ foglie potando i sottoalberi figli di tali foglie. Al livello $2$, ognuno dei $\nu(1)-f(1)$ nodi non foglia del livello $1$ avrà al più $d$ figli. Quindi, il numero di nodi al secondo livello è $\leq d(\nu(1)-f(1))=\nu(2)$. Tra questi $\nu(2)$ nodi, possiamo scegliere $f(2)$ foglie e così via.
 
-  In generale quindi a ogni livello \(k\) scelgo \(f(k)\) nodi dall'insieme dei \(\nu(k)\) rimasti e li rendo foglie.
-  L'albero così costruito ha dunque esattamente \(f(k)\) foglie al livello \(k\) per ogni \(k\), e dunque corrisponde a un codice prefisso su un alfabeto \(d\)-ario con \(f\) come struttura.
+  Poiché le parole di $X$ sono tutte e sole le (etichette delle) foglie di $T_X$ e $f_X$, per il vincolo su $\nu$, rispetta \Cref{cor:kraft-mcmillan_inequality_alt}, allora $X$ è codice prefisso con $f_X$ come funzione di struttura.
 \end{proof}
 
 \begin{example}{}
@@ -493,21 +484,18 @@ Riprendendo il concetto di funzione di struttura della \Cref{def:structure_funct
           ]
         ]
       \end{forest}
-      \caption{Codice prefisso con struttura \(f\)}\label{fig:prefix_code_example_with_structure_f}
+      \caption{Codice prefisso con \(f\) come funzione di struttura.}\label{fig:prefix_code_example_with_structure_f}
   \end{figure}
 \end{example}
 
-
-Infine, formalizziamo l'intuizione citata nella nota precedente
+Infine, formalizziamo l'intuizione dell'osservazione precedente.
 
 \begin{corollary}[label=cor:prefix_code_structure]{}
   Dato \(X \subseteq A^+\) codice,
   \[\exists X' \text{ codice prefisso su } A \st f_{X'} = f_X\]
 \end{corollary}
 
-\begin{proof}
-  Segue direttamente dal \Cref{cor:kraft-mcmillan_inequality_alt} e dal \Cref{thm:kraft}.
-\end{proof}
+Possiamo dimostrare che, non solo a partire dalla funzione di struttura di un codice è sempre possibile ricavare un codice prefisso, ma che tale codice prefisso ha anche lo stesso costo assoluto. Ciò è molto utile poiché, come vedremo, i codici prefissi hanno una decodifica istantanea.
 
 \begin{proposition}{}
   Dato \(X \subseteq A^+\) codice adattato a \(S\), esiste \(X' \subseteq A^+\) codice prefisso adattato a \(S\) tale che
@@ -522,14 +510,14 @@ Infine, formalizziamo l'intuizione citata nella nota precedente
   Allora, per ogni codifica \(\varphi : \SCal \leftrightarrow X\), si ha che
   \[c(X,\varphi) = \sum_{s \in \SCal} p(s)\abs{\varphi(s)} = \sum_{s \in \SCal} p(s)\abs{\delta(\varphi(s))} = c(X', \delta \circ \varphi)\]
   Dunque ogni costo di \(X\) per qualsiasi codifica è ottenibile come costo di \(X'\) per una codifica opportuna.
-  In oltre, essendo \(\delta\) invertibile è possibile mostrare il viceversa, ovvero, per ogni codifica \(\psi: \SCal \leftrightarrow X'\), si ha che
+  Inoltre, essendo \(\delta\) invertibile è possibile mostrare il viceversa, ovvero, per ogni codifica \(\psi: \SCal \leftrightarrow X'\), si ha che
   \[c(X',\psi) = \sum_{s \in \SCal} p(s)\abs{\psi(s)} = \sum_{s \in \SCal} p(s)\abs{\delta^{-1}(\psi(s))} = c(X, \delta^{-1} \circ \psi)\]
   Segue dunque che
   \[\set{c(X,\varphi)}[\varphi:\SCal \leftrightarrow X] = \set{c(X',\psi)}[\psi:\SCal \leftrightarrow X']\]
   e dunque coincide il loro minimo \(c(X) = c(X')\).
 \end{proof}
 
-Possiamo quindi infine dimostrare l'esistenza di un codice ottimale data una sorgente qualsiasi. Il fatto che, tale codice è possibile sempre sceglierlo prefisso, è dimostrato dalla proposizione appena vista.
+Infine, possiamo dimostrare che per una qualsiasi sorgente, esiste sempre un codice ottimale. La precedente proposizione ci dice che tale codice ottimale può essere prefisso.
 
 \begin{proposition}[label=prop:optimal_prefix_code]{}
   Sia \(S = (\SCal, p)\) sorgente, \(A\) alfabeto di codice con \(\# A = d \geq 2\). Allora
