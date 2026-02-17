@@ -524,39 +524,46 @@ Infine, possiamo dimostrare che per una qualsiasi sorgente, esiste sempre un cod
   \[\exists X \subseteq A^+ \text{ codice ottimale per } S\]
 \end{proposition}
 
-\begin{proof}
-  Poiché \(d \geq 2\), esistono codici su \(A\) di qualsiasi cardinalità (finita o infinita numerabile\footnote{Per infinita numerabile si intende un infinito \q{equipotente} a \(\N\)}).
-  Ad esempio se \(a,b \in A, a \neq b\), allora \(\set{a^k b}[0 \leq k \leq n-1]\) ha cardinalità \(n\), e \(\set{a^k b}[k \in \N]\) ha cardinalità infinita numerabile.
+Poiché \(d \geq 2\), esistono codici su \(A\) di qualsiasi cardinalità (finita o infinita numerabile\footnote{Per infinita numerabile si intende un infinito \q{equipotente} a \(\N\)}).
+Ad esempio se \(a,b \in A, a \neq b\), allora \(\set{a^k b}[0 \leq k \leq n-1]\) ha cardinalità \(n\), e \(\set{a^k b}[k \in \N]\) ha cardinalità infinita numerabile. 
+Pertanto, l'insieme delle parti dei codici su $A$ è infinito non numerabile.
 
-  Potrebbe ancora però non esistere un codice di costo minimo per \(S\), nel caso in cui questi formassero una successione infinita decrescente senza minimo.
-  Consideriamo però \(Z\) codice adattato a \(S\). Possiamo mostrare che
-  \[\set{c(Y)}[Y \text{ codice adattato a } S, c(Y)\leq c(Z)] = \mathcal{C}_Z \text{ è finito}\]
+Il primo teorema di Shannon (\Cref{thm:shannon}) garantisce l’esistenza di un limite inferiore per il costo di codifica, ma non assicura che tale limite sia raggiunto da alcun codice. Infatti, l’insieme dei costi associati ai codici può essere infinito non numerabile (ad esempio, un sottoinsieme denso di $\mathbb{R}$), e in tal caso una successione decrescente di costi potrebbe convergere al limite inferiore senza mai raggiungerlo. Per dimostrare l’esistenza di un codice ottimale, è necessario mostrare che il limite inferiore è effettivamente raggiunto da almeno un codice.
+
+\begin{proof}
+  Consideriamo \(Z\) codice adattato a \(S\). Possiamo mostrare che
+  \[\mathcal{C}_Z = \set{c(Y)}[Y \text{ codice adattato a } S, c(Y)\leq c(Z)] \text{ è finito}\]
   In particolare, se \(\mathcal{C}_Z\) è finito, allora ammette minimo.
-  Restringiamoci a considerare le sorgenti con distribuzioni positive, poiché in caso di sorgente impropria è sempre possibile considerare la sorgente propria indotta dalla rimozione delle lettere con distribuzione \(0\) dall'alfabeto di sorgente.
-  Sia inoltre, \(\varphi: \SCal \leftrightarrow Z\) tale che realizza il costo assoluto, ovvero
+  Restringiamoci a considerare le sorgenti proprie: in caso di sorgente impropria è sempre possibile considerare la sorgente propria ottenuta dalla rimozione delle lettere con distribuzione \(0\) dall'alfabeto di sorgente.
+  Sia inoltre, \(\varphi: \SCal \leftrightarrow Z\) il morfismo che realizza il costo assoluto, ovvero
   \[c(Z) = c(Z,\varphi) = \sum_{s \in \SCal} p(s)\abs{\varphi(s)}\]
   Se \(Y\) è tale che \(c(Y) = c(Y,\psi) \leq c(Z)\), allora \(\forall s \in \SCal\)
   \[p(s)\abs{\psi(s)} \leq c(Y) \leq c(Z) \implies \abs{\psi(s)} \leq \frac{c(Z)}{p(s)} \leq \frac{c(Z)}{\min_{t \in \SCal} p(t)} =: M\]
   Dunque, prendendo un codice \(Y\) con costo minore del costo di \(Z\), si ha che tutte le parole di \(Y\) devono avere lunghezza limitata da una costante \(M\).
   Ma l'insieme delle parole su \(A\) di lunghezza minore o uguale a \(M\) è finito, ed essendo il costo dipendente solo dalla lunghezza delle parole, anche l'insieme \(\mathcal{C}_Z\) è finito.
-  Essendo che inoltre \(\mathcal{C}_Z\neq \emptyset\), poiché \(c(Z) \in \mathcal{C}_Z\) segue che \(\exists \min \mathcal{C}_Z\), e qualunque codice \(X\) realizzi tale costo è ottimale per \(S\).
+  Inoltre, \(\mathcal{C}_Z\neq \emptyset\), poiché \(c(Z) \in \mathcal{C}_Z\). Dunque, \(\exists \min \mathcal{C}_Z\), e qualunque codice \(X\) realizzi tale costo è ottimale per \(S\).
 \end{proof}
 
 \begin{observation}{}
-  Ovviamente, dagli ultimi due risultati segue che per ogni sorgente \(S\) e alfabeto di codice \(A\) con \(\# A = d \geq 2\), esiste un codice \textbf{prefisso} ottimale per \(S\) su \(A\).
+  Come già notato, dagli ultimi due risultati segue che per ogni sorgente \(S\) e alfabeto di codice \(A\) con \(\# A = d \geq 2\), esiste un codice \textbf{prefisso} ottimale per \(S\) su \(A\).
 \end{observation}
 
 Dal teorema di Shannon (\ref{thm:shannon}), se \(\#A = d \geq 2\) e \(\varphi: \SCal \leftrightarrow X\)
 \[c(X,\varphi) = \frac{H(S)}{\log(d)} \iff X \text{ massimale } \land \forall s \in \SCal, p(s)=d^{-\abs{\varphi(s)}}\]
 
 Ovvero, sappiamo che un codice assolutamente ottimale è necessariamente massimale. In caso di codice binario però, si può dimostrare che basta l'ottimalità per garantire la massimalità.
+
+\begin{definition}{Codice binario}
+  Un codice $X \subseteq A^{*}$ si dice \keyword{binario} se $\# A=2$.
+\end{definition}
+
 \begin{proposition}{}
-  Sia \(X\) codice prefisso binario ottimale per \(S\) sorgente \textit{propria}\footnote{Come già accennato nella dimostrazione precedente, per sorgente propria si intende una sorgente con distribuzione positiva}.
+  Sia \(X\) codice prefisso binario ottimale per \(S\) sorgente propria.
   Allora \(X\) è massimale.
 \end{proposition}
 
 \begin{proof}
-  Sia \(X\) prefisso binario \textbf{non} massimale e mostriamo che non è ottimale.
+  Sia \(X\) prefisso binario \textbf{non} massimale.
   Essendo \(X\) prefisso, allora \(T_X\) non è completo, ovvero esiste un nodo interno con meno di \(2\) figli, ovvero \(\exists w \in Pref(X) \st wa \in Pref(X) \land wb \not\in Pref(X)\).
   Dunque tutte le parole di \(X\) che iniziano per \(w\), iniziano per \(wa\).
   Sia dunque \(X' = \set{wv \in A^*}[wav \in X] \cup (X\setminus \set{w}A^*)\), ovvero \(X\) a cui ogni parola che inizia per \(wa\) viene rimossa la \(a\) davanti alla \(w\).
@@ -603,11 +610,11 @@ Ovvero, sappiamo che un codice assolutamente ottimale è necessariamente massima
     \caption{Costruzione del codice \(X'\) da \(X\)}\label{fig:prefix_code_not_maximal_construction}
   \end{figure}
 
-  Essendo che \(\# X' = \# X\), questo nuovo codice è ancora adattabile a \(S\) ma,
-  considerando \(\phi: \SCal \leftrightarrow X\st c(X) = c(X,\varphi)\), definiamo 
+  Poiché \(\# X' = \# X\), questo nuovo codice è ancora adattabile a \(S\) ma,
+  considerando \(\varphi: \SCal \leftrightarrow X\st c(X) = c(X,\varphi)\), definiamo 
   \begin{equation*}
     \begin{aligned}
-      \phi': \SCal  &\leftrightarrow X'\\
+      \varphi': \SCal  &\leftrightarrow X'\\
                   s &\mapsto \begin{cases}
                     \varphi(s) & \varphi(s) \not\in \set{wa}A^*\\
                     wv, & \varphi(s) = wav \in \set{wa}A^*
@@ -623,7 +630,7 @@ Ovvero, sappiamo che un codice assolutamente ottimale è necessariamente massima
 Possiamo dunque estendere questo risultato a qualsiasi codice binario, non necessariamente prefisso.
 
 \begin{corollary}[label=cor:binary-optimality-maximality]{}
-  Sia \(X\) codice su \(A\) binario ottimale per \(S\). Allora \(X\) è massimale
+  Sia \(X\subseteq A^{*}\) codice binario ottimale per \(S\). Allora \(X\) è massimale.
 \end{corollary}
 
 \begin{proof}
@@ -632,39 +639,42 @@ Possiamo dunque estendere questo risultato a qualsiasi codice binario, non neces
   Ma \(\pi(X') = \sum_{n=0}^{\infty} f_X(n)d^{-n} = \pi(X)\), dunque \(X\) è massimale.
 \end{proof}
 
-Nel caso una sorgente ammetta ottimo assoluto, abbiamo già dimostrato come il costo di codifica è pari all'entropia della sorgente diviso il logaritmo della base dell'alfabeto di codice.
-Ovviamente, in caso la sorgente non ammetta ottimo assoluto questo valore è superato, ma, come vedremo nel seguente teorema, mai per più di \(1\)
+Il teorema di Shannon (\Cref{thm:shannon}) fornisce un limite inferiore per il costo di codifica. Il seguente teorema, fornisce anche un limite superiore.
 \begin{theorem}{}
   Sia \(S\) sorgente, \(A\) alfabeto di codice con \(\#A = d \geq 2\). Allora esiste \(X\) codice su \(A\) adattato a \(S\) tale che
   \[\frac{H(S)}{\log_2(d)} \leq c(X) <\frac{H(S)}{\log_2(d)} +1\]
 \end{theorem}
 
+Per il Teorema di Shannon (\Cref{thm:shannon}), si ha 
+\[\frac{H(S)}{\log(d)} = c(X) \iff X \text{ massimale }\land \forall s \in \SCal, \abs{\varphi(s)}=-\log_d(p(s))=\log_d\left(\frac{1}{p(s)}\right)\]
+Come già osservato, non è sempre possibile trovare un codice assolutamente ottimo, poiché non in tutte le sorgenti si ha \(\log_d\left(\frac{1}{p(s)}\right) \in \N, \forall s\), e dunque non sempre tali valori sono ammissibili come lunghezze di parole di codice.
+Per avvicinarsi più possibile a tali valori, e quindi al codice assolutamente ottimale, possiamo prendere il loro soffitto, ovvero $\left\lceil \log_d\left(\frac{1}{p(s)}\right)\right\rceil \in \N, \forall s$.
+
 \begin{proof}
   Per semplicità, ci ridurremmo al caso di sorgenti proprie, ma il teorema è valido in generale.
-  Per il \Cref{thm:shannon}, abbiamo che 
-  \[\frac{H(S)}{\log(d)} = c(X) \iff X \text{ massimale }\land \forall s \in \SCal, \abs{\varphi(s)}=-\log_d(p(s))=\log_d\left(\frac{1}{p(s)}\right)\]
-
-  Come già osservato, non è sempre possibile trovare un codice assolutamente ottimo, poiché non in tutte le sorgenti \(\log_d\left(\frac{1}{p(s)}\right) \in \N\), e dunque non sempre tali valori sono ammissibili come lunghezze di parole di codice.
-  Ovviamente, per provare ad avvicinarsi il più possibile a questo ottimo l'idea è di prendere il minimo intero maggiore di tali valori.
-  Definiamo dunque \(r: \SCal \to \N\) come
+  
+  Definiamo \(r: \SCal \to \N\) come
   \[r(s) = \left\lceil \log_d\left(\frac{1}{p(s)}\right) \right\rceil\]
   Per definizione della funzione \(\lceil\;\rceil\), si ha che
   \[\log_d\left(\frac{1}{p(s)}\right) \leq r(s) < \log_d\left(\frac{1}{p(s)}\right) + 1\]
-  Dalla prima disuguaglianza, ovvero \(r(s) \geq -\log_d(p(s))\), abbiamo che \(d^{-r(s)} \leq p(s)\implies \sum_{s\in\SCal} d^{-r(s)} \leq \sum_{s\in\SCal} p(s) = 1\).
-  Sia dunque \(f: \N \to \N\) una funzione di conteggio dei simboli di \(\SCal\) tali che \(r(s)\) abbia un certo valore, ovvero:
+  Dalla prima disuguaglianza, abbiamo che \(d^{-r(s)} \leq p(s)\implies \sum_{s\in\SCal} d^{-r(s)} \leq \sum_{s\in\SCal} p(s) = 1\).
+
+  Sia \(f: \N \to \N\) una funzione di conteggio dei simboli di \(\SCal\) per cui \(r(s)\) assuma un certo valore, ovvero:
   \[f(n) = \#\set{s \in \SCal}[r(s) = n]\]
   Utilizzando tale funzione, possiamo riscrivere le precedenti sommatorie come
   \[1 \geq \sum_{s\in\SCal} d^{-r(s)} = \sum_{n=0}^{\infty} f(n)d^{-n}\]
-  Essendo \(S\) propria, \(p(s) > 0 \forall s \in \SCal\), dunque \(\log_d\left(\frac{1}{p(s)}\right)>0 \implies r(s) \geq 1\) per definizione di \(\lceil\;\rceil\).
-  Da cui \(f(0) = 0\). Sono dunque valide le ipotesi del \Cref{thm:kraft}, e dunque esiste \(X\) codice prefisso su \(A\) tale che \(f_X = f\), e in particolare si ha che \(\lvert\; \rvert \circ \varphi = r\), ovvero la funzione lunghezza delle parole di \(X\) coincide con \(r\).
-  In oltre si ha che \(\# X = \# \SCal\). Allora
-  \(c(X) \leq \sum_{s\in\SCal} p(s)r(s) < \sum_{s\in\SCal} p(s)\left(\log_d\left(\frac{1}{p(s)}\right) + 1\right) = \frac{\sum_{s\in\SCal} p(s)\log\left(\frac{1}{p(s)}\right)}{\log(d)} + \sum_{s\in\SCal} p(s) = \frac{H(S)}{\log(d)} + 1\)
+  Essendo \(S\) propria, si osserva \(p(s) > 0,  \forall s \in \SCal\), dunque \(\log_d\left(\frac{1}{p(s)}\right)>0 \implies r(s) \geq 1\).
+  Pertanto, \(f(0) = 0\). 
+  
+  Sono dunque valide le ipotesi del \Cref{thm:kraft}, e quindi esiste \(X\) codice prefisso su \(A\) tale che \(f_X = f\), e in particolare si ha che \(\lvert\; \rvert \circ \varphi = r\), ovvero $r$ è la funzione lunghezza delle parole di \(X\).
+  Inoltre si ha che \(\# X = \# \SCal\). Allora
+  \[c(X) = \sum_{s\in\SCal} p(s)r(s) < \sum_{s\in\SCal} p(s)\left(\log_d\left(\frac{1}{p(s)}\right) + 1\right) = \frac{\sum_{s\in\SCal} p(s)\log\left(\frac{1}{p(s)}\right)}{\log(d)} + \sum_{s\in\SCal} p(s) = \frac{H(S)}{\log(d)} + 1\]
 \end{proof}
 
 \begin{observation}{}
-  Come già detto alla fine dello scorso capitolo, in generale non è detto che un codice finito ammetta completamento finito.
-  Per i codici prefisso invece sì. Questo poiché essere massimale per un codice prefisso è equivalente all'esistenza di un albero completo.
-  Dunque se non è massimale, posso aggiungere nodi fino a renderlo completo.
+  Come già detto alla fine del capitolo 2, in generale, non è detto che un codice finito ammetta completamento finito.
+  Per i codici prefisso invece sì, poiché, per un codice prefisso, essere massimale è equivalente all'esistenza di un albero completo.
+  Dunque se esso non è massimale, è possibile  aggiungere nodi al suo albero fino a rendere quest'ultimo completo.
 \end{observation}
 
 \begin{example}{}
