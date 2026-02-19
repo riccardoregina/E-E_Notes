@@ -673,7 +673,7 @@ Per avvicinarsi più possibile a tali valori, e quindi al codice assolutamente o
 
 \begin{observation}{}
   Come già detto alla fine del capitolo 2, in generale, non è detto che un codice finito ammetta completamento finito.
-  Per i codici prefisso invece sì, poiché, per un codice prefisso, essere massimale è equivalente all'esistenza di un albero completo.
+  Per i codici prefisso invece sì, poiché, per un codice prefisso, essere massimale è equivalente all'esistenza di un albero completo che lo rappresenti.
   Dunque se esso non è massimale, è possibile  aggiungere nodi al suo albero fino a rendere quest'ultimo completo.
 \end{observation}
 
@@ -734,34 +734,31 @@ Per avvicinarsi più possibile a tali valori, e quindi al codice assolutamente o
 
 Come visto nella \Cref{prop:optimal_prefix_code}, per ogni sorgente e alfabeto di codice con almeno due simboli, esiste un codice ottimale.
 Vediamo dunque un algoritmo per costruire un codice (prefisso) ottimale data una qualsiasi sorgente. Tale algoritmo è detto \keyword{algoritmo di Huffman}, e i codici da esso generati \keyword{codici di Huffman}.
-Iniziamo mostrando il caso binario, per poi estenderlo al caso \(d\)-ario.
+Iniziamo mostrando il caso binario per poi estenderlo al caso \(d\)-ario.
 
-
-Sia \(S = (\SCal,p)\) sorgente con \(\SCal = \set{s_1, \ldots, s_k}\) e sia \(\forall i \in \set{1,\ldots,k}, p_i=p(s_i)\), supponendo \(p_1 \geq p_2 \geq \ldots \geq p_k\).
-Allora se \(X\) è codice binario adattato a \(S\), e \(X = \set{x_1,\ldots,x_k}\) con \(\varphi(s_i) = x_i\) tale che realizzi il costo minimo, si ha che \(\abs{x_1}\leq\abs{x_2}\leq\ldots\leq\abs{x_k}\), ovvero ai simboli più probabili sono associate parole più corte, e ai meno probabili le più lunghe.
-
-Se \(X\) è prefisso e ottimale per \(S\), allora è massimale. 
-Poiché allora \(T_X\) è completo, nell'ultimo livello il numero di foglie è pari, poiché tutti i nodi al livello precedente devono avere due figli,
-e dunque tutte le parole associate a tali foglie hanno la stessa lunghezza.
-Assumiamo quindi senza perdita di generalità\footnote{Non c'è perdita di generalità poiché tutte le parole associate alle foglie dell'ultimo livello avendo la stessa lunghezza possono essere permutate nella successione \(\abs{x_1}\leq\abs{x_2}\leq\ldots\leq\abs{x_k}\) senza alterarne il significato.}
-che \(x_k\) e \(x_{k-1}\) siano figlie dello stesso nodo.
-Si ha che \(\exists x_{k-1/k}\in Pref(X)\), massimo prefisso comune, tale che \(x_{k-1} = x_{k-1/k}a\) e \(x_k = x_{k-1/k}b\) con \(a,b \in A, a \neq b\).
 \begin{algorithmdesc}{Huffman (caso binario)}
-  
-  L'idea dell'algoritmo è passare a una sorgente ridotta \(S_{k-1} =(\SCal_{k-1}, p')\), con
-  \[\SCal_{k-1} = \set{s_1,\ldots,s_{k-2}, s_{k-1/k}} \text{ e}\]
-  \[p'(s_i)=p_i, \forall i \in \set{1,\ldots,k-2} \land p_{k-1,k}' = p_{k-1} + p_k\] 
-  dove \(s_{k-1/k}\) è un nuovo simbolo che sostituisce \(s_{k-1}\) e \(s_k\).
-  A tale sorgente viene adattato il codice \(X_{k-1} = \set{x_1,\ldots,x_{k-2}, x_{k-1/k}}\), ovvero un codice in cui andiamo a sostituire le parole \(x_{k-1}\) e \(x_k\) con il loro prefisso comune \(x_{k-1/k}\).
-  L'albero di codice \(T_{X_{k-1/k}}\) rimane ovviamente completo e quindi il codice rimane massimale.
-  Vedremo a breve che \(X_{k-1}\) è ottimale per \(S_{k-1}\) se e solo se \(X\) è ottimale per \(S\).
-  Dimostrato questo, è possibile definire una procedura iterando il procedimento fino a ottenere una sorgente con due soli simboli, per la quale l'ottimo è banale da calcolare.
-  Infatti, in tal caso l'unico codice prefisso ottimale è \(X_2 = \set{a,b}\) con \(a,b \in A, a \neq b\).
-  Da lì, avendo tenuto traccia delle \qi{fusioni} operate, potremmo ottenere il codice \(X_3\) ottimale per \(S_3\) e così via fino a risalire a \(X\).
+  Sia \(S = (\SCal,p)\) sorgente con \(\SCal = \set{s_1, \ldots, s_k}\) e sia \(\forall i \in \set{1,\ldots,k}, p_i=p(s_i)\). Riordiniamo i simboli in modo tale che si ottenga \(p_1 \geq p_2 \geq \ldots \geq p_k\).
+  L'algoritmo è composto da due fasi: riduzione, adattamento.
+  \begin{description}
+    \item[\qi{Riduzione}] 
+      L'idea in questa fase è passare da $S_k$ a una sorgente ridotta \(S_{k-1} =(\SCal_{k-1}, p')\), con
+      \[\SCal_{k-1} = \set{s_1,\ldots,s_{k-2}, s_{k-1/k}} \text{ e}\]
+      \[p'(s_i)=p_i, \forall i \in \set{1,\ldots,k-2} \land p_{k-1/k}' = p_{k-1} + p_k\] 
+      dove \(s_{k-1/k}\in S_{k-1}\) è un nuovo simbolo che sostituisce \(s_{k-1},s_k\in S_{k}\), ovvero i due simboli di $S_k$ a probabilità di emissione minore. Questa operazione di sostituzione viene impropriamente detta \qi{fusione}.
+      Reiteriamo il procedimento fino a raggiungere una sorgente $S_2=\set{s_1, s_2}$.  Durante questa fase, bisogna aver cura di segnare le \qi{fusioni} effettuate ad ogni passo, che saranno necessarie nella fase di adattamento.
+    \item[\qi{Adattamento}]
+      In questa fase, ripercorriamo a ritroso le \qi{fusioni}, ottenendo sorgenti via via più grandi, fino a $S_{k}=S$, adattando ad esse un codice prefisso ottimale. 
+      La fase di riduzione è terminata producendo una sorgente $S_2$ per la quale il codice prefisso ottimale è \(X_2 = \set{a,b}\) con \(a,b \in A, a \neq b\).
+      Supponiamo di aver \qi{fuso} $u,v \in S_{3}$ per ottenere $s_2 \in S_{2}$ e di associare $a$ a $s_1$, $b$ a $s_2$. Allora, reintroducendo $S_{3}$, vi adattiamo il codice $X_{3}=\set{a,ba,bb}$, associando $ba$ a $u$, $bb$ a $v$. Insomma, abbiamo ripercorso a ritroso la \qi{fusione} effettuata nella fase di riduzione per ottenere $S_{3}$ a cui abbiamo adattato $X_{3}$. Reiteriamo il procedimento fino ad ottenere $S_{k}=S$, a cui adatteremo un codice $X_{k}=X$.
+  \end{description}
 \end{algorithmdesc}
 
+\begin{note}{}
+  L'algoritmo di Huffman consente di trovare \qi{un} codice e non \qi{il} codice, poiché durante la fase di riduzione dell'algoritmo è possibile scegliere una tra le possibili \qi{fusioni}. Ad esempio, si potrebbe avere un simbolo con probabilità minima e due simboli con la seconda probabilità più bassa. Nello scenario descritto, è possibile scegliere arbitrariamente uno dei simboli con seconda probabilità minima. Scelte diverse portano a codici diversi, ma ugualmente ottimali.
+\end{note}
+
 \begin{example}{}
-  Sia \(\SCal = \set{s_1,\ldots, s_6}\) e \(p_1 = 0.3,p_2=0.25,p_3=0.2,p_4=p_5=0.1,p_6=0.05\). Costruiamo dunque un  codice di Huffman per \(S\)
+  Sia \(\SCal = \set{s_1,\ldots, s_6}\) e \(p_1 = 0.3,p_2=0.25,p_3=0.2,p_4=p_5=0.1,p_6=0.05\). Costruiamo dunque un codice di Huffman per \(S\).
   Una possibile prima sorgente ridotta è \(S_5\) con \(\SCal_5 = \set{s_1,s_2,s_3,s_4,s_{5/6}}\) e \(p_{5/6} = 0.15\).
   Dunque \(p_3 = 0.2 > p_{5/6} > p_4 = 0.1\). La successiva riduzione darà quindi \(\SCal_4 = \set{s_1,s_2,s_{3},s_{4/5/6}}\) con \(p_{4/5/6} = 0.25\).
   Ora \(p_2 = p_{4/5/6} = 0.25 > p_3\). Scegliamo dunque di formare \(\SCal_3 = \set{s_1,s_{2/3},s_{4/5/6}}\) con \(p_{2/3} = 0.45\).
@@ -786,7 +783,7 @@ Si ha che \(\exists x_{k-1/k}\in Pref(X)\), massimo prefisso comune, tale che \(
           [{\(x_1 = ba\)}]
           [{\(x_{4/5/6} = bb\)}
             [{\(x_4 = bba\)}]
-            [{\(x_{5/6} = b^4\)}
+            [{\(x_{5/6} = b^3\)}
               [{\(x_5 = b^3a\)}]
               [{\(x_6 = b^4\)}]
             ]
@@ -799,22 +796,17 @@ Si ha che \(\exists x_{k-1/k}\in Pref(X)\), massimo prefisso comune, tale che \(
   Dunque \(\set{a^2,ab,ba,b^2a,b^3a,b^4}\) è ottimale per \(S\). Inoltre l'algoritmo fornisce anche una codifica che realizza il costo ottimale, ovvero \(\phi(s_i) = x_i,\forall i \in \set{1,\ldots,\#\SCal}\)
 \end{example}
 
-\begin{note}{}
-  Da notare che si andrà a trovare \qi{un} codice e non \qi{il} codice, poiché nella procedura sono presenti punti in cui vanno effettuate scelte arbitrarie, che possono portare alla generazione di codici diversi, ugualmente ottimali
-\end{note}
-
-Per la dimostrazione di correttezza dell'algoritmo, come accennato durante la sua esposizione, è necessario assicurarsi che la successione di sorgenti e codici ridotti mantenga sempre la proprietà di ottimalità.
-
-Per tale dimostrazione, saranno utili due osservazioni preliminari, ovvero:
+Per la dimostrazione di correttezza dell'algoritmo, è necessario assicurarsi che la successione di sorgenti e codici ridotti mantenga sempre la proprietà di ottimalità.
+Per tale dimostrazione, saranno utili due osservazioni preliminari. Sia $X$ codice prefisso (massimale) su $A$. Allora:
 \begin{enumerate}
-  \item \(X\) codice prefisso (massimale) su \(A\), \(x \in X \implies X \setminus \set{x} \cup \set{x}A\) codice prefisso (massimale).
-  \item \(X\) codice prefisso (massimale) su \(A\) e \(\exists x' \st \set{x'}A \subseteq X \implies X\setminus \set{x'}A \cup \set{x'}\) codice prefisso (massimale).
+  \item \(x \in X \implies (X \setminus \set{x}) \cup (\set{x}A)\) codice prefisso (massimale).
+  \item \(\exists x' \st \set{x'}A \subseteq X \implies (X\setminus \set{x'}A) \cup \set{x'}\) codice prefisso (massimale).
 \end{enumerate}
 
 In altre parole, queste due proprietà ci dicono che sostituendo in un codice prefisso (massimale) alcune parole col loro prefisso comune o viceversa non inficia l'essere prefisso (massimale).
 Ciò è banale da dimostrare osservando gli alberi di codice corrispondenti.
 
-Andiamo dunque a dimostrare la proposizione lasciata in sospeso necessaria all'algoritmo di Huffman.
+Andiamo dunque a dimostrare la seguente proposizione, che garantisce la correttezza dell'algoritmo di Huffman: dobbiamo dimostrare che partendo da un codice prefisso ottimale $X_i$ e applicando il procedimento di sostituzione si ottiene un codice $X_{i+1}$ ancora prefisso ottimale.
 
 \begin{proposition}{}
   Sia \(X_i \subseteq A^+\) codice ottimale per \(S_i\) sorgente, \(\forall i \in \set{2,\ldots,k-1}\), con \(k \geq 3\).
@@ -824,15 +816,16 @@ Andiamo dunque a dimostrare la proposizione lasciata in sospeso necessaria all'a
 \begin{proof}
   Assumiamo \(X_i = \set{z_1, \ldots,z_i}\) e \(X_{i+1} = \set{z_1,\ldots,z_{i-1},z_{i}a, z_{i}b}\), con queste ultime associate a simboli di probabilità \(q_1\geq q_2 \geq \ldots \geq q_{i-1} \geq q_i \geq q_{i+1}\) e \(z_i\) associata a un simbolo di \(S_i\) di probabilità \(q_i + q_{i+1}\).
   
-  Supponiamo per assurdo che \(X_{i+1}\) \textbf{non} sia ottimale per \(S_{i+1}\) e chiamiamo \(X'_{i+1} \) il prefisso ottimale (binario) per \(S_{i+1}\).
+  Supponiamo per assurdo che \(X_{i+1}\) \textbf{non} sia ottimale per \(S_{i+1}\) e chiamiamo \(X'_{i+1} \) il codice prefisso ottimale (binario) per \(S_{i+1}\).
   Poiché \(X'_{i+1}\) è ottimale, è massimale e dunque \(T_{X'_{i+1}}\) è completo.
 
   Dunque \(\exists z_{i/i+1}' \in Pref(X'),z_i', z_{i+1}' \in X'_{i+1}\) tali che \(z_i' = z_{i/i+1}'a\) e \(z_{i+1}' = z_{i/i+1}'b\) con \(a,b \in A, a \neq b\).
+  
   Nel calcolo di \(c(X_{i+1}')\) tali parole dovranno essere associate a simboli di probabilità \(q_i\) e \(q_{i+1}\).
-  Sia allora \(X_{i+1}' = \set{z_1',\ldots,z_{i-1}'} \text{ con } z_i'=z_{i/i+1}'a,z_{i+1}' = z_{i/i+1}'b\) e definiamo \(X_i' = \set{z_1',\ldots,z_{i-1}', z_{i/i+1}'}\).
+  Sia allora \(X_{i+1}' = \set{z_1',\ldots,z_{i+1}'} \text{ con } z_i'=z_{i/i+1}'a,z_{i+1}' = z_{i/i+1}'b\). \qi{Fondendo} $z_i'$ e $z_{i+1}'$ in $z_{i/i+1}$, si ottiene \(X_i' = \set{z_1',\ldots,z_{i-1}', z_{i/i+1}'}\).
 
   Si ha \(c(X_i') \leq \sum_{j=1}^{i-1} q_j\abs{z_i'} + (q_i+q_{i+1})\abs{z_{i/i+1}'}\).
-  Possiamo inoltre osservare che \(\abs{z_{i,i+1}'} = \abs{z_{i}}-1 = \abs{z_{i+1}}-1\).
+  Possiamo inoltre osservare che \(\abs{z_{i/i+1}'} = \abs{z_{i}}-1 = \abs{z_{i+1}}-1\).
   Dunque
   \[c(X_i') \leq \sum_{j=1}^{i-1} q_j\abs{z_i'} + q_i(\abs{z_{i}}-1) + q_{i+1}(\abs{z_{i+1}}-1) = \]
   \[=\sum_{j=1}^{i+1} q_j\abs{z_j'} - (q_i + q_{i+1}) = c(X_{i+1}') - (q_i + q_{i+1}) < c(X_{i+1}) - (q_i + q_{i+1})\]
@@ -847,20 +840,18 @@ Andiamo dunque a dimostrare la proposizione lasciata in sospeso necessaria all'a
 \end{proof}
 
 
-Passando al caso \(d\)-ario, l'idea va modificata leggermente.
-L'algoritmo infatti si basa sulla \qi{decostruzione} di alberi binari completi associati a codici ottimali in modo da ottenere alberi binari completi più piccoli, fino ad arrivare a un albero con \(2\) foglie, per il quale il codice ottimo è l'alfabeto. 
+Estendiamo, adesso, l'algoritmo di Huffman al caso \(d\)-ario. 
 
-In caso \(d\)-ario, partendo da un albero \(d\)-ario completo il procedimento è analogo. Il problema risiede nel fatto che nel caso binario, come visto nel \Cref{cor:binary-optimality-maximality}, l'ottimalità implica la massimalità, e dunque qualsiasi sia l'ottimo su una sorgente, ho garanzia di partire nella decostruzione da un albero completo.
-Questo purtroppo non vale nel caso \(d\)-ario, ed è facilmente osservabile dal fatto che, dalla \Cref{prop:optimal_prefix_code} per ogni sorgente esiste un codice ottimale prefisso, ma, essendo che gli alberi pieni hanno un numero di foglie\footnote{Questo si può facilmente vedere per costruzione (o per induzione): un albero pieno \(d\)-ario di altezza con un unico nodo ha solo tale nodo come foglia e dunque \(n = 1 \equiv_{d-1} 1\). Ogni altro albero pieno si ottiene sostituendo una foglia con un nodo interno con \(d\) figli, aumentando così il numero di foglie di \(d-1\), e dunque mantenendo la congruenza modulo \(d-1\).}
-\(n\) tale che \(n \equiv_{d-1} 1\), non è detto che per ogni sorgente esista un codice massimale adattabile a essa.
+\begin{observation}{}
+  Partendo da un albero $d$-ario completo, per ottenere un altro albero completo con più foglie, è sufficiente rendere una foglia padre di altre nuove $d$ foglie. Questa operazione toglie una foglia, adesso nodo interno, e ne aggiunge $d$, quindi aggiunge $d-1$ foglie. Poiché nella costruzione di un qualsiasi albero si parte dalla radice (e quindi si parte dall'avere una sola foglia) e l'operazione descritta aggiunge sempre $d -1$ foglie, è chiaro che un albero $d$-ario completo ha sempre \(n \equiv_{d-1} 1\) foglie. 
+\end{observation}
 
-Di conseguenza, l'algoritmo di Huffman \(d\)-ario può essere ricavato in maniera diretta da quello binario (sostituendo opportunamente \(2\) con \(d\)) solo se l'alfabeto di sorgente (e dunque il codice) ha cardinalità \(k\) tale che \(k \equiv_{d-1} 1\).
+Dall'osservazione precedente, poiché le (etichette delle) foglie dell'albero corrispondono alle parole del codice prefisso, segue che non tutti i codici $d$-ari prefissi possono essere rappresentati mediante un albero completo. Tali codici non sono massimali e quindi neanche assolutamente ottimali. Invece, nel caso binario in cui la completezza dell'albero era garantita, l'algoritmo di Huffman permetteva di trovare sempre un codice assolutamente ottimale. 
+Affinchè esista un codice $d$-ario prefisso assolutamente ottimale, è necessario che $\#\mathcal{S} \equiv_{d-1} 1$.
 
-Nel caso generale, se \(\# \SCal = n \not\equiv_{d-1} 1\), significa che ad uno step della costruzione dell'albero non tutti i nodi avranno \(d\) figli.
-Si può facilmente mostrare però che è sempre possibile farlo come ultimo (primo) step, riconducendoci al caso precedente.
-Sia dunque \(n \equiv_{d-1} r\), con \(r \in \{2, \ldots, d-1\}\), allora l'algoritmo prevede che per il passaggio alla prima sorgente ridotta \(S_{n-1}\) vengano fusi solo i \(r\) simboli
-meno probabili, invece di \(d\). In questo modo si ottiene un albero a cui sono state rimosse \(r\) foglie e aggiune una, dunque si avrà che il nuovo albero avrà \(n - r + 1\) foglie, che soddisfa
-\[n - r + 1 \equiv_{d-1} 1\]
+\begin{algorithmdesc}{Huffman (caso $d$-ario)}
+  L'algoritmo segue lo stesso esatto procedimento di quello definito per il caso binario. Tuttavia, invece di \qi{fondere} due parole per iterazione, se ne \qi{fondono} $d$. Vi è, però, un caso in più da gestire: se $\#\mathcal{S} \equiv_{d-1} r \neq 1$, allora ad un certo punto saremo costretti a fondere $r$ parole invece di $d$. Per ottenere una lunghezza media minore per il codice, si consiglia di fare ciò come prima iterazione nella fase di riduzione e quindi come ultima iterazione nella fase di adattamento.  
+\end{algorithmdesc}
 
 \section{Ritardo di decifrazione e sincronizzazione}
 
