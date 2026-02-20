@@ -1107,7 +1107,7 @@ Se abbiamo infatti \(\lambda\rho \in X \land \set{\rho}X^*\set{\lambda} \cap X^*
     \draw[thick,blue, bend left = 90] (0,-\r) to node[midway, below left, blue]{\(\lambda\)} (-\r,0);
     
   \end{tikzpicture}
-  \caption{Rappresentazione grafica della definizione di codice circolare}\label{fig:circular_factorization}
+  \caption{Rappresentazione grafica di due fattorizzazioni circolari per la parola $abab \in X^{*}$.}\label{fig:circular_factorization}
 \end{figure}
 
 \begin{example}{}
@@ -1155,9 +1155,9 @@ Se abbiamo infatti \(\lambda\rho \in X \land \set{\rho}X^*\set{\lambda} \cap X^*
 \end{proposition}
 
 \begin{proof}
-  Dal \Cref{cor:schutz_maximality_completeness} e dalla \Cref{prop:finite_complete_codes_contains_powers}, sappiamo che se \(X\) è massimale e finito, \(\forall a \in A, \exists n_a \geq 1 \st a^{n_a} \in X\)
+  Per \Cref{cor:schutz_maximality_completeness} e dalla \Cref{prop:finite_complete_codes_contains_powers}, sappiamo che se \(X\) è massimale e finito, \(\forall a \in A, \exists n_a \geq 1 \st a^{n_a} \in X\).
   Poiché \(X\) è circolare, \(\forall a, n_a = 1\).
-  Dunque \(A \subseteq X \implies X = A\), essendo \(A\) codice massimale su \(A^*\)
+  Dunque \(A \subseteq X \implies X = A\) e $A$ è codice massimale su \(A^*\).
 \end{proof}
 
 \begin{theorem}{Restivo}
@@ -1193,6 +1193,8 @@ Se abbiamo infatti \(\lambda\rho \in X \land \set{\rho}X^*\set{\lambda} \cap X^*
   Dunque, per la proposizione precedente, l'unico codice finito binario circolare ottimale è l'alfabeto stesso, che però non è adattato a una sorgente propria con più di due simboli.
 \end{proof}
 
+Dunque, abbiamo finora scoperto che un codice finito ha ritardo di sincronizzazione finito se e solo se è circolare. Tuttavia, la verifica manuale della circolarità di un codice può essere ardua. Per fortuna, esiste un metodo iterativo di facile applicazione.
+
 \begin{definition}{Insiemi resto modificati}
   Sia \(X\) codice su \(A\). Definiamo l'insieme dei \keyword{resti modificati} di \(X\) come
   \begin{equation*}
@@ -1211,16 +1213,17 @@ Se abbiamo infatti \(\lambda\rho \in X \land \set{\rho}X^*\set{\lambda} \cap X^*
   Per \(X\) codice (finito),
   \[R_1 = X^{-1}X\setminus \set{\varepsilon} \subseteq Suff(X) \setminus (X \cup \set{\varepsilon}) = R_1' \implies \forall n \geq 1, R_n \subseteq R_n'\]
   Questo è un altro modo per dimostrare che se \(X\) ha ritardo di sincronizzazione finito, allora ha ritardo di decodifica finito.
-  Infatti se ha ritardo di sincronizzazione finito, allora ha \(R_n' = \emptyset\) per qualche \(n\), dunque anche \(R_n = \emptyset\) per lo stesso \(n\), e quindi ha ritardo di decodifica finito per teoremi visti prima 
+  Infatti se ha ritardo di sincronizzazione finito, allora ha \(R_n' = \emptyset\) per qualche \(n\), dunque anche \(R_n = \emptyset\) per lo stesso \(n\), e quindi ha ritardo di decodifica finito per teoremi visti prima.
 \end{observation}
 
 \begin{example}{}
   \(X = \set{a,ba,bb}\) \textbf{non} è circolare.
   Infatti \(R_1' = Suff(X) \setminus (X \cup \set{\varepsilon}) = \set{b}\).
-  Inoltre \(R_2' = {R_1'}^{-1}X \cup X^{-1}R_1' = \set{a,b}\).
+  Inoltre, \(R_2' = {R_1'}^{-1}X \cup X^{-1}R_1' = \set{a,b}\).
   \(R_3' = \set{\varepsilon, a ,b}\),\(R_4' = \set{\varepsilon, a ,b, ba,bb} = R_n' \forall n \geq 4\).
 
-  Invece \(X' = \set{ab,aab}\) circolare: \(R_1' = \set{b}, R'_2 = \emptyset\)
+  Invece, \(X' = \set{ab,aab}\) è circolare: \(R_1' = \set{b}, R'_2 = \emptyset\).
+  
   Anche \(X'' = \set{ab,aba,ba^3,b^2a}\) è circolare:
   \(R_1' = \set{a,b,a^2,ba,a^3}, R_2' = \set{b,ba,a^3,a^2}, R_3' = \set{a^3,ba,a^3}, R_4' = \set{a^3}, R_5' = \emptyset\)
 \end{example}
