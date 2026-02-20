@@ -853,43 +853,46 @@ Affinchè esista un codice $d$-ario prefisso assolutamente ottimale, è necessar
   L'algoritmo segue lo stesso esatto procedimento di quello definito per il caso binario. Tuttavia, invece di \qi{fondere} due parole per iterazione, se ne \qi{fondono} $d$. Vi è, però, un caso in più da gestire: se $\#\mathcal{S} \equiv_{d-1} r \neq 1$, allora ad un certo punto saremo costretti a fondere $r$ parole invece di $d$. Per ottenere una lunghezza media minore per il codice, si consiglia di fare ciò come prima iterazione nella fase di riduzione e quindi come ultima iterazione nella fase di adattamento.  
 \end{algorithmdesc}
 
-\section{Ritardo di decifrazione e sincronizzazione}
+\section{Ritardo di decodifica e sincronizzazione}
 
-\subsection{Ritardo di decifrazione}
-Come detto in precedenza, i codici prefissi sono anche detti codici istantanei, poiché
-la decifrazione di un messaggio codificato con un codice prefisso può essere iniziata alla prima parola ricevuta.
-Un altro modo per esprimere questo concetto è dire che il ritardo di decifrazione di un codice prefisso è \(0\).
+\subsection{Ritardo di decodifica}
+Come detto in precedenza, i codici prefissi sono anche detti codici istantanei, poiché la decodifica di un messaggio codificato con un codice prefisso può essere iniziata alla prima parola ricevuta.
+Un altro modo per esprimere questo concetto è dire che il ritardo di decodifica di un codice prefisso è \(0\).
 
-Consideriamo invece il codice \(X = \set{a,ab,bb}\). Ricevendo il messaggio \(abbbb\ldots\), non è possibile
+Consideriamo invece il codice \(X'' = \set{a,ab,bb}\). Ricevendo il messaggio \(abbbb\ldots\), non è possibile
 decifrare nulla fino a quando non si riceve l'intero messaggio.
-Essendo il numero di \(b\) potenzialmente infinito si dice che il ritardo di decifrazione è infinito.
+Essendo il numero di \(b\) potenzialmente infinito si dice che il ritardo di decodifica è infinito.
 
-\begin{definition}{Ritardo di decifrazione}
+\begin{note}{}
+  Durante la decodifica di un messaggio, non si può assumere che il messaggio arrivi a blocchi di parole di codice. Altrimenti, ovviamente non vi sarebbe mai ambiguità di decodifica. Si deve invece assumere che esso arrivi come una generica parola di $A^{*}$.
+\end{note}
+
+\begin{definition}[label=def:decoding-delay-sets]{Insiemi dei ritardi di decodifica}
   Per \(k\geq 0\), definiamo l'insieme
   \begin{equation*}
     DD(k) = \set{C\subseteq A^* }[\forall x,x' \in X, (\set{x}X^k A^+ \cup \set{x'}X^* \neq \emptyset) \implies x = x']
   \end{equation*}
-  che contiene tutti i codici \(X\) di cui ogni parola può essere decifrata dopo aver ricevuto al più \(k\) parole aggiuntive.
-  Il \keyword{ritardo di decifrazione} di un codice \(X\) è il minimo \(k\) tale che \(X \in DD(k)\), se esiste, altrimenti è infinito.
+  che contiene tutti i codici \(X\) di cui ogni parola può essere decodificata senza ambiguità dopo aver ricevuto al più \(k\) parole aggiuntive.
 \end{definition}
 
-\begin{observation}
-  Si noti che \(DD(0) \subseteq DD(1) \subseteq DD(2) \subseteq \ldots\).
-  Questo è il motivo per cui chiamiamo ritardo di decifrazione il minimo \(k\) tale che \(X \in DD(k)\).
-\end{observation}
+Questa definizione è abbastanza densa di logica: i codici $X \subseteq A^{*}$ appartengono a $DD(k)$ se, per ogni coppia $x,x^{'} \in X$, è vera l'implicazione. Tale implicazione è vera quando:
+\begin{itemize}
+  \item $\left(\{x\}X^{k}A^{*} \cap \{x^{'}\}X^{*} \neq \emptyset \right) \wedge x=x^{'}$, cioè se non si sa ancora se la prima parola del messaggio sia $x$ o $x^{'}$ dopo aver letto altre $k$ parole di $X$, allora è vero $x=x^{'}$.
+  \item $\{x\}X^{k}A^{*} \cap \{x^{'}\}X^{*} = \emptyset$, ovvero dopo aver letto altre $k$ parole di $X$, non c'è ambiguità di decodifica.
+\end{itemize}
+Insomma, $X \in DD(k)$ se, per ogni coppia $x,x^{'} \in X$, non può esserci un'ambiguità di decodifica sulla prima parola del messaggio ($x$ o $x^{'}$) dopo aver letto altre $k$ parole di $X$.
 
-La definizione formale di ritardo di decifrazione risulta un po' ostica da interpretare, ma cattura esattamente l'idea che si vuole esprimere.
-Prendiamo ad esempio un codice con ritardo di decifrazione \(k\).
-Questo intuitivamente ci dice che, qualsiasi parola del codice può essere decifrata dopo aver ricevuto al più \(k\) parole aggiuntive.
-In altre parole, presa una qualsiasi parola \(x\) del codice, e preso il linguaggio \(\set{x}X^2 A^+\) delle parole che iniziano con \(x\) e sono seguite da almeno \(2\) parole di codice,
-tale linguaggio ha solo parole che si è certi inizino per \(x\), permettendo la fattorizzazione e dunque la decifrazione.
-Di conseguenza, presa una qualsiasi altra parole \(x'\) del codice, questa non può essere confusa con \(x\) nella fattorizzazione, e dunque qualsiasi parola di codice che inizia per \(x'\) non può appartenere a \(\set{x}X^2 A^+\).
-Da qui la definizione formale.
+\begin{proposition}{}
+$\forall k\geq 0: DD(k) \subseteq DD(k+1)$.
+\end{proposition}
 
-È importante notare come sia fondamentale che nella definizione formale si faccia riferimento al linguaggio \(\set{x}X^k A^+\) e non a \(\set{x}X^k X^+\), poiché nel secondo caso l'intersezione sarebbe sempre vuota, o avremmo una doppia fattorizzazione di parole di \(X^*\).
-Questa accortezza matematica è anche giustificata nel contesto pratico, poiché la trasmissione dei messaggi non avviene necessariamente in blocchi di parole di codice, ma può essere interrotta in qualsiasi momento.
+Infatti, se si riesce a non avere ambiguità sulla prima parola del messaggio leggendo altri $k$ simboli, allora a maggior ragione non si avrà ambiguità leggendone un altro ancora.
 
-Possiamo dunque facilmente osservare che i codici prefisso sono esattamente i codici con ritardo di decifrazione \(0\).
+\begin{definition}{}
+  Il \keyword{ritardo di decodifica} di un codice \(X\) è il minimo \(k\) tale che \(X \in DD(k)\), se esiste, altrimenti è infinito.
+\end{definition}
+
+Possiamo dunque facilmente osservare che i codici prefisso sono esattamente i codici con ritardo di decodifica \(0\).
 \begin{proposition}{}
   \(X\) codice prefisso \(\iff X \in DD(0)\)
 \end{proposition}
@@ -898,8 +901,8 @@ Possiamo dunque facilmente osservare che i codici prefisso sono esattamente i co
   Ponendo \(k=0\) nella definizione di \(DD(k)\), si ottiene un analogo della definizione di codice prefisso.
 \end{proof}
 
-\begin{example}{}
-  Il codice \(X' = \set{a,aba,bb}\) ha ritardo di decifrazione \(1\).
+\begin{example}[label=ex:code-with-decoding-delay-one]{}
+  Il codice \(X' = \set{a,aba,bb}\) ha ritardo di decodifica \(1\).
   Infatti se un messaggio inizia per \(b\) allora la prima parola del codice che lo compone
   è necessariamente \(bb\), mentre se inizia per \(a\) allora la prima parola del codice può essere sia 
   \(a\) che \(aba\), ma in questo caso, dopo aver ricevuto una parola aggiuntiva, sarà possibile distinguere
@@ -907,7 +910,7 @@ Possiamo dunque facilmente osservare che i codici prefisso sono esattamente i co
   Infatti, sia in caso di recezione di \(aaA^*\) che di \(abbA^*\), la prima parola del codice è \(a\), mentre se si riceve \(abaA^*\) la prima parola del codice è \(aba\).
 \end{example}
 
-Nella definizione non è specificato che \(X\) debba essere un codice, ma si può dimostrare che se \(X\) ha ritardo di decifrazione finito allora è un codice.
+Formalmente, gli elementi degli insiemi $DD$ sono linguaggi e non necessariamente codici. Tuttavia, si può dimostrare che se \(X\) ha ritardo di decodifica finito allora è un codice.
 
 \begin{proposition}{}
   Sia \(X \subseteq A^*\). Allora
@@ -915,93 +918,97 @@ Nella definizione non è specificato che \(X\) debba essere un codice, ma si pu�
 \end{proposition}
 
 \begin{proof}
-  Sia \(X \in DD(k)\) per qualche \(k \geq 0\), e per assurdo \(X^*\) contenga parole che ammettono doppia fattorizzazione in parole di \(X\), ovvero siano
+  Sia \(X \in DD(k)\) per qualche \(k \geq 0\). Per assurdo, \(X^*\) contiene parole che ammettono doppia fattorizzazione in parole di \(X\), ovvero esistono
   \[x_1,\ldots,x_m,x_1',\ldots,x_n' \in X \st x_1\neq x_1' \land x_1\ldots x_m = x_1'\ldots x_n'\]
 
   Se \(w \in X^k\), allora
   \[x_1\ldots x_m w = x_1'\ldots x_n' w\]
-  Abbiamo dunque che \(x_1\) è seguita da almeno \(k\) parole\footnote{A prescindere dal valore di \(m\), essendo \(w \in X^k\) avremo che \(x_1\) è seguita da \(m-1+k>k\) parole di \(X\)} di \(X\), e quindi appartenendo a \(DD(k)\) dovrebbe essere \(x_1 = x_1'\), assurdo.
+  Abbiamo dunque che \(x_1\) è seguita da almeno \(k\) parole\footnote{A prescindere dal valore di \(m\), essendo \(w \in X^k\) avremo che \(x_1\) è seguita da \(m-1+k>k\) parole di \(X\)} di \(X\), e quindi, appartenendo a \(DD(k)\), dovrebbe verificarsi \(x_1 = x_1'\). Assurdo!
 \end{proof}
 
-Il concetto di ritardo di decifrazione è inoltre fortemente legato agli insiemi resto visti nella \Cref{def:remainder}.
+Il concetto di ritardo di decodifica è inoltre fortemente legato agli insiemi resto visti nella \Cref{def:remainder}.
 
 \begin{theorem}{Even}
   Sia \(X \subseteq A^+\). Allora 
   \[\exists k \geq 0 \st X \in DD(k) \iff \exists n \geq 1 \st R_n(X) = \emptyset\]
 \end{theorem}
 
-\begin{proof}
-  Per la dimostrazione di questo teorema è fondamentale il risultato del \Cref{lem:sardinas-patterson-intermediate}, usato per dimostrare il teorema di Sardinas-Patterson.
+Per la dimostrazione di questo teorema è fondamentale il risultato del \Cref{lem:sardinas-patterson-intermediate}, usato per dimostrare il teorema di Sardinas-Patterson.
 
-  Andiamo dunque a dimostrare le due implicazioni.
+\begin{proof}
   \begin{description}
     \item[\q{\(\impliedby\)}] 
       Sia \(R_n = \emptyset\) e dimostriamo \(X \in DD(n-1)\).
 
       Supponiamo per assurdo che \(X \not\in DD(n-1)\), e siano dunque
-      \[v \in A^*, x_1,\ldots,x_n,x_1',\ldots,x_m' \in X \st x_1\neq x_1' \land x_1\ldots x_m v = x_1'\ldots x_m'\]
-      Possiamo notare che chiaramente \(x_1\ldots x_n v \in \set{x_1}X^{n-1}A^*\) e \(x_1'\ldots x_m' \in \set{x_1'}X^* \), negando quindi la condizione per essere in \(DD(n-1)\).
-      Essendo che \(v\) è suffisso di \(x_1'\ldots x_m'\), esisterà  \(r\) tale che \(1 \leq r \leq m\) e \(v = u x_{r+1}'\ldots x_m'\) con \(u \in Suff(x_r')\).
+      \[v \in A^*, x_1,\ldots,x_n,x_1',\ldots,x_j' \in X \st x_1\neq x_1' \land x_1\ldots x_n v = x_1'\ldots x_j'\]
+      Possiamo notare che chiaramente \(x_1\ldots x_n v \in \set{x_1}X^{n-1}A^*\) e \(x_1'\ldots x_j' \in \set{x_1'}X^* \), negando quindi per $X$ la condizione per appartenere a \(DD(n-1)\).
+      Poiché \(v\) è suffisso di \(x_1'\ldots x_j'\), esisterà un indice \(r\) tale che \(1 \leq r \leq j\) e \(v = u x_{r+1}'\ldots x_j'\) con \(u \in Suff(x_r')\).
 
       Sostituendo, otteniamo
-      \[x_1\ldots x_n u x_{r+1}'\ldots x_m' = x_1'\ldots x_r' x_{r+1}'\ldots x_m'\implies x_1\ldots x_n u =x_1'\ldots x_r'\]
-      Quindi \(\abs{u} \leq \abs{x_r'}\).
-      Dunque in questa equazione sussistono tutte le condizioni del \Cref{lem:sardinas-patterson-intermediate}, e quindi \(u \in R_{n+r-1}\).
-      Ma avendo supposto che \(R_n = \emptyset\), otteniamo un assurdo, poiché \(n+r-1 \geq n\) e dunque \(R_{n+r-1} = \emptyset\).
+      \[x_1\ldots x_n u \bcancel{x_{r+1}'\ldots x_j'} = x_1'\ldots x_r' \bcancel{x_{r+1}'\ldots x_j'} \implies x_1\ldots x_n u = x_1'\ldots x_r'\]
+      Dunque, si ha $m:=n+r-1$, $x_1\neq x_1'$, $x_1\ldots x_n u = x_1'\ldots x_r'$, $\abs{u} \leq \abs{x_r'}$.
+      Sussistono quindi tutte le condizioni del \Cref{lem:sardinas-patterson-intermediate} e quindi \(u \in R_{m}\). Notiamo che $m=n+r-1\geq n$.
+      Quindi, avevamo supposto \(R_n = \emptyset\), ma abbiamo trovato $R_{m} \neq \emptyset$, ovvero che un resto successivo a $R_n$ (o $R_n$ stesso) sia non vuoto. Assurdo!
     \item[\q{\(\implies\)}]
       Sia \(X \in DD(d)\) e mostriamo che \(R_n = \emptyset\) per \(n > 2d\).
-      Sia \(w \in R_n\) per un \(n\) qualsiasi, per il \Cref{lem:sardinas-patterson-intermediate} esistono \(i,j \geq 1, x_1,\ldots,x_i, x_1',\ldots,x_j' \in X\) tali che:
+      Sia \(w \in R_n\) per un \(n\) qualsiasi. 
+      Per il \Cref{lem:sardinas-patterson-intermediate} esistono \(i,j \geq 1, x_1,\ldots,x_i, x_1',\ldots,x_j' \in X\) tali che:
       \begin{enumerate}
         \item \(i+j - 1 = n\)
         \item \(x_1 \neq x_1'\)
-        \item \(x_1\ldots x_i' w = x_1'\ldots x_j'\)\label{item:even-thm-dim-3}
+        \item \(x_1\ldots x_i w = x_1'\ldots x_j'\)\label{item:even-thm-dim-3}
         \item \(\abs{w} \leq \abs{x_j'}\)\label{item:even-thm-dim-4}
       \end{enumerate}
-      Dunque dall'equazione al punto~\ref{item:even-thm-dim-3} e dall'ipotesi \(X \in DD(d)\) segue che \(i-1 < d\implies i\leq d\).
-      Non fosse così, in maniera analoga alla dimostrazione precedente avremmo \(x_i\) seguita da almeno \(d\) parole di \(X\) uguali a \(x_1'\ldots x_j'\), il che contraddirebbe l'ipotesi che \(X \in DD(d)\).
-      Dal punto~\ref{item:even-thm-dim-4}, avendo che \(\abs{w} \leq \abs{x_j'}\), si ha che necessariamente \(\exists \lambda \in A^* \st x_j=\lambda w\).
+      Notiamo, nell'equazione al punto~\ref{item:even-thm-dim-3}, che $\set{x_1} X^{i-1} A^{*} \ni x_1\ldots x_i w = x_1'\ldots x_j' \in \set{x_1'} X^{*}$. Quindi, dall'ipotesi \(X \in DD(d)\), segue che \(i-1 < d\implies i\leq d\).
+      Dal punto~\ref{item:even-thm-dim-4}, avendo che \(\abs{w} \leq \abs{x_j'}\), si ha che necessariamente \(\exists \lambda \in A^* \st x_j'=\lambda w\).
       Si ha dunque che 
-      \[x_1\ldots x_i' w = x_1'\ldots x_{j-1}' \lambda w\implies x_1\ldots x_i' = x_1'\ldots x_{j-1}' \lambda\]
-      Dunque \(j-2<d\implies j-1\leq d\).\footnote{Abbiamo inizialmente assunto \(j \geq 1\), ma questo potrebbe creare problemi nella costruzione poiché \(j-2\) potrebbe essere negativo. Tuttavia, se \(j=1\) si ha sempre che \(j-1 \leq d\) essendo \(d \in \N\). Dunque è possibile assumere \(j > 1\), poiché il caso \(j = 1\) risulta banale.}
-      Ne segue che \(2d \geq i+j-1 = n\) necessariamente. 
-      Avendo preso per la dimostrazione un arbitraria parola \(w\) di un arbitrario insieme \(R_n\), e avendo dedotto che in ogni caso tale \(n\) deve valere al più da \(2d\), si ha come conseguenza che non si possano prendere parole da insiemi \(R_n\) se \(n > 2d\), e dunque per tali \(n\) si ha \(R_n = \emptyset\).
+      \[x_1\ldots x_i \bcancel{w} = x_1'\ldots x_{j-1}' \lambda \bcancel{w}\implies x_1\ldots x_i = x_1'\ldots x_{j-1}' \lambda\]
+      Notiamo adesso che $\set{x_1} X^{*} \ni x_1\ldots x_i = x_1'\ldots x_{j-1}' \lambda \in \set{x_i'} X^{j-2} A^{*}$. Ancora una volta, dall'ipotesi \(X \in DD(d)\), segue che \(j-2<d\implies j-1\leq d\).\footnote{Abbiamo inizialmente assunto \(j \geq 1\), ma questo potrebbe creare problemi nella costruzione poiché \(j-2\) potrebbe essere negativo. Tuttavia, se \(j=1\) si ha sempre che \(j-1 \leq d\) essendo \(d \in \N\). Dunque è possibile assumere \(j > 1\), poiché il caso \(j = 1\) risulta banale.}
+      Quindi $$\begin{cases}
+        i \leq d \\
+        j-1 \leq d
+      \end{cases} \implies 2d \geq i+j-1 = n$$
+      Avendo preso per la dimostrazione un'arbitraria parola \(w\) di un arbitrario insieme \(R_n\), e avendo dedotto che in ogni caso si deve avere \(n\leq 2d\), si ha come conseguenza che non si possano prendere parole da insiemi \(R_n\) se \(n > 2d\), e dunque per tali \(n\) si ha \(R_n = \emptyset\).
   \end{description}
 \end{proof}
 
 \begin{example}{}
-  Se \(X\) è prefisso, abbiamo già osservato che \(R_1(X) = \emptyset\)
-  Per \(X'\) visto prima, possiamo facilmente verificare che \(R_n(X) = \set{b}, \forall n \geq 1\).
-  Per \(X'' = \set{a,aba,bb}\), come abbiamo visto precedentemente, \(R_1\set{ba}\) e \(R_2 = \emptyset\).
+  Se \(X\) è prefisso, abbiamo già osservato che \(R_1(X) = \emptyset\).
+  Per \(X' = \set{a,aba,bb}\) visto in \Cref{ex:code-with-decoding-delay-one}, si ha \(R_1\set{ba}\) e \(R_2 = \emptyset\).
+  Per \(X''=\set{a, ab, bb}\) visto come primo esempio di codice a ritardo di decodifica infinito, possiamo facilmente verificare che \(R_n(X) = \set{b}, \forall n \geq 1\).
 \end{example}
 
-Fino a ora abbiamo solo visto codici massimali con ritardo di decifrazione \(0\) (codici prefissi) o infinito come l'esempio precedente.
+Fino a ora abbiamo solo visto codici massimali con ritardo di decodifica \(0\) (codici prefissi) o infinito come l'esempio precedente.
 
 Questo non è un caso, ma è risultato di un teorema
 
 \begin{theorem}{Schützenberger (the last one)}
-  Se \(X\) è codice finito massimale, allora o è prefisso (e quindi ha ritardo di decifrazione \(0\)) o ha ritardo di decifrazione infinito.
+  Se \(X\) è codice finito massimale, allora o è prefisso (e quindi ha ritardo di decodifica \(0\)) o ha ritardo di decodifica infinito.
 \end{theorem}
 
 \begin{corollary}{}
-  Sia \(X\) codice binario ottimale per \(S\) propria. Allora ha ritardo di decifrazione \(0\) o infinito.
+  Sia \(X\) codice binario ottimale per \(S\) propria. Allora \(X\) ha ritardo di decodifica \(0\) o infinito.
 \end{corollary}
 
 \subsection{Sincronizzazione}
 
-Nel parlare di ritardo di decifrazione, abbiamo fatto la fondamentale assunzione che il ricevitore conosca l'inizio della trasmissione.
-In molti casi pratici, questo non è vero, e il ricevitore può iniziare a ricevere il messaggio in un punto qualsiasi della trasmissione.
+Nel parlare di ritardo di decodifica, abbiamo fatto la fondamentale assunzione che il ricevitore conosca l'inizio della trasmissione.
+In molti casi pratici, questo non è vero: il ricevitore può iniziare a ricevere il messaggio in un punto qualsiasi della trasmissione.
 Vediamo dunque come formalizzare questo concetto e di esprimere eventuali proprietà dei codici che permettono di risolvere questo problema.
 
 Sia \(X = \set{ab,ba,bb}\) e supponiamo di ricevere \(\ldots abababab\). 
 In questo caso non è possibile sapere se la prima \(a\) ricevuta è l'inizio di un \(ab\) o la fine di un \(ba\).
-Abbiamo dunque una doppia interpretazione mancando l'inizio.
+Avendo mancato l'inizio della trasmissione, è possibile una doppia interpretazione.
 
-Se però questo pattern si interrompe, ricevendo ad un certo punto \(\ldots baab \ldots\), allora siamo sicuri che queste due parole sono \(ba\) e \(ab\), e quindi possiamo risincronizzarci.
+Se però questo pattern si interrompe, ricevendo ad un certo punto \(\ldots baab \ldots\), allora siamo sicuri che queste due parole sono \(ba\) e \(ab\), e quindi possiamo risincronizzare la nostra decodifica, avendo adesso un punto dicronizzare la nostra decodifica, avendo adesso un punto di \qi{inizio}.
 
 \begin{definition}{Coppia sincronizzante}
   Dato \(X\subseteq A^*\), chiamiamo \keyword{coppia sincronizzante} due parole \(u,v \in X^+\) tali che
   \[\forall \lambda,\rho \in A^*, \lambda u v \rho \implies \lambda u, v\rho \in X^*\]
 \end{definition}
+
+Nell'esempio precedente, $ba$ e $ab$ erano una coppia sincronizzante.
 
 \begin{definition}{Codice sincronizzante}
   Un codice \(X\) si dice \keyword{sincronizzante} se esiste una coppia sincronizzante \(u,v \in X^+\).
@@ -1010,31 +1017,31 @@ Se però questo pattern si interrompe, ricevendo ad un certo punto \(\ldots baab
 Ad esempio, il codice \(X = \set{ab,ba,bb}\) è sincronizzante, ma \(X' = \set{ab,ba,bb,aa}\) non lo è.
 In oltre, il codice Morse è sincronizzante, poiché ogni parola di codice finisce con uno spazio (pausa più lunga), e quindi ogni coppia di parole è sincronizzante.
 
-Definiamo dunque un concetto analogo a quello di ritardo di decifrazione per la sincronizzazione.
+Definiamo dunque un concetto analogo a quello di ritardo di decodifica per la sincronizzazione.
 
 \begin{definition}{Ritardo di sincronizzazione}
   Definiamo \(\forall k \geq 1\)
   \[BS(k) = \set{X \subseteq A^* \text{ codice }}[\forall (u,v) \in X^k\times X^k, (u,v) \text{ coppia sincronizzante per } X]\]
   
-  Definiamo come \keyword{ritardo di sincronizzazione} di un codice\footnote{Tecnicamente tutte queste definizioni possono essere date per insiemi qualsiasi, ma ridurla ai soli codici renderà future dimostrazioni più semplici e scorrevoli} \(X\) il più piccolo \(k\) tale che \(X \in BS(k)\). Se non esiste tale \(k\), diciamo che il codice ha ritardo di sincronizzazione infinito.
+  Definiamo come \keyword{ritardo di sincronizzazione} di un codice\footnote{Tecnicamente, come per \Cref{def:decoding-delay-sets}, questa definizione potrebbe essere estesa ai linguaggi, senza imporre l'essere codice. Tuttavia, questa restrizione renderà future dimostrazioni più semplici.} \(X\) il più piccolo \(k\) tale che \(X \in BS(k)\). Se non esiste tale \(k\), diciamo che il codice ha ritardo di sincronizzazione infinito.
 \end{definition}
 
 \begin{proposition}{}
-  \(\forall k \geq 1, BS(k)\subseteq BS(k+1)\)
+  \(\forall k \geq 1: BS(k)\subseteq BS(k+1)\)
 \end{proposition}
 
 \begin{proof}{}
-  Per questa dimostrazione, è necessario mostrare che ogni se un codice \(X \in BS(k)\) allora \(X \in BS(k+1)\) per un qualsiasi \(k \geq 1\).
-  Assumiamo dunque \(X \in BS(k)\) e mostriamo che \(X \in BS(k+1)\).
+  Sia \(X \in BS(k)\) e mostriamo che \(X \in BS(k+1)\).
   Siano \(u = x_1\ldots x_{k+1},v = x_1'\ldots x_{k+1}' \in X^{k+1}\) e \(\lambda, \rho \in A^*\) tali che
   \(X^* \ni \lambda uv \rho = \lambda x_1\ldots x_{k+1}  x_1'\ldots x_{k+1}' \rho\). 
-  Essendo che \(w = x_2\ldots x_{k+1}, t = x_1'\ldots x_k \in X^k\) e \(X \in BS(k)\), la coppia \((w, t)\) è sincronizzante, e dunque \(\lambda x_1 w, t x_{k+1}' \rho \in X^*\).
+  Poiché \(w = x_2\ldots x_{k+1}, t = x_1'\ldots x_k \in X^k\) e \(X \in BS(k)\), la coppia \((w, t)\) è sincronizzante, e dunque \(\lambda x_1 w, t x_{k+1}' \rho \in X^*\).
   Di conseguenza, \(\lambda u, v \rho \in X^*\).
 \end{proof}
 
+Il seguente teorema mette in relazione il ritardo di decodifica e il ritardo di sincronizzazione.
 \begin{theorem}{}
   Se \(X\) ha ritardo di sincronizzazione \(d < \infty\), allora \(X \in DD(d)\).
-  Ovvero \(X\) ha ritardo di decifrazione al più \(d\).
+  Ovvero \(X\) ha ritardo di decodifica al più \(d\).
 \end{theorem}
 
 \begin{proof}
@@ -1042,15 +1049,15 @@ Definiamo dunque un concetto analogo a quello di ritardo di decifrazione per la 
   \[x_0x_1\ldots x_d w = x_0'\ldots x_h'\]
 
   Per dimostrare che \(X \in DD(d)\) dobbiamo mostrare che \(x_0 = x_0'\).
-  Si ha che
+  Moltiplicando a sinistra ambo i membri per $x_{0}^{d-1}$, si ottiene
   \[x_0x_1\ldots x_d w = x_0'\ldots x_h' \implies x_0^d x_1\ldots x_d w = x_0^{d-1}x_0'\ldots x_h'\]
 
-  Essendo che \(X \in BS(d)\), la coppia \((x_0^d, x_1\ldots x_d)\) è sincronizzante, dunque
+  Poiché \(X \in BS(d)\), la coppia \((x_0^d, x_1\ldots x_d)\) è sincronizzante, dunque
   \[x_1\ldots x_d w \in X^* \implies x_1\ldots x_d w = x_1''\ldots x_l''\]
   per qualche \(x_1'',\ldots, x_l'' \in X\).
   Sostituendo nella precedente uguaglianza si ha
   \[x_0x_1''\ldots x_l'' = x_0'\ldots x_h' \implies x_0 = x_0'\]
-  essendo \(X\) codice.
+  poiché, essendo \(X\) codice, non è ammessa una doppia fattorizzazione in $X^{*}$.
 \end{proof}
 
 Infine, per dimostrare le ultime importanti proprietà dei codici sincronizzanti, andiamo a definire un altra classe di codici strettamente legata a questi.
@@ -1203,8 +1210,8 @@ Se abbiamo infatti \(\lambda\rho \in X \land \set{\rho}X^*\set{\lambda} \cap X^*
 \begin{observation}{}
   Per \(X\) codice (finito),
   \[R_1 = X^{-1}X\setminus \set{\varepsilon} \subseteq Suff(X) \setminus (X \cup \set{\varepsilon}) = R_1' \implies \forall n \geq 1, R_n \subseteq R_n'\]
-  Questo è un altro modo per dimostrare che se \(X\) ha ritardo di sincronizzazione finito, allora ha ritardo di decifrazione finito.
-  Infatti se ha ritardo di sincronizzazione finito, allora ha \(R_n' = \emptyset\) per qualche \(n\), dunque anche \(R_n = \emptyset\) per lo stesso \(n\), e quindi ha ritardo di decifrazione finito per teoremi visti prima 
+  Questo è un altro modo per dimostrare che se \(X\) ha ritardo di sincronizzazione finito, allora ha ritardo di decodifica finito.
+  Infatti se ha ritardo di sincronizzazione finito, allora ha \(R_n' = \emptyset\) per qualche \(n\), dunque anche \(R_n = \emptyset\) per lo stesso \(n\), e quindi ha ritardo di decodifica finito per teoremi visti prima 
 \end{observation}
 
 \begin{example}{}
