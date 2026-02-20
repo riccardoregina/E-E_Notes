@@ -12,9 +12,9 @@ $\SCal$ viene spesso detto \textit{alfabeto sorgente}. Inoltre, se \(p\) è una 
 \begin{definition}{Codifica}
   Definiamo \keyword{codifica} un morfismo iniettivo \(\varphi: \SCal^* \to A^*\) con \(A\) alfabeto. Il morfismo $\varphi$ identifica il \keyword{codice} $X=\varphi(\SCal)$.
   Diremo inoltre che $X$ è \keyword{adattabile} alla sorgente \(S\) se \(\# X = \# \SCal\).
-  In particolare, $X$ sarà \keyword{adattato} a una sorgente \(S\) mediante \(\varphi\), se \(\varphi\) induce una biezione tra \(\SCal\) e \(X\), \(\varphi_{|_X}: \SCal \leftrightarrow X\).
+  In particolare, $X$ sarà \keyword{adattato} a una sorgente \(S\) mediante una biiezione \(\varphi_{|_X}: \SCal \leftrightarrow X\).
 \end{definition}
-Si noti che il fatto che un $X$ sia adattabile non implica che esso sia anche adattato: l'esistenza di una biezione tra $X$ e $\SCal$ non è garantita da $\#\SCal=\#X$. Ciò avviene perché $\varphi$ è definito come iniettivo: $\varphi$ potrebbe non mappare una parola di $X$. Invece, nel caso in cui $\varphi$ mappi tutte le parole di $X$, allora si può ottenere la biezione $\varphi_{|_X}$ semplicemente restringendo $\varphi$ a $\varphi^{-1}(X)$, ovvero forzando la suriettività.
+Se $X$ è adattabile, allora, per ottenere la biiezione che lo adatta alla sorgente, è necessario forzare la suriettività di $\varphi$, definita iniettiva, restringendo $\varphi$ a $\varphi^{-1}(X)$.
 
 \begin{definition}{Costo di una codifica}
   Data una sorgente \(S = (\SCal,p)\) e una codifica \(\varphi: \SCal^* \to A^*\) con codice \(X = \varphi(\SCal)\), definiamo il \keyword{costo} di \(\varphi\) la quantità:
@@ -36,11 +36,11 @@ La scelta di $\varphi'$ nell'esempio non è casuale, ma è anzi il risultato del
 \begin{proposition}{}
   Sia \(S\) sorgente, \(X\) codice su \(A\) \emph{adattato} a \(S\) mediante \(\varphi\).
   Allora \(c(X) = c(X,\varphi)\) se e solo se
-    \[\forall s,s' \in \SCal, p(s) < p(s') \implies \abs{\varphi(s)} < \abs{\varphi(s')} \]
+    \[\forall s,s' \in \SCal, p(s) < p(s') \implies \abs{\varphi(s)} > \abs{\varphi(s')} \]
 \end{proposition}
 
 \begin{definition}{Codice ottimale}
-  Diremo che \(X\) è un \keyword{codice ottimale} per la sorgente \(S\) se, per ogni codice \(Z\) sullo stesso alfabeto e con la stessa cardinalità, si ha che
+  Diremo che \(X\) è un \keyword{codice ottimale} per la sorgente \(S\) se, per ogni codice \(Z\) sullo stesso alfabeto e di cardinalità \(\#X=\#\SCal\), si ha che
   \[c(X) \leq c(Z)\]
 \end{definition}
 
