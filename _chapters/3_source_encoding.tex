@@ -526,7 +526,7 @@ Infine, possiamo dimostrare che per una qualsiasi sorgente, esiste sempre un cod
 
 Poiché \(d \geq 2\), esistono codici su \(A\) di qualsiasi cardinalità (finita o infinita numerabile\footnote{Per infinita numerabile si intende un infinito \q{equipotente} a \(\N\)}).
 Ad esempio se \(a,b \in A, a \neq b\), allora \(\set{a^k b}[0 \leq k \leq n-1]\) ha cardinalità \(n\), e \(\set{a^k b}[k \in \N]\) ha cardinalità infinita numerabile. 
-Pertanto, l'insieme delle parti dei codici su $A$ è infinito non numerabile.
+Essendo l'insieme delle parti di un codice a cardinalità infinita numerabile di un infinito non numerabile, anche l'insieme di codici su $A$ è infinito non numerabile.
 
 Il primo teorema di Shannon (\Cref{thm:shannon}) garantisce l’esistenza di un limite inferiore per il costo di codifica, ma non assicura che tale limite sia raggiunto da alcun codice. Infatti, l’insieme dei costi associati ai codici può essere infinito non numerabile (ad esempio, un sottoinsieme denso di $\mathbb{R}$), e in tal caso una successione decrescente di costi potrebbe convergere al limite inferiore senza mai raggiungerlo. Per dimostrare l’esistenza di un codice ottimale, è necessario mostrare che il limite inferiore è effettivamente raggiunto da almeno un codice.
 
@@ -870,7 +870,7 @@ Essendo il numero di \(b\) potenzialmente infinito si dice che il ritardo di dec
 \begin{definition}[label=def:decoding-delay-sets]{Insiemi dei ritardi di decodifica}
   Per \(k\geq 0\), definiamo l'insieme
   \begin{equation*}
-    DD(k) = \set{C\subseteq A^* }[\forall x,x' \in X, (\set{x}X^k A^+ \cup \set{x'}X^* \neq \emptyset) \implies x = x']
+    DD(k) = \set{X\subseteq A^* }[\forall x,x' \in X, (\set{x}X^k A^+ \cap \set{x'}X^* \neq \emptyset) \implies x = x']
   \end{equation*}
   che contiene tutti i codici \(X\) di cui ogni parola può essere decodificata senza ambiguità dopo aver ricevuto al più \(k\) parole aggiuntive.
 \end{definition}
@@ -987,6 +987,8 @@ Questo non è un caso, ma è risultato di un teorema
   Se \(X\) è codice finito massimale, allora o è prefisso (e quindi ha ritardo di decodifica \(0\)) o ha ritardo di decodifica infinito.
 \end{theorem}
 
+Ricordando che, per codici binari, l'ottimalità implica la massimalità, si ottiene il seguente corollario.
+
 \begin{corollary}{}
   Sia \(X\) codice binario ottimale per \(S\) propria. Allora \(X\) ha ritardo di decodifica \(0\) o infinito.
 \end{corollary}
@@ -1001,7 +1003,7 @@ Sia \(X = \set{ab,ba,bb}\) e supponiamo di ricevere \(\ldots abababab\).
 In questo caso non è possibile sapere se la prima \(a\) ricevuta è l'inizio di un \(ab\) o la fine di un \(ba\).
 Avendo mancato l'inizio della trasmissione, è possibile una doppia interpretazione.
 
-Se però questo pattern si interrompe, ricevendo ad un certo punto \(\ldots baab \ldots\), allora siamo sicuri che queste due parole sono \(ba\) e \(ab\), e quindi possiamo risincronizzare la nostra decodifica, avendo adesso un punto dicronizzare la nostra decodifica, avendo adesso un punto di \qi{inizio}.
+Se però questo pattern si interrompe, ricevendo ad un certo punto \(\ldots baab \ldots\), allora siamo sicuri che queste due parole sono \(ba\) e \(ab\), e quindi possiamo risincronizzare la nostra decodifica, avendo adesso un punto di \qi{inizio}.
 
 \begin{definition}{Coppia sincronizzante}
   Dato \(X\subseteq A^*\), chiamiamo \keyword{coppia sincronizzante} due parole \(u,v \in X^+\) tali che
@@ -1050,7 +1052,7 @@ Il seguente teorema mette in relazione il ritardo di decodifica e il ritardo di 
 
   Per dimostrare che \(X \in DD(d)\) dobbiamo mostrare che \(x_0 = x_0'\).
   Moltiplicando a sinistra ambo i membri per $x_{0}^{d-1}$, si ottiene
-  \[x_0x_1\ldots x_d w = x_0'\ldots x_h' \implies x_0^d x_1\ldots x_d w = x_0^{d-1}x_0'\ldots x_h'\]
+  \[x_0^d x_1\ldots x_d w = x_0^{d-1}x_0'\ldots x_h'\]
 
   Poiché \(X \in BS(d)\), la coppia \((x_0^d, x_1\ldots x_d)\) è sincronizzante, dunque
   \[x_1\ldots x_d w \in X^* \implies x_1\ldots x_d w = x_1''\ldots x_l''\]
@@ -1060,7 +1062,7 @@ Il seguente teorema mette in relazione il ritardo di decodifica e il ritardo di 
   poiché, essendo \(X\) codice, non è ammessa una doppia fattorizzazione in $X^{*}$.
 \end{proof}
 
-Infine, per dimostrare le ultime importanti proprietà dei codici sincronizzanti, andiamo a definire un altra classe di codici strettamente legata a questi.
+Infine, per dimostrare le ultime importanti proprietà dei codici sincronizzanti, andiamo a definire un'altra classe di codici strettamente legata a questi.
 
 \begin{definition}{Codici circolari}
   \(X \subseteq A^*\) codice si dice \keyword{circolare} se
@@ -1069,7 +1071,7 @@ Infine, per dimostrare le ultime importanti proprietà dei codici sincronizzanti
 
 In altre parole, questa proprietà richiede che l'univoca fattorizzazione dei codici sia anche in senso \q{circolare}, oltre che \q{lineare}.
 
-Se abbiamo infatti \(\lambda\rho \in X \land \set{\rho}X^*\set{\lambda} \cap X^* \neq \emptyset\), possiamo prendere una parola di questa intersezione e, come mostrato in \Cref{fig:circular_factorization}, nonostante la fattorizzazione lineare possa essere univoca, andando a chiudere circolarmente la parola si va a formare una nuova parola di \(X\) nella fattorizzazione, che fa perdere il riferimento all'inizio della parola, portando a potenziali multiple fattorizzazioni.
+Infatti, se si ha \(\lambda\rho \in X \land \set{\rho}X^*\set{\lambda} \cap X^* \neq \emptyset\), è possibile prendere una parola di questa intersezione e, come mostrato in \Cref{fig:circular_factorization}, chiuderla circolarmente, ottenendo una nuova parola di \(X^{*}\), che ammette più fattorizzazioni circolari.
 \begin{figure}[H]
   \centering
   \begin{tikzpicture}
@@ -1107,12 +1109,12 @@ Se abbiamo infatti \(\lambda\rho \in X \land \set{\rho}X^*\set{\lambda} \cap X^*
     \draw[thick,blue, bend left = 90] (0,-\r) to node[midway, below left, blue]{\(\lambda\)} (-\r,0);
     
   \end{tikzpicture}
-  \caption{Rappresentazione grafica di due fattorizzazioni circolari per la parola $abab \in X^{*}$.}\label{fig:circular_factorization}
+  \caption{Rappresentazione grafica della definizione di codice circolare}
 \end{figure}
 
 \begin{example}{}
   Il codice \(X = \set{ab,ba,bb}\) non è circolare. Considerando infatti la parola \(abab\). Si ha che, fissando \(\rho = a, \lambda = b\) che \(\lambda\rho = ba \in X\) e che \(\rho ba \lambda = abab \in \set{\rho}X^*\set{\lambda}\).
-  Passando alla fattorizzazione circolare, è possibile ottenre \(abab\) nei seguenti modi:
+  Passando alla fattorizzazione circolare, è possibile ottenere \(abab\) nei seguenti modi:
   \begin{figure}[H]
     \centering
     \begin{tikzpicture}
@@ -1144,7 +1146,7 @@ Se abbiamo infatti \(\lambda\rho \in X \land \set{\rho}X^*\set{\lambda} \cap X^*
       \draw[thick,blue, bend left = 90] (0,-\r) to node[midway, below, blue]{\(b\)} (-\r,0);
     
     \end{tikzpicture}
-    \caption{Rappresentazione grafica della definizione di codice circolare}
+    \caption{Rappresentazione grafica di due fattorizzazioni circolari per la parola $abab \in X^{*}$.}\label{fig:circular_factorization}
   \end{figure}
   Inoltre, qualsiasi codice che contenga una parola che è potenza di una lettera non può essere circolare.
   Questo si può banalmente vedere considerando il caso in cui \(a^n \in X\) con \(a \in A\). Si ha necessariamente che \(a^{2n} = a^{\frac{n}{2}} a^n a^{\frac{n}{2}} \in X^*\) e dunque la fattorizzazione non è circolarmente univoca.
