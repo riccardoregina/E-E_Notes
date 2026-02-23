@@ -1,49 +1,47 @@
 \chapter{Entropia multivariabile e processi stocastici}
 
-Nel precedente capitolo abbiamo introdotto il concetto di entropia di una sorgente, associandola al limite inferiore del costo di codifica per una sorgente binaria.
-Tale trattazione è stata però piuttosto informale e non ha tenuto conto di alcune importanti proprietà dell'entropia.
-
-In questo capitolo approfondiremo il concetto di entropia introdotto nel capitolo precedente, analizzandolo più formalmente, introducendo alcune sue proprietà e generalizzandolo a più variabili aleatorie.
+Nel precedente capitolo, abbiamo introdotto il concetto di entropia di una sorgente, vedendo che essa è il limite inferiore del costo di codifica. 
+In questo capitolo, approfondiremo il concetto di entropia, analizzandolo più formalmente, introducendo alcune sue proprietà e generalizzandolo a più variabili aleatorie.
 
 \section{Rimandi di teoria della probabilità ed Entropia}
 
 Prima di procedere, facciamo un breve richiamo ad alcuni concetti di teoria della probabilità necessari per la comprensione dei concetti che andremo a trattare in questo capitolo.
-Un \keyword{spazio di probabilità} è una tripla \((\Omega, \mathcal{F}, \Prob)\) dove
+Uno \keyword{spazio di probabilità} è una tripla \((\Omega, \mathcal{F}, \Prob)\) dove
 \begin{itemize}
-  \item \(\Omega\) è un insieme non vuoto, detto spazio campione;
-  \item \(\mathcal{F} \subseteq \mathcal{P}(\Omega)\) è una \(\sigma\)-algebra su \(\Omega\), cioè un insieme di sottoinsiemi di \(\Omega\) che contiene \(\Omega\) stesso, è chiuso rispetto al complemento e alle unioni numerabili;
+  \item \(\Omega\) è un insieme non vuoto, detto spazio dei campioni (o spazio campione);
+  \item \(\mathcal{F} \subseteq \mathcal{P}(\Omega)\) è una \(\sigma\)-algebra su \(\Omega\), cioè un insieme di sottoinsiemi di \(\Omega\), incluso lo stesso \(\Omega\), chiuso rispetto all'unione, al complemento e alle unioni numerabili\footnote{$\mathcal{F}$ è: chiuso rispetto all'unione se $\forall A,B \in \mathcal{F}: (A \cup B) \in \mathcal{F}$; chiuso rispetto al complemento se $\forall A \in \mathcal{F}: \bar{A}=(\mathcal{F} \setminus A) \in \mathcal{F}$; chiuso rispetto alle unioni numerabile se $\mathcal{F}$ è infinito numerabile e $\forall \set{A_i}_{i \in \mathbb{N}}: \bigcup_{A \in \set{A_i}}A \in \mathcal{F}$.};
   \item \(\Prob: \mathcal{F} \to [0,1]\) è una misura di probabilità, cioè una funzione tale che \(\Prob[\Omega] = 1, \Prob[\emptyset] = 0\) e che è \(\sigma\)-additiva, ovvero per ogni famiglia numerabile di eventi disgiunti \({\{A_i\}}_{i \in \mathbb{N}} \subseteq \mathcal{F}\) si ha che
   \[\Prob\left[\bigcup_{i=1}^{\infty} A_i\right] = \sum_{i=1}^{\infty} \Prob[A_i]\]
 \end{itemize}
 
-Una \keyword{variabile aleatoria discreta} su uno spazio di probabilità \((\Omega, \mathcal{F}, \Prob)\) è un applicazione misurabile \(S: \Omega \to \SCal\), dove \(\SCal\) è un insieme discreto (finito o numerabile).
+Una \keyword{variabile aleatoria discreta} su uno spazio di probabilità \((\Omega, \mathcal{F}, \Prob)\) è un applicazione misurabile \(S: \Omega \to \SCal\), dove \(\SCal\) è un insieme discreto (finito o numerabile), che ad un evento in $\Omega$ associa un simbolo in $\SCal$.
 
-Essendo \(S\) misurabile, è possibile associare una funzione \q{massa} di probabilità (distribuzione su \(\SCal\)) \(p: \SCal \to [0,1]\) definita come \(p(s) = \Prob[S=s] = \Prob[S^{-1}(s)]\)
-Per allinearci alla notazione usata in teoria della probabilità, indicheremo con \(X,Y,Z\) le variabili aleatorie su \(\mathcal{X}, \mathcal{Y}, \mathcal{Z}\).
+Essendo \(S\) misurabile, è possibile associare una funzione \q{massa} di probabilità (distribuzione su \(\SCal\)) \(p: \SCal \to [0,1]\) definita come \(p(s) = \Prob[S=s] = \Prob[S^{-1}(s)]\)\footnote{La notazione $\Prob[X=x]$ risulta spesso comoda, ma è abusiva: la notazione formalmente corretta è $\Prob[S^{-1}(s)]$ poiché $\Prob$ è definita su $\mathcal{F}$ e $S^{-1}(s) \in \mathcal{F}$.}.
+Per chiarezza e semplicità, assumeremo che la variabile $A$ abbia alfabeto $\mathcal{A}$, che $B$ abbia alfabeto $\mathcal{B}$ e così via.
 
 \begin{definition}{Entropia di una variabile aleatoria}
   Sia \(X\) variabile aleatoria discreta con distribuzione di probabilità \(p\).
   L'\keyword{entropia} di \(X\) è definita come
-  \[H(X) = -\sum_{x \in \mathcal{X}} p(x) \log( p(x))\]
+  \[H(X) = -\sum_{x \in \mathcal{X}} p(x) \log( p(x))= \EV{\log(\frac{1}{p(x)})}\]
 \end{definition}
 
-A seguito del teorema di Shannon, possiamo interpretare questa quantità come il limite inferiore del costo di codifica per una sorgente binaria.
-Dunque possiamo vedere l'entropia come la più corta descrizione binaria del valore di \(X\), o in altre parole il numero medio di domande binarie necessarie per identificare il valore di \(X\).
+A seguito del teorema di Shannon (\Cref{thm:shannon}), possiamo interpretare questa quantità come il limite inferiore del costo di codifica per una sorgente binaria.
+Dunque possiamo vedere l'entropia come la più corta descrizione binaria del valore di \(X\), o in altre parole il numero medio di domande binarie necessarie per identificare il valore di \(X\). Insomma, $H(X)$ rappresenta il grado di incertezza sul valore emesso da $X$.
 
 \begin{definition}{Definizione assiomatica dell'entropia di Shannon}
   Sia \({(H_m)}_{m \geq 1}\) una famiglia di funzioni, di cui ogni \(H_m \in {(H_m)}_{m \geq 1}\) è una funzione a \(m\) variabili con le seguenti proprietà:
   \begin{description}
-    \item[simmetria]: \(\forall \sigma \in S_m, H_m(p_1,\ldots,p_m) = H_m(p_{\sigma(1)},\ldots,p_{\sigma(m)})\), con \( S_m\) insieme delle permutazioni di \(\set{1,\ldots,m}\).
+    \item[simmetria]: \(\forall \sigma \in S_m: H_m(p_1,\ldots,p_m) = H_m(p_{\sigma(1)},\ldots,p_{\sigma(m)})\), con \( S_m\) insieme delle permutazioni di \(\set{1,\ldots,m}\). In altre parole, l'entropia non dipende dall'ordine in cui i simboli appaiono nell'alfabeto, ma solo dalla distribuzione $p$.
     \item[normalizzazione]: \(H_2\left(\frac{1}{2}, \frac{1}{2}\right) = 1\).
-    \item[continuità]: \(H_2(p,1-p)\) funzione continua di \(p\)
+    \item[continuità]: \(H_2(p,1-p)\) funzione continua di \(p\).
     \item[raggruppamento]:
-    \[H_m(p_1,p_2,p_3,\ldots,p_m) = H_{m-1}(p_1 + p_2,p_3,\ldots,p_m)+(p_1+p_2)H_2(\frac{p_1}{p_1+p_2},\frac{p_2}{p_1+p_2})\]
+    \[H_m(p_1,p_2,p_3,\ldots,p_m) = H_{m-1}(p_1 + p_2,p_3,\ldots,p_m)+(p_1+p_2)H_2\left(\frac{p_1}{p_1+p_2},\frac{p_2}{p_1+p_2}\right)\]
   \end{description}
 \end{definition}
 
-Presa questa definizione, si ha necessariamente che \( H_m(p_1,\ldots,p_m) = - \sum_{i=1}^{m} p_i \log(p_i)\), preso un qualsiasi \(m\geq 1\).
+Presa questa definizione, si vede che l'unica implementazione possibile per l'entropia è \[H_m(p_1,\ldots,p_m) = - \sum_{i=1}^{m} p_i \log(p_i)\] preso un qualsiasi \(m\geq 1\).
 
-Andiamo quindi a introdurre più variabili aleatorie, e a definire come si comporta l'entropia in questo caso.
+A questo punto, introduciamo il concetto di variabile aleatoria multipla ed estendiamo l'entropia a tale caso.
 
 \begin{definition}{Entropia Congiunta}
   Siano \(X, Y\) variabili aleatorie. Definiamo la \keyword{variabile aleatoria congiunta}, rappresentata dalla coppia \((X,Y)\), come:
@@ -56,7 +54,7 @@ Andiamo quindi a introdurre più variabili aleatorie, e a definire come si compo
 \end{definition}
 
 \begin{definition}{Condizionamento}
-  Dati \(A,B \subseteq \Omega\), definiamo \(A|B\) l'evento \(A\) condizionato a \(B\) come l'evento tale che
+  Dati \(A,B \subseteq \Omega\), definiamo \(A|B\) l'evento \(A\) condizionato da \(B\) (\qi{A dato B}) come l'evento tale che
   \[\Prob[A|B] = \frac{\Prob[A \cap B]}{\Prob[B]}\]
 
   In particolare, se \(X,Y\) sono variabili aleatorie, definiamo \(p(y|x) = \Prob[Y=y|X=x]\)
@@ -65,12 +63,11 @@ Andiamo quindi a introdurre più variabili aleatorie, e a definire come si compo
 \end{definition}
 
 Possiamo notare che  \(\forall x \in \mathcal{X}\) fissato, \(p(y|x)\) è una distribuzione di probabilità su \(\mathcal{Y}\).
-Infatti,\footnote{Si ricorda che, date \(X,Y\) variabili aleatorie, si ha che \(\sum_{y \in \mathcal{Y}} p(x,y) = p(x), \forall x \in \mathcal{X}\) per definizione di probabilità marginale.
-Di conseguenza, data una probabilità congiunta \(p(x,y)\), è sempre possibile ricavare le distribuzioni marginali di \(X\) e \(Y\), ma non il contrario.}
+Infatti,\footnote{Date \(X,Y\) variabili aleatorie, si ha che \(\sum_{y \in \mathcal{Y}} p(x,y) = p(x), \forall x \in \mathcal{X}\) per la proprietà di marginalizzazione di una funzioni di massa di probabilità congiunta.
+In altre parole, data una funzione di massa di probabilità congiunta \(p(x,y)\), è sempre possibile ricavare le distribuzioni marginali $p(x)$ e $p(y)$. L'operazione inversa è possibile solo quando $X$ e $Y$ sono indipendenti, ovvero quando si osserva $p(x,y)=p(x)p(y)$.}
 \[\sum_{y \in \mathcal{Y}} p(y|x) = \sum_{y \in \mathcal{Y}} \frac{p(x,y)}{p(x)} = \frac{1}{p(x)} \sum_{y \in \mathcal{Y}} p(x,y) = \frac{p(x)}{p(x)} = 1\]
 
-
-Essendo dunque questa una distribuzione di probabilità, possiamo vederla come funzione massa di probabilità di una variabile aleatoria \(Y|X=x\).
+Possiamo vedere $p(y|x)$ come funzione massa di probabilità di una variabile aleatoria \(Y|X=x\).
 
 \begin{definition}{Entropia Condizionata}
   Siano \(X,Y\) variabili aleatorie.
@@ -78,7 +75,7 @@ Essendo dunque questa una distribuzione di probabilità, possiamo vederla come f
   \[H(Y|X) = \sum_{x \in \mathcal{X}} p(x) H(Y|X=x) = - \sum_{x \in \mathcal{X}} p(x) \sum_{y \in \mathcal{Y}} p(y|x) \log(p(y|x)) = \]
   \[= -\sum_{\substack{x \in \mathcal{X}\\y \in \mathcal{Y}}} p(x,y) \log (p(y|x)) = \EV{\log\left(\frac{1}{p(y|x)}\right)}[x,y]\]
   
-  Ovvero la media delle entropie di \(Y|X=x\) al variare di \(x\), pesata secondo la probabilità \(p(x)\).
+  ovvero la media delle entropie di \(Y|X=x\) al variare di \(x\), pesata secondo la probabilità \(p(x)\).
 \end{definition}
 
 Definite queste quantità, vediamo come si relazionano tra di loro, partendo dalla prima regola di catena.
@@ -139,16 +136,15 @@ Definite queste quantità, vediamo come si relazionano tra di loro, partendo dal
   Infine, si ha che \(H(X|Y) = H(X,Y)-H(X) = \frac{27}{8} - \frac{7}{4} = \frac{13}{8}\) e che \(H(Y|X) = H(X,Y)-H(Y) = \frac{27}{8} - 2 = \frac{11}{8}\).
 \end{example}
 
-Da questi calcoli possiamo osservare come l'entropia congiunta sia simmetrica rispetto alle variabili coinvolte, mentre l'entropia condizionata no.
-In generale quindi \(H(X|Y) \neq H(Y|X)\) e \(H(X,Y) = H(Y,X)\).
+Dall'esempio precedente, possiamo osservare che l'entropia congiunta è simmetrica rispetto alle variabili coinvolte, mentre l'entropia condizionata no.
+In generale, \(H(X|Y) \neq H(Y|X)\) e \(H(X,Y) = H(Y,X)\).
 
-
-Dunque dalla regola di catena si ha che
+Tuttavia, la regola di catena ci assicura che
 \[H(Y)+H(X|Y)=H(Y,X)=H(X,Y) = H(X)+H(Y|X)\]
-Ovvero
+ovvero
 \[H(Y) - H(Y|X) = H(X) - H(X|Y)\]
 
-Possiamo dunque andare a generalizzare questi risultati a più variabili aleatorie.
+Possiamo generalizzare questo risultato a più variabili aleatorie.
 
 \begin{proposition}{Regola di catena con condizionamento}
   Date \(X,Y,Z\) variabili aleatorie, si ha che
@@ -213,7 +209,7 @@ Un modo intuitivo per visualizzare le relazioni tra le varie quantità di inform
     \draw[thick] (-\d/2-\r,-\r-0.5) -- ++(0,0.3);
     \draw[thick] (\d/2+\r,-\r-0.5) -- ++(0,0.3);
   \end{tikzpicture}
-  \caption{Diagramma di Venn per le quantità di informazione}\label{fig:venn_info}
+  \caption{Diagramma di Venn per le quantità di informazione.}\label{fig:venn_info}
 \end{figure}
 
 \begin{definition}{Informazione mutua condizionata}
@@ -235,29 +231,27 @@ Possiamo dunque generalizzare le regole di catena a \(n\) variabili.
 
 \subsection{Limiti dell'informazione mutua}\label{subs:mutual_information_limits}
 
-Essendo \(I\) definita in termini di divergenza di Kullback-Leibler è definita positiva, dunque \(I(X;Y) \geq 0\) con uguaglianza se e solo se \(X\) e \(Y\) sono indipendenti.
+Essendo \(I\) definita in termini di divergenza di Kullback-Leibler, \(I\) è definita positiva, dunque \(I(X;Y) \geq 0\) e l'uguaglianza si verifica se e solo se \(X\) e \(Y\) sono indipendenti.
 In tal caso infatti, le due variabili non forniscono alcuna informazione l'una sull'altra.
 
 Da un punto di vista formale, questo si ha perché \(p(x,y)=p(x)p(y)\) per ogni \(x \in \mathcal{X}\) e \(y \in \mathcal{Y}\) se e solo se \(X\) e \(Y\) sono indipendenti.
 
-Per quanto riguarda l'estremo superiore, si ha che, essendo \(I(X;Y) = H(X) - H(X|Y)\), ed essendo \(H(X), H(X|Y) \geq 0\), \(I(X,Y)\) sarà massima quando \(H(X|Y) = 0\), ovvero quando \(X\) è funzione di \(Y\), ovvero\footnote{Ricordiamo che dati due insiemi \(A,B\), con \(B^A\) si intende l'insieme delle funzioni da \(A\) a \(B\), come visto nel primo capitolo.}
+Poiché \(I(X;Y) = H(X) - H(X|Y)\) e l'entropia è una quantità non negativa, $I$ è massima quando $H(X|Y)=0$. Ciò si verifica quando l'incertezza sull'emissione di $X$ è nulla dopo aver osservato l'emissione di $Y$, ovvero quando $X$ è deterministicamente ricavato da $Y$, ovvero: \footnote{Ricordiamo che dati due insiemi \(A,B\), con \(B^A\) si intende l'insieme delle funzioni da \(A\) a \(B\), come visto nel primo capitolo.}
 \[\exists f \in \mathcal{X}^\mathcal{Y} \st X= f\circ Y\]
-Infatti, 
-\[H(X|Y) = -\sum_{\substack{x\in\mathcal{X}\\y\in\mathcal{Y}}}p(x,y)\log(p(x|y)) = 0 \iff \forall x \in \mathcal{X}, y \in \mathcal{Y}, p(x,y)=0\lor p(x|y)=1\]
-Essendo che fissato \(y\in\mathcal{Y}\), \(p(x|y)\) è una distribuzione di probabilità su \(\mathcal{X}\), si ha che
-\[\forall y \in \mathcal{Y}, \exists! x:=f(y)\st p(x|y)=1\]
 
 In tal caso, si ha che \(I(X;Y) = H(X)\).
-In particolare, per \(f = id\) si ha che \(I(X;X) = H(X)\), giustificando il significato intuitivo dato precedentemente all'entropia come misura dell'autoinformazione di una variabile aleatoria.
+In particolare, per \(f = id\) si ha che \(I(X;X) = H(X)\), giustificando il significato intuitivo dato all'entropia nel capitolo precedente come misura dell'autoinformazione di una variabile aleatoria.
+
+Infine, notiamo che
+\[I(X;Y)\geq 0 \implies H(X) \geq H(X|Y)\]
+cioè che \qi{il condizionamento non aumenta l'entropia}. Infatti, intuitivamente, la conoscenza di $Y$ può togliere incertezza dall'emissione di $X$, ma di certo non può aggiungerla. Per questo motivo, si osserva il seguente risultato.
 
 \begin{proposition}{}
   Date \(X_1, X_2, \ldots, X_n\) variabili aleatorie, si ha che
   \(H(X_1, \ldots, X_n)\leq \sum_{i=1}^n H(X_i)\)
 \end{proposition}
 \begin{proof}
-  Essendo che in generale \(I(X;Y)= H(X) - H(X|Y) \geq 0\), si ha che \(H(X) \geq H(X|Y) \), ovvero il condizionamento non aumenta l'entropia.
-
-  Dunque
+  Si ha
   \[H(X_1, \ldots, X_n) = H(X_1) + \sum_{i=2}^{n}H(X_i|X_{i-1}, \ldots, X_1)\leq \sum_{i=1}^n H(X_i)\]
   poiché \(H(X_i|X_{i-1}, \ldots, X_1) \leq H(X_i)\) per ogni \(i=2,\ldots,n\).
 \end{proof}
