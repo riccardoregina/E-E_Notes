@@ -259,39 +259,42 @@ cioè che \qi{il condizionamento non aumenta l'entropia}. Infatti, intuitivament
 \section{Catene di Markov e Processi Stocastici}
 
 \begin{definition}{Catena di Markov (3 variabili)}
-  Date tre variabili aleatorie \(X, Y, Z\) si dice che formano una \keyword{catena di Markov} in quest'ordine, denotato come \(X \to Y \to Z\) se vale che
-  \[\forall x \in X, y \in Y, z \in Z, p(x,y,z) = p(x)p(y|x)p(z|y)\]
+  Date tre variabili aleatorie \(X, Y, Z\), si dice che esse formano una \keyword{catena di Markov}, nell'ordine denotato come \(X \to Y \to Z\) se vale che
+  \[\forall x \in X, y \in Y, z \in Z: p(x,y,z) = p(x)p(y|x)p(z|y)\]
 \end{definition}
+Tre variabili $X,Y,Z$ possono formare una catena di Markov anche in diverso ordine. Tuttavia, non è generalmente vero che se formano una catena in un ordine, allora esse ne formano una anche in ordine diverso.
 
 \begin{observation}{}
-  Ciò che cambia rispetto alla definizione generale di variabili aleatorie è che \(p(z|x,y) = p(z|y)\), ovvero che \(Z\) è condizionatamente indipendente da \(X\) dato \(Y\),
-  ovvero \(p(x,z|y) = p(x|y)p(z|y)\). 
-  
-  Si ha infatti che in generale 
-  \[p(x,z|y) = \frac{p(x,y,z)}{p(y)} = \frac{p(x,y)p(z|x,y)}{p(y)} = p(x|y)p(z|x,y) \]
-  e dunque si ha che \(p(z|x,y) = p(z|y)\) se e solo se \(X\) e \(Z\) sono condizionatamente indipendenti dato \(Y\).
+  Nel caso di $X,Y,Z$ variabili qualsiasi, si osserva
+  \[p(x,y,z)=p(x)p(y|x)p(z|x,y)\]
+  Se $X \to Y \to Z$, si verifica anche $p(z|x,y)=p(z|y)$ e ciò avviene se e soltanto se $X$ e $Z$ sono, dato $Y$, indipendenti. In tal caso, si verifica $p(x,z|y)=p(x|y)p(z|y)$.
+  In altre parole, in una catena di Markov $X \to Y \to Z$, il valore di una variabile dipende esclusivamente da quello della variabile che la precede immediatamente.
 \end{observation}
 
 \begin{proposition}[label=prop:markov_chain_third_funcion_second]{}
   Siano \(Y,Z\) variabili aleatorie tali che \(Z = f \circ Y\) per qualche funzione \(f \in \mathcal{Z}^{\mathcal{Y}}\), allora \( \forall X\) variabile aleatoria, \(X \to Y \to Z\).
 \end{proposition}
 \begin{proof}
-  Si ha per ipotesi che
+  Per ipotesi, si osserva
   \begin{equation*}
     p(z|y) = \begin{cases}
       1 & \text{se } z = f(y) \\
       0 & \text{altrimenti}
     \end{cases}
   \end{equation*}
-  Allora se \(z\neq f(y)\), \(0= p(z|y)=\sum_{x\in\mathcal{X}}p(x,z|y)\).
-  
-  Essendo che \(p(x,z|y)\geq 0\), \(\forall x \in \mathcal{X}\), si ha che \(\sum_{x\in\mathcal{X}}p(x,z|y) \iff p(x,z|y)=0 \; \forall x\), e dunque \(0=p(x,z|y) = p(x|y)p(z|y) = p(x|y)\cdot 0\).
-
-  Se invece \(z = f(y)\), allora \(\sum_{z' \in \mathcal{Z}}p(x,z'|y)=p(x,z|y)\) poiché, per \(z'\neq z\), \( p(x,z'|y)=p(z|y)p(x|z,y)=0 \cdot p(x|z,y)\). 
-  Ma stando sommando su tutti gli elementi di \(\mathcal{Z}\), si ha che 
-  \[\sum_{z' \in \mathcal{Z}}p(x,z'|y) = p(x|y)=p(x|y)\cdot 1 = p(x|y)p(z|y)\]
-  Dunque
-  \[p(x,z|y) = \sum_{z' \in \mathcal{Z}}p(x,z'|y)= p(x|y)p(z|y)\]
+  \begin{description}
+    \item[(Caso $z \neq f(y)$)]
+      In questo caso, si verifica \[\sum_{x\in\mathcal{X}}p(x,z|y)=p(z|y)=0\]
+      Tale somma è composta da termini non negativi, che, quindi, sono tutti nulli. Quindi, $\forall x\in\mathcal{X}:p(x,z|y)=0=p(x|y)p(z|y)$ poiché due quantità nulle sono ovviamente uguali.
+    \item[(Caso $z = f(y)$)]
+      Si ha \(\sum_{k\in\mathcal{Z}}p(x,k|y)=p(x,z|y)\) poiché l'unico termine non nullo della somma sarà quello per $k=z$. 
+      Inoltre, si ha \(\sum_{k\in\mathcal{Z}}p(x,k|y)=p(x|y)\). Allora, 
+      \[\begin{cases}
+        \sum_{k\in\mathcal{Z}}p(x,k|y)=p(x,z|y) \\
+        \sum_{k\in\mathcal{Z}}p(x,k|y)=p(x|y)
+      \end{cases} \implies p(x,z|y)=p(x|y)=p(x|y)\cdot 1=p(x|y)p(z|y)\]
+  \end{description}
+  In ogni caso, \(p(x,z|y)=p(x|y)p(z|y)\), quindi si ha $X \to Y \to Z$. 
 \end{proof}
 
 \begin{proposition}[label=prop:dpi]{Disuguaglianza di Data Processing (DPI)}
@@ -311,48 +314,42 @@ cioè che \qi{il condizionamento non aumenta l'entropia}. Infatti, intuitivament
   Se \(X \to Y \to Z\), abbiamo che \(X\) e \(Z\) sono condizionatamente indipendenti dato \(Y\), dunque \(I(X;Z|Y)=0\) dalla \Cref{subs:mutual_information_limits}
   Allora
   \[I(X;Y) = I(X;Z) + I(X;Y|Z) \]
-  Essendo che \(I(X;Y|Z) \geq 0\), si ha la tesi.
+  Essendo \(I(X;Y|Z) \geq 0\), si ha la tesi.
 
   Inoltre, vale l'uguaglianza se e solo se \(I(X;Y|Z)=0\), ovvero se e solo se \(X\) e \(Y\) sono condizionatamente indipendenti dato \(Z\), ovvero \(X\to Z \to Y\).
 \end{proof}
 
 È importante notare che l'equazione ricavata nella dimostrazione precedente porta anche a
 \[I(X;Y) \geq I(X;Y|Z)\]
-Intuitivamente, questa disuguaglianza esprime il concetto che l'informazione che \(Y\) fornisce su \(X\) non può essere aumentata conoscendo \(Z\), se \(X \to Y \to Z\), ovvero se \(X\) e \(Z\) sono condizionatamente indipendenti dato \(Y\).
-In altre parole, com'è intuitivo, date due variabili aleatorie \(X\) e \(Z\) tali che data una terza variabile aleatoria \(Y\) queste sono condizionatamente indipendenti, se conosco \(Y\) tutta l'informazione che \(Z\) può fornirmi su \(X\) è già contenuta in \(Y\).
+Intuitivamente, questa disuguaglianza ci dice che l'informazione che \(Y\) fornisce su \(X\) non può essere aumentata conoscendo \(Z\), se \(X \to Y \to Z\), ovvero se \(X\) e \(Z\) sono condizionatamente indipendenti dato \(Y\).
 
-In generale, però, se non vale che \(X \to Y \to Z\), tale disuguaglianza può non essere vera.
-Ad esempio, siano \(X, Y\) i.i.d\footnote{Indipendenti e Identicamente Distribuite}, uniformi su \(\{0,1\}\), e sia \(Z = X + Y, \mathcal{Z} = \set{0,1,2}\).
-Allora \(I(X;Y) = 0\) poiché sono indipendenti, ma 
-\[I(X;Y|Z) = H(X|Z) - H(X|Y,Z) = H(X|Z) - 0 = H(X|Z) = \frac{1}{2}\]
+In generale, però, se non è vero \(X \to Y \to Z\), tale disuguaglianza può non sussistere.
+Ad esempio, siano \(X, Y\) i.i.d\footnote{Indipendenti e Identicamente Distribuite}, uniformi su \(\{0,1\}\), e sia \(Z = X + Y\), con \(\mathcal{Z} = \set{0,1,2}\).
+Allora, per l'indipendenza, si ha \(I(X;Y) = 0\), ma 
+\[I(X;Y|Z) = H(X|Z) - \bcancel{H(X|Y,Z)} = \frac{1}{2} > I(X;Y)\]
 
 \begin{definition}{Processi stocastici}
-  Un \keyword{processo stocastico} \(\underline{X} = {(X_n)}_{n\geq 1}\) è una successione di variabili aleatorie su \(\mathcal{X}\).
+  Un \keyword{processo stocastico} \(\underline{X} = {(X_n)}_{n\geq 1}\) è una successione di variabili aleatorie, dette variabili membro, su \(\mathcal{X}\).
 
   Un processo \(\underline{X}\) è \keyword{stazionario} se \(\forall n, k \geq 1, (x_1, \ldots, x_n) \in \mathcal{X}^n\) si ha che
   \[\Prob[X_1 = x_1, \ldots ,X_n = x_n] = \Prob[X_{k+1} = x_1, \ldots, X_{k+n} = x_n]\]
 
-  In particolare per \(n=1\) si ha che le variabili aleatorie \(X_i\) sono identicamente distribuite.
+  In particolare, per \(n=1\) si ha che le variabili aleatorie \(X_i\) sono identicamente distribuite.
 
-  Caso particolare, se le variabili aleatorie sono anche indipendenti, si ha un processo \keyword{i.i.d.}
+  Inoltre, se le variabili aleatorie sono anche indipendenti, si ha un processo \keyword{i.i.d.}
 \end{definition}
 
-\begin{note}{}
-  % TODO: per l'interpretazione come sorgente è necessaria la stazionarietà? Non necessaria, ma comoda e frequente
-  Possiamo interpretare i processi stocastici stazionari come modelli per sorgenti di informazione che generano simboli in modo casuale secondo una certa distribuzione di probabilità nel tempo.
-
-  Si ha che un processo stazionario indipendente corrisponde a una sorgente a memoria zero.
-  Essendo questo però un caso particolare, questo modello ci permette di descrivere anche sorgente con memoria, ovvero in cui la probabilità di generare un certo simbolo dipende dai simboli generati in precedenza.
-\end{note}
+Un processo stazionario può essere utilizzato come modello per una sorgente che emette simboli nel tempo secondo una certa distribuzione.
+Come caso particolare, se le variabili membro sono indipendenti, allora il processo può modellare una sorgente a memoria zero.
 
 \begin{definition}{Catene di Markov (processi)}
   Un processo stocastico \(\underline{X} = {(X_n)}_{n\geq 1}\) è una \keyword{catena di Markov} se si ha che, 
   \[\begin{aligned}
-    \forall n \geq 1, & \forall (x_1, \ldots, x_{n+1}) \in \mathcal{X}^{n+1}, \\
+    \forall n \geq 1, & \forall (x_1, \ldots, x_{n+1}) \in \mathcal{X}^{n+1}: \\
                       & \Prob[X_{n+1} = x_{n+1}|X_n = x_n, \ldots, X_1 = x_1] = \Prob[X_{n+1} = x_{n+1}|X_n = x_n]
   \end{aligned}\]
 
-  Ovvero la probabilità di osservare un certo stato \(X_{n+1}\) dipende solo dallo stato precedente \(X_n\), e non da tutti gli stati precedenti.
+  ovvero la probabilità di osservare un certo stato \(X_{n+1}\) dipende solo dallo stato precedente \(X_n\), e non da tutti gli stati precedenti.
 \end{definition}
 
 \begin{note}{}
