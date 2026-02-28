@@ -321,7 +321,7 @@ Tre variabili $X,Y,Z$ possono formare una catena di Markov anche in diverso ordi
 
 È importante notare che l'equazione ricavata nella dimostrazione precedente porta anche a
 \[I(X;Y) \geq I(X;Y|Z)\]
-Intuitivamente, questa disuguaglianza ci dice che l'informazione che \(Y\) fornisce su \(X\) non può essere aumentata conoscendo \(Z\), se \(X \to Y \to Z\), ovvero se \(X\) e \(Z\) sono condizionatamente indipendenti dato \(Y\).
+Intuitivamente, questa disuguaglianza ci dice che, se \(X \to Y \to Z\), l'informazione che \(Y\) fornisce su \(X\) non può essere aumentata conoscendo \(Z\). Ciò avviene perché la conoscenza di $Z$ riduce l'incertezza su $Y$ ma non su $X$ e quindi riduce anche la loro mutua informazione. 
 
 In generale, però, se non è vero \(X \to Y \to Z\), tale disuguaglianza può non sussistere.
 Ad esempio, siano \(X, Y\) i.i.d\footnote{Indipendenti e Identicamente Distribuite}, uniformi su \(\{0,1\}\), e sia \(Z = X + Y\), con \(\mathcal{Z} = \set{0,1,2}\).
@@ -352,46 +352,57 @@ Come caso particolare, se le variabili membro sono indipendenti, allora il proce
   ovvero la probabilità di osservare un certo stato \(X_{n+1}\) dipende solo dallo stato precedente \(X_n\), e non da tutti gli stati precedenti.
 \end{definition}
 
-\begin{note}{}
-  L'analogia con le sorgenti a memoria zero per i processi stazionari indipendenti potrebbe portare a pensare che le catene di Markov rappresentino solo sorgenti con memoria \(1\), ma in realtà, aggregando più variabili aleatorie insieme è possibile modellare sorgenti con memoria maggiore.
-\end{note}
+L'analogia con le sorgenti a memoria zero per i processi stazionari indipendenti potrebbe portare a pensare che le catene di Markov rappresentino solo sorgenti con memoria \(1\), ma, in realtà, aggregando più variabili aleatorie insieme, è possibile modellare sorgenti con memoria maggiore. Ad esempio, si potrebbero prendere variabli aleatorie su $\mathcal{X}^{n}$ e quindi ottenere una catena di Markov che ha la capacità di memorizzare $n$ simboli di $\mathcal{X}$.
 
 \begin{definition}{Catene tempo invarianti}
     Una catena di Markov si dice \keyword{invariante nel tempo} se \(\forall n \geq 1, \forall x,x'\in\mathcal{X}\)
   \[\Prob[X_{n+1} = x | X_n = x'] = \Prob[X_2 = x | X_1 = x']\]
   
-  Ovvero che la probabilità di osservare un certo stato noto il precedente non dipende da in che punto del processo ci si trova.
+  ovvero se la probabilità di emissione di un simbolo, dato il simbolo precedente, non dipende dal tempo.
 \end{definition}
 
-Si nota facilmente che una catena di Markov tempo invariante è completamente caratterizzata dalla distribuzione iniziale \(\Prob[X_1 = x]\) e da una matrice \(P\), detta \keyword{matrice di transizione}, tale che \(P_{i,j} = (\Prob[X_2 = j | X_1 = i])\).\footnote{Tecnicamente per poter descrivere la transizione come una matrice è necessario che \(\mathcal{X} = \set{1, \ldots, \abs{\mathcal{X}}}\). Anche se questo non è sempre vero, si può sempre costruire una corrispondenza biunivoca tra gli elementi di \(\mathcal{X}\) e un insieme di interi consecutivi.}
+Una catena di Markov tempo invariante è completamente caratterizzata dalla distribuzione iniziale \(\mu^{(1)}=\Prob[X_1 = x]\) e da una matrice \(P\), detta \keyword{matrice di transizione}, tale che \(P_{i,j} = (\Prob[X_2 = j | X_1 = i])\).\footnote{La definizione della matrice di transizione assume che \(\mathcal{X} = \set{1, \ldots, \abs{\mathcal{X}}}\). Se ci si trovasse con un alfabeto che non rispetta questa ipotesi, si può sempre costruire una corrispondenza biunivoca tra gli elementi di \(\mathcal{X}\) e un insieme di interi consecutivi.} 
+Una riga di $P$ corrisponde ad una legge di probabilità condizionata. Ad esempio, $P_{i}$ è il vettore riga che rappresenta la distribuzione di probabilità di emissione dei simboli dato che l'ultimo simbolo emesso è $i$. 
+Per questo motivo, una riga di $P$ somma sempre ad $1$: $P$ è una matrice stocastica\footnote{Una matrice è detta stocastica per righe (colonne) quando le sue righe (colonne) sono costituite da elementi non negativi che hanno somma unitaria. Quando si parla di matrice stocastica, si intende implicitamente che essa è stocastica per righe. Inoltre, una matrice è detta doppiamente stocastica quando è stocastica sia per righe che per colonne.}.
 
-Infatti \(\forall n\geq 1\), 
-\[p(x_{n+1}) = \Prob[X_{n+1}=x_{n+1}] = \sum_{x_n\in\mathcal{X}}\Prob[X_n = x_n]P_{x_n,x_{n+1}} = \sum_{x_n\in\mathcal{X}}p(x_n)P_{x_n,x_{n+1}}\]
+Come detto, una catena invariante nel tempo è completamente caratterizzata dalla distribuzione iniziale $\mu^{(1)}$ e dalla matrice di transizione $P$. Infatti,
+\[\mu^{(2)}_j = \Prob[X_{2}=j] = \sum_{i \in \mathcal{X}}\Prob[X_2 = j | X_1 = i]\Prob[X_1 = i] = \sum_{i \in \mathcal{X}} P_{i,j}\mu^{(1)}_i = \mu^{(1)} \cdot P^{T}_{j}\]
+ovvero $\mu^{(2)}_{j}$ viene calcolato con il prodotto tra $\mu^{(1)}$, vettore riga, e la $j$-esima colonna di $P$. 
+Di conseguenza, la distribuzione $\mu^{(2)}$ viene calcolata come
+\[\mu^{(2)}=\mu^{(1)}\cdot P\]
 
-Vedendo quindi le distribuzioni come vettori riga, si ha che la distribuzione al tempo \(n+1\), denotata come \(p_{n+1}\), si ottiene moltiplicando la distribuzione al tempo \(n\), \(p_n\), per la matrice di transizione \(P\), ovvero
-\[p_{n+1} = p_n P\]
+A questo punto, siamo interessati a studiare il comportamento asintotico di una catena di Markov, ovvero come essa si comporta ad un tempo infinitamente distante dal suo inizio.
 
 \begin{definition}{Distribuzione stazionaria}
-Rispetto a una matrice di transizione \(P\), una distribuzione di probabilità \(\mu\) su \(\mathcal{X}\) si dice \keyword{stazionaria} se \(\mu P = \mu\).
-
-Ovvero \(\mu\) è un autovettore sinistro di \(P\) associato all'autovalore \(1\).
-
-Inoltre possiamo dire che se un processo \(\underline{X}\) ha \(P\) come matrice di transizione e distribuzione iniziale \(\mu\) stazionaria, allora \(\underline{X}\) ha \(\mu\) come distribuzione in ogni istante di tempo.
+Rispetto a una matrice di transizione \(P\), una distribuzione di probabilità \(\mu\) su \(\mathcal{X}\) si dice \keyword{stazionaria} se \(\mu P = \mu\), ovvero se \(\mu\) è un autovettore sinistro di \(P\) associato all'autovalore \(1\).
 \end{definition}
 
-\begin{proposition}{}
-  Se la distribuzione iniziale di una catena \(\underline{X}\) invariante nel tempo è stazionaria, allora \(\underline{X}\) è stazionaria.
-\end{proposition}
+Se un processo \(\underline{X}\) è invariante nel tempo e si osserva $\mu_1=\mu$, allora esso ha $\mu$ come distribuzione in ogni istante di tempo. In questo caso, \(\underline{X}\) si dice \keyword{invariante}.
 
-\begin{definition}{Catene irriducibili e aperiodiche}
+\begin{definition}{Catene irriducibili}
   Una catena \(\underline{X}\) si dice \keyword{irriducibile} se
-  \[\forall i,h \in \mathcal{X}, \exists n \geq 1 \st \Prob[X_{n+1} = j|X_1 = i] > 0\]
-
-  Una catena \(\underline{X}\) si dice \keyword{aperiodica} se
-  \[\forall x \in \mathcal{X}, MCD \set{n\in\N}[\Prob[X_{n+1} = x|X_1=x]>0] = 1\]
+  \[\forall i,j \in \mathcal{X}: \exists n \geq 1 \st \Prob[X_{n+1} = j|X_1 = i] > 0\]
 \end{definition}
 
-Si dimostra che una catena invariante nel tempo, aperiodica e irriducibile ha un'unica distribuzione stazionaria e che indipendentemente dalla distribuzione iniziale, se \(\mu\) è tale distribuzione stazionaria, si ha che \[\lim_{n\to\infty} p_n = \mu\]
+Una catena è detta irriducibile se, in ogni istante, è possibile raggiungere ogni stato da ciascuno stato in un numero finito di passi. In altre parole, una catena è irriducibile se nella rappresentazine a grafo\footnote{È possibile rappresentare una catena di Markov mediante un grafo i cui nodi sono i simboli di $\mathcal{X}$ ed un arco da $x$ a $y$ ed etichettato con $p(y|x)$ rappresenta la probabilità di passare dallo stato $x$ allo stato $y$.} della catena, non sono presenti \qi{isole}, ovvero regioni da cui, una volta entrati, non è possibile tornare indietro, rendendo impossibile il raggiungimento degli stati al di fuori di tale regione. 
+Nello studio del comportamento asintotico delle catene, si considerano quelle irriducibili per minimalità: asintoticamente, una catena riducibile può essere ridotta, appunto, ad una sua \qi{isola}. Si noti che, se sono presenti più \qi{isole}, allora la distribuzione asintotica non è unica. 
+
+\begin{definition}{Catene aperiodiche}
+  Una catena \(\underline{X}\) si dice \keyword{aperiodica} se
+  \[\forall x \in \mathcal{X} \st \gcd \set{n\in\N}[\Prob[X_{n+1} = x|X_1=x]>0] = 1\]
+\end{definition}
+
+Uno stato $x \in \mathcal{X}$ è periodico, con periodo $n$, quando tutti i cammini che partono da $x$ e vi ritornano hanno lunghezza multiplo di $n$. Inoltre, $n$ è il massimo periodo osservato, ovvero il $\gcd$ della definizione. Se $\gcd=1$, allora lo stato si dice aperiodico. Una catena si dice aperiodica quando tutti i suoi stati sono aperiodici. Una catena periodica ha un comportamento, appunto, periodico e quindi, asintoticamente, non si stabilizza ad una distribuzione stazionaria.
+
+\begin{theorem}
+  Sia $\underline{X}$ una catena di Markov irriducibile, aperiodica e invariante nel tempo. Allora esiste un'unica distribuzione stazionaria $\mu$ t.c. 
+  \[\lim_{n\to\infty} \mu^{(n)} = \mu\]
+  che non dipende dalla distribuzione iniziale.
+\end{theorem}
+
+\begin{note}{}
+  Per una qualsiasi distribuzione $\mu$, rappresentata mediante vettore riga, possono essere usate indistintamente le notazioni $\mu_i$ e $\mu(i)$ per indicare la probabilità dell'$i$-esimo simbolo di $\mathcal{X}$.
+\end{note}
 
 \begin{example}{}
   Sia \(\mathcal{X} = \set{1,2}\). La matrice di transizione \(P\) di una catena \(\underline{X}\) è individuata da \(\alpha = \Prob[X_2 = 2 | X_1 = 1]\) e \(\beta = \Prob[X_2 = 1 | X_1 = 2]\) come
@@ -401,7 +412,7 @@ Si dimostra che una catena invariante nel tempo, aperiodica e irriducibile ha un
       \beta & 1-\beta
     \end{pmatrix}
   \end{equation*}
-  Se \(p_n = (\Prob[X_n = 1], \Prob[X_n = 2])\), allora \(p_{n+1} = p_n P\).
+  Se \(\mu_n = (\Prob[X_n = 1], \Prob[X_n = 2])\), allora \(\mu_{n+1} = \mu_n P\).
 
   La distribuzione stazionaria \(\mu = (\mu(1), \mu(2))\) è tale che \(\mu = \mu \cdot P\), e dunque soddisfa il sistema
   \begin{equation*}
