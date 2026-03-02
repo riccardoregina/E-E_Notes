@@ -219,7 +219,7 @@ Un modo intuitivo per visualizzare le relazioni tra le varie quantità di inform
 
 Possiamo dunque generalizzare le regole di catena a \(n\) variabili.
 
-\begin{proposition}{}
+\begin{proposition}[label=prop:general-chain-rule]{}
   Siano \(X_1, X_2, \ldots, X_n, Y\) variabili aleatorie.
   Si ha che
   \[H(X_1, X_2, \ldots, X_n) = H(X_1) + H(X_2|X_1) + \cdots + H(X_n | X_1, X_2, \ldots, X_{n-1}) = \]
@@ -321,12 +321,13 @@ Tre variabili $X,Y,Z$ possono formare una catena di Markov anche in diverso ordi
 
 È importante notare che l'equazione ricavata nella dimostrazione precedente porta anche a
 \[I(X;Y) \geq I(X;Y|Z)\]
-Intuitivamente, questa disuguaglianza ci dice che, se \(X \to Y \to Z\), l'informazione che \(Y\) fornisce su \(X\) non può essere aumentata conoscendo \(Z\). Ciò avviene perché la conoscenza di $Z$ riduce l'incertezza su $Y$ ma non su $X$ e quindi riduce anche la loro mutua informazione. 
+Intuitivamente, questa disuguaglianza ci dice che, se \(X \to Y \to Z\), l'informazione che \(Y\) fornisce su \(X\) non può essere aumentata conoscendo \(Z\). Ciò avviene perché la conoscenza di $Z$ riduce l'incertezza su $Y$ ma non su $X$ e questo fa sì che $I(X;Y)$ sia generalmente maggiore di $I(X;Y|Z)$. 
 
 In generale, però, se non è vero \(X \to Y \to Z\), tale disuguaglianza può non sussistere.
 Ad esempio, siano \(X, Y\) i.i.d\footnote{Indipendenti e Identicamente Distribuite}, uniformi su \(\{0,1\}\), e sia \(Z = X + Y\), con \(\mathcal{Z} = \set{0,1,2}\).
-Allora, per l'indipendenza, si ha \(I(X;Y) = 0\), ma 
+Allora, per l'indipendenza tra $X$ e $Y$, si ha \(I(X;Y) = 0\), ma 
 \[I(X;Y|Z) = H(X|Z) - \bcancel{H(X|Y,Z)} = \frac{1}{2} > I(X;Y)\]
+poiché la conoscenza di $Z$ dà informazione sia su $X$ che su $Y$.
 
 \begin{definition}{Processi stocastici}
   Un \keyword{processo stocastico} \(\underline{X} = {(X_n)}_{n\geq 1}\) è una successione di variabili aleatorie, dette variabili membro, su \(\mathcal{X}\).
@@ -334,7 +335,7 @@ Allora, per l'indipendenza, si ha \(I(X;Y) = 0\), ma
   Un processo \(\underline{X}\) è \keyword{stazionario} se \(\forall n, k \geq 1, (x_1, \ldots, x_n) \in \mathcal{X}^n\) si ha che
   \[\Prob[X_1 = x_1, \ldots ,X_n = x_n] = \Prob[X_{k+1} = x_1, \ldots, X_{k+n} = x_n]\]
 
-  In particolare, per \(n=1\) si ha che le variabili aleatorie \(X_i\) sono identicamente distribuite.
+  In particolare, per \(n=1\) si ha che le variabili membro \(X_i\) sono identicamente distribuite.
 
   Inoltre, se le variabili aleatorie sono anche indipendenti, si ha un processo \keyword{i.i.d.}
 \end{definition}
@@ -361,7 +362,7 @@ L'analogia con le sorgenti a memoria zero per i processi stazionari indipendenti
   ovvero se la probabilità di emissione di un simbolo, dato il simbolo precedente, non dipende dal tempo.
 \end{definition}
 
-Una catena di Markov tempo invariante è completamente caratterizzata dalla distribuzione iniziale \(\mu^{(1)}=\Prob[X_1 = x]\) e da una matrice \(P\), detta \keyword{matrice di transizione}, tale che \(P_{i,j} = (\Prob[X_2 = j | X_1 = i])\).\footnote{La definizione della matrice di transizione assume che \(\mathcal{X} = \set{1, \ldots, \abs{\mathcal{X}}}\). Se ci si trovasse con un alfabeto che non rispetta questa ipotesi, si può sempre costruire una corrispondenza biunivoca tra gli elementi di \(\mathcal{X}\) e un insieme di interi consecutivi.} 
+Una catena di Markov tempo invariante è completamente caratterizzata dalla distribuzione iniziale \(\mu^{(1)}=\Prob[X_1 = x]\) e da una matrice \(P\), detta \keyword{matrice di transizione}, tale che \(P_{i,j} = (\Prob[X_2 = j | X_1 = i])\).\footnote{La definizione della matrice di transizione assume che \(\mathcal{X} = \set{1, \ldots, \abs{\mathcal{X}}}\). Se ci si trovasse con un alfabeto che non rispetta questa ipotesi, si potrebbe sempre costruire una corrispondenza biunivoca tra gli elementi di \(\mathcal{X}\) e un insieme di interi consecutivi che parte da $1$.} 
 Una riga di $P$ corrisponde ad una legge di probabilità condizionata. Ad esempio, $P_{i}$ è il vettore riga che rappresenta la distribuzione di probabilità di emissione dei simboli dato che l'ultimo simbolo emesso è $i$. 
 Per questo motivo, una riga di $P$ somma sempre ad $1$: $P$ è una matrice stocastica\footnote{Una matrice è detta stocastica per righe (colonne) quando le sue righe (colonne) sono costituite da elementi non negativi che hanno somma unitaria. Quando si parla di matrice stocastica, si intende implicitamente che essa è stocastica per righe. Inoltre, una matrice è detta doppiamente stocastica quando è stocastica sia per righe che per colonne.}.
 
@@ -384,7 +385,7 @@ Se un processo \(\underline{X}\) è invariante nel tempo e si osserva $\mu_1=\mu
   \[\forall i,j \in \mathcal{X}: \exists n \geq 1 \st \Prob[X_{n+1} = j|X_1 = i] > 0\]
 \end{definition}
 
-Una catena è detta irriducibile se, in ogni istante, è possibile raggiungere ogni stato da ciascuno stato in un numero finito di passi. In altre parole, una catena è irriducibile se nella rappresentazine a grafo\footnote{È possibile rappresentare una catena di Markov mediante un grafo i cui nodi sono i simboli di $\mathcal{X}$ ed un arco da $x$ a $y$ ed etichettato con $p(y|x)$ rappresenta la probabilità di passare dallo stato $x$ allo stato $y$.} della catena, non sono presenti \qi{isole}, ovvero regioni da cui, una volta entrati, non è possibile tornare indietro, rendendo impossibile il raggiungimento degli stati al di fuori di tale regione. 
+Una catena è detta irriducibile se, in ogni istante, è possibile raggiungere ogni stato da ciascuno stato in un numero finito di passi. In altre parole, una catena è irriducibile se nella rappresentazine a grafo\footnote{È possibile rappresentare una catena di Markov mediante un grafo i cui nodi sono i simboli di $\mathcal{X}$ ed un arco da $x$ a $y$ ed etichettato con $p(y|x)$ rappresenta la probabilità di passare dallo stato $x$ allo stato $y$.} della catena non sono presenti \qi{isole}, ovvero regioni da cui, una volta entrati, non è possibile tornare indietro, rendendo impossibile il raggiungimento degli stati al di fuori di tale regione. 
 Nello studio del comportamento asintotico delle catene, si considerano quelle irriducibili per minimalità: asintoticamente, una catena riducibile può essere ridotta, appunto, ad una sua \qi{isola}. Si noti che, se sono presenti più \qi{isole}, allora la distribuzione asintotica non è unica. 
 
 \begin{definition}{Catene aperiodiche}
@@ -392,16 +393,16 @@ Nello studio del comportamento asintotico delle catene, si considerano quelle ir
   \[\forall x \in \mathcal{X} \st \gcd \set{n\in\N}[\Prob[X_{n+1} = x|X_1=x]>0] = 1\]
 \end{definition}
 
-Uno stato $x \in \mathcal{X}$ è periodico, con periodo $n$, quando tutti i cammini che partono da $x$ e vi ritornano hanno lunghezza multiplo di $n$. Inoltre, $n$ è il massimo periodo osservato, ovvero il $\gcd$ della definizione. Se $\gcd=1$, allora lo stato si dice aperiodico. Una catena si dice aperiodica quando tutti i suoi stati sono aperiodici. Una catena periodica ha un comportamento, appunto, periodico e quindi, asintoticamente, non si stabilizza ad una distribuzione stazionaria.
+Uno stato $x \in \mathcal{X}$ è periodico, con periodo $n$, quando tutti i cammini che partono da $x$ e vi ritornano hanno lunghezza multiplo di $n$ che è il massimo periodo osservato, ovvero il $\gcd$ della definizione. Se $\gcd=1$, allora lo stato si dice aperiodico. Una catena si dice aperiodica quando tutti i suoi stati sono aperiodici. Una catena periodica ha un comportamento, appunto, periodico e quindi, asintoticamente, non si stabilizza ad una distribuzione stazionaria.
 
-\begin{theorem}
+\begin{theorem}{}
   Sia $\underline{X}$ una catena di Markov irriducibile, aperiodica e invariante nel tempo. Allora esiste un'unica distribuzione stazionaria $\mu$ t.c. 
   \[\lim_{n\to\infty} \mu^{(n)} = \mu\]
   che non dipende dalla distribuzione iniziale.
 \end{theorem}
 
 \begin{note}{}
-  Per una qualsiasi distribuzione $\mu$, rappresentata mediante vettore riga, possono essere usate indistintamente le notazioni $\mu_i$ e $\mu(i)$ per indicare la probabilità dell'$i$-esimo simbolo di $\mathcal{X}$.
+  Per una qualsiasi distribuzione $\mu$, rappresentata mediante vettore riga, possono essere usate indistintamente le notazioni $\mu_i$ e $\mu(i)$ per indicare la probabilità di emissione dell'$i$-esimo simbolo di $\mathcal{X}$.
 \end{note}
 
 \begin{example}{}
@@ -430,15 +431,14 @@ Uno stato $x \in \mathcal{X}$ è periodico, con periodo $n$, quando tutti i camm
   \[H(\underline{X}) = \lim_{n\to\infty} \frac{1}{n} H(X_1, X_2, \ldots, X_n)\]
 \end{definition}
 
-Il tasso entropico è un tentativo di generalizzare ai processi il concetto di entropia congiunta.
-Tale però è solo un tentativo, poiché non è detto che il limite esista.
+Il tasso entropico è un tentativo di generalizzare ai processi il concetto di entropia congiunta. Esso è un tentativo poiché non è detto che il limite esista.
 
-Se le variabili aleatorie \(X_i\) sono i.i.d., allora dalla regola di catena
+Se le variabili aleatorie \(X_i\) sono i.i.d., allora, dalla regola di catena (\Cref{prop:general-chain-rule}), si ha
   \[H(X_1, X_2, \ldots, X_n) = H(X_1) + \sum_{i=2}^n H(X_i|X_{i-1}, \ldots, X_1) = \sum_{i=1}^n H(X_i) = n H(X_1)\]
 
-Dunque in questo caso \(H(\underline{X}) = H(X_1)\).\footnote{Essendo i.i.d si ha che \(H(X_1) = H(X_i), \forall i\).}
+Dunque, in questo caso, si osserva \(H(\underline{X}) = H(X_1)\).\footnote{Essendo le variabili membro i.i.d si ha che \(H(X_1) = H(X_i), \forall i\), cioè potrebbe essere scelta l'entropia di una qualsiasi delle variabili membro. Di solito, per comodità, si sceglie $X_1$.}
 
-Si può mostrare che però, già togliendo la sola ipotesi di indipendenza, il limite può non esistere.
+Si può mostrare però, che, già togliendo la sola ipotesi di indipendenza, il limite può non esistere.
 
 \begin{theorem}{}
   Se \(\underline{X}\) è stazionario, il tasso di entropia esiste e coincide con
@@ -446,15 +446,17 @@ Si può mostrare che però, già togliendo la sola ipotesi di indipendenza, il l
 \end{theorem}
 
 \begin{proof}
-  \(\forall n \geq 1\), essendo che il condizionamento non aumenta l'entropia, si ha che
+  \(\forall n \geq 1\), poiché che il condizionamento non aumenta l'entropia, si ha che
   \[H(X_{n+1}|X_n, \ldots, X_1)\leq H(X_{n+1}|X_n, \ldots, X_2)\]
-  Essendo che \(\underline{X}\) è stazionario, si ha che
+  Poiché \(\underline{X}\) è stazionario, si ha che
   \[H(X_{n+1}|X_n, \ldots, X_2) = H(X_n|X_{n-1}, \ldots, X_1)\]
   Dunque la successione \(a_n = H(X_n|X_{n-1}, \ldots, X_1)\) è decrescente di termini non negativi, e dunque converge, ovvero \(H'(\underline{X})\) esiste.
 
-  Inoltre, dalla regola di catena, \(\frac{1}{n} H(X_1, \ldots, X_n) = \frac{1}{n}\left(H(X_1) +\sum_{i=2}^n H(X_i|X_{i-1}, \ldots, X_1)\right)\), cioè \(\frac{1}{n} H(X_1, \ldots, X_n)\) è la media dei primi \(n\) termini della successione \(a_n\).
+  Inoltre, dalla regola di catena, si ha 
+  \[\frac{1}{n} H(X_1, \ldots, X_n) = \frac{1}{n}\left(H(X_1) +\sum_{i=2}^n H(X_i|X_{i-1}, \ldots, X_1)\right)\]
+  cioè \(\frac{1}{n} H(X_1, \ldots, X_n)\) è la media dei primi \(n\) termini della successione \(a_n\).
 
-  Per il teorema della media di Cesàro\footnote{Il teorema della media di Cesàro afferma che se una successione \(a_n\) ammette limite, allora la media aritmetica delle sue medie parziali converge allo stesso limite. In termini più formali, dato \(\sigma_n = \frac{1}{n}\sum_{i=1}^n a_i\), si ha \[\lim_{n\to\infty} \sigma_n = \lim_{n\to\infty} a_n\]}, si ricava \(H(\underline{X}) = H'(\underline{X})\).
+  Per il teorema della media di Cesàro\footnote{Teorema di Cesàro: sia $(a_{n})_{n}$ una successione convergente e $(m_{n})_{n}$ la successione della media aritmetica dei primi $n$ valori di $(a_{n})_{n}$ tale per cui $m_{n}=\frac{a_{1}+\dots +a_{n}}{n}$. Allora$$\lim_{ n \to \infty }{m_{n}}=\lim_{ n \to \infty }{a_{n}}$$}, si ricava \(H(\underline{X}) = H'(\underline{X})\).
 \end{proof}
 
 Se \(\underline{X}\) è una catena di Markov stazionaria, si ha che
@@ -463,14 +465,13 @@ Se \(\underline{X}\) è una catena di Markov stazionaria, si ha che
 Inoltre se \(P\) è la matrice di transizione della catena e \(\mu\) la sua distribuzione stazionaria, si ha che
 \[H(\underline{X}) = H(X_2|X_1) = -\sum_{i,j\in \mathcal{X}} \mu(i) P_{ij} \log P_{ij}\]
 
-Essendo il tasso di entropia una quantità definita al limite, tutte le proprietà che abbiamo visto valgono anche per catene di Markov non stazionarie ma la cui distribuzione converge a quella stazionaria, ovvero catene invariate nel tempo, aperiodiche e irriducibili.
+Essendo il tasso di entropia una quantità definita al limite, tutte le proprietà che abbiamo visto valgono anche per catene di Markov non stazionarie ma la cui distribuzione converge ad un'unica distribuzione stazionaria, ovvero, come visto, le catene invarianti nel tempo, aperiodiche e irriducibili.
 
 \begin{example}{}
-  Per la catena di Markov dell'esempio precedente, si ha che
-  \[H(\underline{X}) = -\mu(1)((1-\alpha)\log(1-\alpha) + \alpha \log \alpha) - \mu(2)(\beta \log \beta + (1-\beta) \log (1-\beta))\]
+  Per la catena di Markov dell'esempio precedente, per la formula appena vista, si ha che
+  \[H(\underline{X}) = -\mu(1)\left((1-\alpha)\log(1-\alpha) + \alpha \log \alpha\right) - \mu(2)\left(\beta \log \beta + (1-\beta) \log (1-\beta)\right)\]
   \[=\frac{\beta}{\alpha+\beta} H(\alpha) + \frac{\alpha}{\alpha+\beta} H(\beta)\]
-
-  Dove \(H(p) = -p \log(p) - (1-p) \log (1-p)\) è l'entropia di una variabile aleatoria di Bernoulli con parametro \(p\).
+  dove \(H(p) = -p \log(p) - (1-p) \log (1-p)\) è l'entropia di una variabile aleatoria di Bernoulli con parametro \(p\).
 \end{example}
 
 
