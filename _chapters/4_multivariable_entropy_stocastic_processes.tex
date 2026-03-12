@@ -378,14 +378,14 @@ A questo punto, siamo interessati a studiare il comportamento asintotico di una 
 Rispetto a una matrice di transizione \(P\), una distribuzione di probabilità \(\mu\) su \(\mathcal{X}\) si dice \keyword{stazionaria} se \(\mu P = \mu\), ovvero se \(\mu\) è un autovettore sinistro di \(P\) associato all'autovalore \(1\).
 \end{definition}
 
-Se un processo \(\underline{X}\) è invariante nel tempo e si osserva $\mu_1=\mu$, allora esso ha $\mu$ come distribuzione in ogni istante di tempo. In questo caso, \(\underline{X}\) si dice \keyword{invariante}.
+Se un processo \(\underline{X}\) è invariante nel tempo e si osserva $\mu^{(1)}=\mu$, allora esso ha $\mu$ come distribuzione in ogni istante di tempo. In questo caso, \(\underline{X}\) si dice \keyword{invariante}.
 
 \begin{definition}{Catene irriducibili}
   Una catena \(\underline{X}\) si dice \keyword{irriducibile} se
   \[\forall i,j \in \mathcal{X}: \exists n \geq 1 \st \Prob[X_{n+1} = j|X_1 = i] > 0\]
 \end{definition}
 
-Una catena è detta irriducibile se, in ogni istante, è possibile raggiungere ogni stato da ciascuno stato in un numero finito di passi. In altre parole, una catena è irriducibile se nella rappresentazine a grafo\footnote{È possibile rappresentare una catena di Markov mediante un grafo i cui nodi sono i simboli di $\mathcal{X}$ ed un arco da $x$ a $y$ ed etichettato con $p(y|x)$ rappresenta la probabilità di passare dallo stato $x$ allo stato $y$.} della catena non sono presenti \qi{isole}, ovvero regioni da cui, una volta entrati, non è possibile tornare indietro, rendendo impossibile il raggiungimento degli stati al di fuori di tale regione. 
+Una catena è detta irriducibile se, in ogni istante, è possibile raggiungere ogni stato da ciascuno stato in un numero finito di passi. In altre parole, una catena è irriducibile se nella rappresentazine a grafo\footnote{È possibile rappresentare una catena di Markov mediante un grafo i cui nodi sono i simboli di $\mathcal{X}$ ed un arco da $x$ a $y$, etichettato con $p(y|x)$, rappresenta la probabilità di passare dallo stato $x$ allo stato $y$.} della catena non sono presenti \qi{isole}, ovvero regioni da cui, una volta entrati, non è possibile tornare indietro, rendendo impossibile il raggiungimento degli stati al di fuori di tale regione. 
 Nello studio del comportamento asintotico delle catene, si considerano quelle irriducibili per minimalità: asintoticamente, una catena riducibile può essere ridotta, appunto, ad una sua \qi{isola}. Si noti che, se sono presenti più \qi{isole}, allora la distribuzione asintotica non è unica. 
 
 \begin{definition}{Catene aperiodiche}
@@ -393,7 +393,7 @@ Nello studio del comportamento asintotico delle catene, si considerano quelle ir
   \[\forall x \in \mathcal{X} \st \gcd \set{n\in\N}[\Prob[X_{n+1} = x|X_1=x]>0] = 1\]
 \end{definition}
 
-Uno stato $x \in \mathcal{X}$ è periodico, con periodo $n$, quando tutti i cammini che partono da $x$ e vi ritornano hanno lunghezza multiplo di $n$ che è il massimo periodo osservato, ovvero il $\gcd$ della definizione. Se $\gcd=1$, allora lo stato si dice aperiodico. Una catena si dice aperiodica quando tutti i suoi stati sono aperiodici. Una catena periodica ha un comportamento, appunto, periodico e quindi, asintoticamente, non si stabilizza ad una distribuzione stazionaria.
+Uno stato $x \in \mathcal{X}$ è periodico, con periodo $n$, quando tutti i cammini che partono da $x$ e vi ritornano hanno lunghezza multiplo di $n$, con $n$ massimo, ovvero il $\gcd$ dei periodi, come nella definizione. Se $\gcd=1$, allora lo stato si dice aperiodico. Una catena si dice aperiodica quando tutti i suoi stati sono aperiodici. Invece, una catena periodica ha un comportamento, appunto, periodico e quindi, asintoticamente, non si stabilizza ad una distribuzione stazionaria.
 
 \begin{theorem}{}
   Sia $\underline{X}$ una catena di Markov irriducibile, aperiodica e invariante nel tempo. Allora esiste un'unica distribuzione stazionaria $\mu$ t.c. 
