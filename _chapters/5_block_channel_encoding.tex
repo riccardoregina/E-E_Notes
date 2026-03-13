@@ -5,46 +5,49 @@ Visti concetti di teoria di probabilità e di entropia, e analizzato il parallel
 \section{Codifica a blocchi}
 
 Consideriamo una sorgente (a memoria zero) \(S\). Abbiamo visto che se \(Z\) è un codice binario ottimale per \(S\), allora
-\[H(S)\leq C(Z)<H(S)+1\]
+\[H(S)\leq c(Z)<H(S)+1\]
 
 Vediamo ora come avvicinarci al limite inferiore migliorando l'efficienza del codice.
 
-Sia \(S^n\) la variabile a valori in \(\SCal^n\), ed essendo \(S\) a memoria zero distribuita secondo 
+Sia \(S^n\) la variabile a valori in \(\SCal^n\) con distribuzione 
 \[p(s_1, \ldots, s_n) = p(s_1)\ldots p(s_n), \forall s_1, \ldots, s_n \in \SCal\]
+poiché $S$ è a memoria zero.
 
-Allora per questa sorgente una codifica ottimale \(\phi: \SCal^n \to \set{a,b}^*\) verificherà
-\[H(S^n) = H(S_1, \ldots, S_n) \leq \sum_{s_1, \ldots, s_n \in \SCal} p(s_1, \ldots, s_n) \abs{\phi(s_1, \ldots, s_n)} < H(S^n) + 1\]
+Sia $\phi:\mathcal{S}^{n}\to \{a,b\}^{*}$ una codifica ottimale, per cui si verifica il costo assoluto, e sia
+$$c(\phi)=\sum_{s_{1},\dots,s_{n} \in \mathcal{S}}{p(s_{1},\dots, s_{n})|\phi(s_{1}\dots s_{n})|}$$
+tale costo assoluto, relativo all'emissione di $n$ simboli.
 
-La sommatoria centrale è il costo di codifica, ma questa volta relativo all'emissione (e dunque codifica) di \(n\) simboli della sorgente.
-
-Dunque il costo \textit{effettivo} (ovvero medio per simbolo) \(C_e(\phi)\) verifica
-\[\frac{1}{n} H(S^n) \leq C_e(\phi) < \frac{1}{n} H(S^n) + \frac{1}{n}\]
-
-Essendo che siamo nel caso di variabili i.i.d, si ha che \(H(S^n) = n H(S)\), e dunque
-\[H(S) \leq C_e(\phi) < H(S) + \frac{1}{n}\]
-
-E dunque, aumentando \(n\), possiamo avvicinarci arbitrariamente al costo assolutamente ottimale \(H(S)\).
+Allora, si ha
+$$H(S^{n})=H(S_{1},\dots,S_{n})\leq c(\phi) < H(S^{n})+1$$
+Dunque, per conoscere il \keyword{costo effettivo} per singolo simbolo $c_{e}(\phi)$, si deve dividere l'intera disuguaglianza per $n$:
+$$\begin{aligned}
+\frac{1}{n}H(S^{n}) &\leq c_{e}(\phi) < \frac{1}{n}(H(S^{n})+1), \\
+H(S) &\leq c_{e}(\phi)< \frac{\bcancel{n} H(S)}{\bcancel{n}} +\frac{1}{n} &&\text{($S_{1},\dots,S_{n}$ i.i.d.)}
+\end{aligned}$$
+Poiché $\lim_{ n \to \infty } \frac{1}{n}=0$, allora $\lim_{ n \to \infty }{c_{e}(\phi)}=H(S)$, ovvero, aumentando \(n\), possiamo avvicinarci arbitrariamente al costo ideale \(H(S)\).
 
 \begin{example}{}
   Sia \(\SCal = \set{\alpha, \beta, \gamma}, p(\alpha) = \frac{5}{8}, p(\beta) = p(\gamma) = \frac{3}{16}\).
 
-  Da Huffman, \(Z=\set{a, ba, bb}\) è un codice ottimale per \(S\) con costo
-  \[C(Z) = \frac{5}{8} \cdot 1 + \frac{3}{16} \cdot 2 + \frac{3}{16} \cdot 2 = \frac{5}{8} + \frac{6}{8} = \frac{11}{8}\]
+  Mediante l'algoritmo di Huffman, troviamo un codice \(Z=\set{a, ba, bb}\) ottimale per \(S\) con costo
+  \[c(Z) = \frac{5}{8} \cdot 1 + \frac{3}{16} \cdot 2 + \frac{3}{16} \cdot 2 = \frac{5}{8} + \frac{6}{8} = \frac{11}{8}\]
   
-  Abbiamo che \(H(S) = \frac{5}{8}(\log 8 - \log 5) + \frac{3}{8}(\log 16 - \log 3) = \frac{27-\log 5 -\log3}{8}\)
+  Per quanto riguarda l'entropia della sorgente, si ha \[H(S) = \frac{5}{8}(\log 8 - \log 5) + \frac{3}{8}(\log 16 - \log 3) = \frac{27-\log 5 -\log3}{8}\]
 
   Fissando \(n=2\), allora \(p(\alpha, \alpha) = \frac{25}{64}\), \(p(\alpha, \beta)=p(\alpha, \gamma) = p(\beta, \alpha) = p(\gamma, \alpha) = \frac{15}{128}\) e \(p(\beta, \beta) = p(\beta, \gamma) = p(\gamma, \beta) = p(\gamma, \gamma) = \frac{9}{256}\).
   
-  Sempre da Huffman, un codice ottimale per \(S^2\) è \(Z_2 = \set{a^2, ba^2, bab,b^2a^2, b^2ab,b^3ab,b^4,b^5}\) con costo
+  Mediante l'algoritmo di Huffman, troviamo un codice ottimale per \(S^2\), cioè \(Z_2 = \set{a^2, ba^2, bab,b^2a^2, b^2ab,b^3ab,b^4,b^5}\) con costo
   \[\frac{1}{2}\left(\frac{25}{64}+\frac{15}{128}(2\cdot 3 + 2\cdot 4) + \frac{9}{256}4\cdot 5\right) = \frac{25+105+45}{64} \simeq 1.367<\frac{11}{8}\]
+  
+  Quindi, già per $n=2$, si osserva un abbassamento del costo di codice.
 \end{example}
 
 In generale, ovvero per sorgenti a memoria finita, si può vedere che se \(\underline{S}\) è stazionario e \(\phi^{(n)}\) una codifica ottimale binaria per \(S^n=S_1, \ldots, S_n\) si ha ancora
-\[\frac{1}{n}H(S_1,\ldots, S_n)\leq C_e(\phi^{(n)}) < \frac{1}{n}H(S_1,\ldots, S_n) + \frac{1}{n}\]
+\[\frac{1}{n}H(S_1,\ldots, S_n)\leq c_e(\phi^{(n)}) < \frac{1}{n}H(S_1,\ldots, S_n) + \frac{1}{n}\]
 da cui
-\[\lim_{n\to \infty} C_e(\phi^{(n)}) = H(\underline{S})\]
+\[\lim_{n\to \infty} c_e(\phi^{(n)}) = H(\underline{S})\]
 
-Questo vale anche per catene di Markov irriducibili, aperiodiche e invariati nel tempo.
+Questo vale anche per catene di Markov irriducibili, aperiodiche e invarianti nel tempo.
 
 \begin{example}{}
   Sia \(\SCal = \set{1,2,3}\) e 
@@ -71,7 +74,7 @@ Questo vale anche per catene di Markov irriducibili, aperiodiche e invariati nel
   Siano \(X \to Y \to \hat{X}\) variabili aleatorie con \(\hat{X}\) stima di \(X\) basata su \(Y\).
   Sia inoltre \(P_e = \Prob[X\neq\hat{X}]\). Allora
   \[H(X|Y) \leq H(X|\hat{X})\leq H(P_e)+P_e\log(\#\mathcal{X})\]
-  Dove \(H(P_e) = -P_e \log (P_e) - (1-P_e)\log(1-P_e)\) è l'entropia di una variabile di Bernoulli con parametro \(P_e\).
+  dove \(H(P_e) = -P_e \log (P_e) - (1-P_e)\log(1-P_e)\) è l'entropia di una variabile di Bernoulli con parametro \(P_e\).
 \end{theorem}
 
 \begin{proof}
@@ -80,32 +83,26 @@ Questo vale anche per catene di Markov irriducibili, aperiodiche e invariati nel
     0 & \text{se } X = \hat{X} \\
     1 & \text{se } X \neq \hat{X}
   \end{cases}\]
-  Si ha ovviamente che \(H(E) = H(P_e)\). 
+  Poiché \(P_e=\Prob[E=1]\), si ha \(H(E) = H(P_e)\). 
   Dalla regola di catena,
   \[H(X|\hat{X})+H(E|X,\hat{X})=H(E,X|\hat{X}) = H(E|\hat{X}) + H(X|E,\hat{X})\]
   Possiamo notare che \(H(E|X,\hat{X})=0\) poiché conoscendo \(X\) e \(\hat{X}\) possiamo sapere se la stima è corretta o meno, e dunque non c'è incertezza su \(E\).
   Inoltre, \(H(E|\hat{X}) \leq H(E) \) poiché il condizionamento non aumenta l'entropia. 
-  Infine, abbiamo che per definizione di entropia condizionata che \(H(X|E,\hat{X})\) si può scrivere come
+  Infine, per la legge della probabilità totale, \(H(X|E,\hat{X})\) si può scrivere come
   \[P(E=0)H(X|E=0,\hat{X}) + P(E=1)H(X|E=1,\hat{X})\]
   Ma se \(E=0\), allora \(X=\hat{X}\) e dunque \(H(X|E=0,\hat{X})=0\).
-  Essendo poi che \(H(X|\hat{X},E=1)\) è comunque un entropia di una variabile con \(\#\mathcal{X}\) possibili valori, si ha che \(H(X|E=1,\hat{X}) \leq \log(\#\mathcal{X})\).
+  Essendo poi \(H(X|\hat{X},E=1)\) entropia di una variabile con \(\#\mathcal{X}\) possibili valori, si ha che \(H(X|E=1,\hat{X}) \leq \log(\#\mathcal{X})\).
   Da queste osservazioni, si ricava che
   \[H(X|\hat{X}) \leq H(E) + P(E=1) \log(\#\mathcal{X}) = H(P_e) + P_e \log(\#\mathcal{X})\]
-  L'ipotesi che \(X \to Y \to \hat{X}\) è necessaria solo per la prima disuguaglianza \(H(X|Y) \leq H(X|\hat{X})\), che segue in modo diretto dalla disuguaglianza di data processing~\ref{prop:dpi}.
+  Infine, poiché \(X \to Y \to \hat{X}\) per ipotesi, vale la disuguaglianza di data processing (DPI, \ref{prop:dpi}), per cui si ha \(H(X|Y) \leq H(X|\hat{X})\). 
 \end{proof}
+
 \begin{observation}{}
-  Se \(\mathcal{\hat{X}} = \mathcal{X}\), allora \(H(X|\hat{X})\leq H(P_e)+P_e\log(\#\mathcal{X}-1)\). Questo poiché \(\log(\#\mathcal{X})\) deriva dalla maggiorazione di \(H(X|\hat{X},E=1)\). Ma se i valori che \(X\) e \(\hat{X}\) possono assumere sono esattamente gli stessi, sapendo che c'è stato un errore possiamo escludere il valore di \(\hat{X}\) tra i possibili valori che \(X\) può assumere, e dunque il numero di possibili valori di \(X\) dato che c'è stato un errore è al più \(\#\mathcal{X}-1\).
+  Se \(\mathcal{\hat{X}} = \mathcal{X}\), in caso di un errore di stima, ovvero $\hat{X}\neq X$, allora tra i valori possibili di $X$ dobbiamo escludere quello assunto da $\hat{X}$. Pertanto, il numero dei possibili valori che $X$ può assumere è \(\#\mathcal{X}-1\). In questo contesto, si osserva \(H(X|\hat{X})\leq H(P_e)+P_e\log(\#\mathcal{X}-1)\).
 
-  Inoltre, è possibile raggiungere l'uguaglianza.
-  Sia \(\mathcal{X} = \set{1,\ldots,m}\) e sia \(\hat{X} = 1\), ovvero ogni altro valore di \(\mathcal{X}\) abbia probabilità nulla nella distribuzione di \(\hat{X}\).
-  
-  In tal caso, \(X\) e \(\hat{X}\) sono indipendenti, da cui \(H(X|\hat{X}) = H(X)\).
-
-  Dalla disuguaglianza appena vista abbiamo
-  \(H(X) \leq H(1-p_1)+(1-p_1)\log(m-1)\),
-  dove \(p_i = \Prob(X=i)\), con quindi \(P_e = 1-p_1\).
-
-  Se \(p_2=\ldots=p_m = \frac{1-p_1}{m-1}\), si ha che
+  Inoltre, è possibile raggiungere l'uguaglianza: sia \(\mathcal{X} = \set{1,\ldots,m}\) e sia \(\hat{X} = 1\), sempre, ovvero abbia probabilità nulla ogni altro valore di \(\mathcal{X}\) nella distribuzione di \(\hat{X}\).
+  Banalmente, in questo caso, \(X\) e \(\hat{X}\) sono indipendenti, da cui \(H(X|\hat{X}) = H(X)\). La probabilità di commettere un errore di stima è chiaramente $P_e=1-\Prob[X=1]$. Definendo $p_i:=\Prob[X=i], \forall i \in \mathcal{X}$, si ha $P_e=1-p_1$. Dal teorema precedente, si osserva \(H(X) \leq H(1-p_1)+(1-p_1)\log(m-1)\).
+  Se tutti gli altri $m-1$ possibili valori di $X$ sono distribuiti uniformemente, ovvero se \(p_2=\ldots=p_m = \frac{1-p_1}{m-1}\), si ha che
   \[H(X) = p_1\log\left(\frac{1}{p_1}\right) + \sum_{i=2}^m \frac{1-p_1}{m-1}\log\left(\frac{m-1}{1-p_1}\right)=\]
   \[ = p_1\log\left(\frac{1}{p_1}\right) + (m-1)\frac{1-p_1}{m-1}\log\left(\frac{m-1}{1-p_1}\right) = \]
   \[ = p_1\log\left(\frac{1}{p_1}\right) + (1-p_1)\left(\log(m-1) + \log\left(\frac{1}{1-p_1}\right)\right) = \]
@@ -116,7 +113,7 @@ Questo vale anche per catene di Markov irriducibili, aperiodiche e invariati nel
 \section{Codifica di canale}
 
 \begin{definition}{Canale discreto a memoria zero}
-  Un \keyword{canale discreto a memoria zero (DMC)} è una terna \((\mathcal{X}, \mathcal{Y}, p(y|x))\), dove \(\mathcal{X}\) è l'alfabeto di input, \(\mathcal{Y}\) è l'alfabeto di output e \(p(y|x)\) è la probabilità di ricevere il simbolo \(y\in\mathcal{Y}\) quando viene inviato il simbolo \(x\in\mathcal{X}\), che modella il rumore del canale.
+  Un \keyword{canale discreto a memoria zero (DMC)} è una terna \((\mathcal{X}, \mathcal{Y}, p(y|x))\), dove \(\mathcal{X}\) è l'alfabeto di input, \(\mathcal{Y}\) è l'alfabeto di output e \(p(y|x)\), la probabilità di ricevere il simbolo \(y\in\mathcal{Y}\) quando viene inviato il simbolo \(x\in\mathcal{X}\), che modella il rumore del canale.
 \end{definition}
 
 È importante notare che il canale è caratterizzato solo dall'alfabeto di input, output e dalla probabilità condizionata, e dunque non fissa una variabile aleatoria di input o di output specifica.
@@ -124,10 +121,10 @@ Questo vale anche per catene di Markov irriducibili, aperiodiche e invariati nel
 \begin{definition}{Capacità di un canale}
   La \keyword{capacità \(C\)} di un canale discreto è la quantità
   \[C = \max_{X} I(X;Y)\]
-  Dove il massimo è preso su tutte le variabili aleatorie \(X\) a valori in \(\mathcal{X}\).
-  Fissare tale \(X\) avendo \(p(y|x)\) è sufficiente a determinare univocamente anche \(Y\), poiché
-  \[\forall y \in \mathcal{Y}, p(y) = \sum_{x\in\mathcal{X}} p(y|x)p(x)\]
+  dove il massimo è preso su tutte le variabili aleatorie \(X\) a valori in \(\mathcal{X}\).
 \end{definition}
+Si noti che, fissata una variabile \(X\) e la sua distribuzione $p(x)$, avendo la distribuzione \(p(y|x)\) del canale è possibile determinare univocamente anche \(Y\), poiché
+\[\forall y \in \mathcal{Y}, p(y) = \sum_{x\in\mathcal{X}} p(y|x)p(x)\]
 
 \begin{example}{}
   Un primo esempio molto semplice che consideriamo è un canale binario senza rumore, ovvero con \(\mathcal{X} = \mathcal{Y} = \set{0,1}\) e \(p(y|x) = 1 \iff y=x\).
