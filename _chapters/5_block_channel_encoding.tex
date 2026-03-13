@@ -123,20 +123,23 @@ Questo vale anche per catene di Markov irriducibili, aperiodiche e invarianti ne
   \[C = \max_{X} I(X;Y)\]
   dove il massimo è preso su tutte le variabili aleatorie \(X\) a valori in \(\mathcal{X}\).
 \end{definition}
-Si noti che, fissata una variabile \(X\) e la sua distribuzione $p(x)$, avendo la distribuzione \(p(y|x)\) del canale è possibile determinare univocamente anche \(Y\), poiché
+Intuitivamente, la capacità di un canale misura quanta informazione di $X$ esso riesce a conservare in $Y$. Infatti, poiché è definita come mutua informazione, la capacità è massima quando $Y$ è funzione deterministica di $X$, minima (nulla) quando $Y$ e $X$ sono indipendenti.
+Nella definizione di capacità, il massimo è ricercato nell'insieme delle $X$ possibili e non nelle coppie $X,Y$ possibili. Ciò avviene perché, fissata una variabile \(X\) e la sua distribuzione $p(x)$, avendo la distribuzione \(p(y|x)\) del canale, è possibile determinare univocamente anche \(Y\), poiché
 \[\forall y \in \mathcal{Y}, p(y) = \sum_{x\in\mathcal{X}} p(y|x)p(x)\]
 
-\begin{example}{}
-  Un primo esempio molto semplice che consideriamo è un canale binario senza rumore, ovvero con \(\mathcal{X} = \mathcal{Y} = \set{0,1}\) e \(p(y|x) = 1 \iff y=x\).
-  In questo caso, qualunque sia la distribuzione di \(X\), si ha che \(Y=X\) e dunque \(I(X;Y) = H(X)\), ovvero \(C = \max_{X} H(X) = 1\).
-
-  Consideriamo ora un canale rumoroso senza sovrapposizioni, ovvero con \(\mathcal{X} = \set{0,1}\), \(\mathcal{Y} = \set{a,b,c,d}\) con \(p(a|0) = p(b|0) = \frac{1}{2}\), \(p(c|1) = \frac{1}{3}\),\(p(d|1) = \frac{2}{3}\) con le altre combinazioni a probabilità zero.
-  In questo caso c'è rumore ma non essendoci sovrapposizione tra i simboli ricevuti per i diversi simboli inviati tale rumore \qi{non da fastidio}, nel senso che conoscendo il simbolo ricevuto è possibile risalire univocamente a quello inviato.
-  Ci si può dunque ricondurre al caso precedente, e si ha che \(C = 1\).
+Consideriamo adesso degli esempi di canale.
+\begin{example}{Canale binario senza rumore}
+  Si consideri un canale binario senza rumore, ovvero con \(\mathcal{X} = \mathcal{Y} = \set{0,1}\) e \(p(y|x) = 1 \iff y=x\).
+  In questo canale, $Y$ è funzione deterministica di $X$ per qualsiasi $X$. Dunque, \(I(X;Y) = H(X) + \bcancel{H(X|Y)}\). Pertanto, la capacità del canale è \(C = \max_{X} H(X)=1\) per $X$ variabile uniforme.
 \end{example}
 
-\begin{example}{}
-  Infine, consideriamo un canale binario simmetrico (BSC), ovvero con \(\mathcal{X} = \mathcal{Y} = \set{0,1}\) e 
+\begin{example}{Canale binario rumoroso senza sovrapposizioni}
+  Si consideri un canale rumoroso con \(\mathcal{X} = \set{0,1}\), \(\mathcal{Y} = \set{a,b,c,d}\) con \(p(a|0) = p(b|0) = \frac{1}{2}\), \(p(c|1) = \frac{1}{3}\),\(p(d|1) = \frac{2}{3}\) con le altre combinazioni a probabilità zero.
+  Questo canale è detto \keyword{senza sovrapposizioni} perché gli input possono essere soggetti a rumore, ma i possibili output corrispondenti a ciascun input non si sovrappongono con quelli di un altro input. Infatti, dato un output, non vi è incertezza alcuna sul valore dell'input corrispondente. Pertanto, si ha $H(X|Y)=0$, il che ci dice che è possibile ricondursi al caso di un canale senza rumore.
+\end{example}
+
+\begin{example}{Canale binario simmetrico}
+  Si consideri un canale binario simmetrico (BSC), ovvero con \(\mathcal{X} = \mathcal{Y} = \set{0,1}\) e 
   \[p(y|x) = \begin{cases}
     q & \text{se } y\neq x \\
     1-q & \text{se } y = x
@@ -148,18 +151,16 @@ Si noti che, fissata una variabile \(X\) e la sua distribuzione $p(x)$, avendo l
   Ma \(H(Y|X=x)\) è \(H(q)\), poiché una volta noto il valore che \(X\) assume, l'incertezza rimasta su \(Y\) è solo data dalla probabiltà di errore. Si ha quindi
   \[ I(X;Y)=H(Y)-H(q)\sum_{x\in\set{0,1}} p(x) = H(Y) - H(q)\leq 1- H(q)\]
 
-  Per calcolare la capacità del canale, dobbiamo massimizzare \(H(Y)-H(q)\) al variare di \(p(x)\).
-  Ovviamente il massimo di tale quantità al variare di \(Y\) si ha quando \(Y\) è uniforme, ovvero quando \(p(Y=0) = p(Y=1) = \frac{1}{2}\), e in tal caso si raggiunge il limite \(1-H(q)\)
-
+  Notiamo che \(H(Y)-H(q)\) è massima per $Y$ uniforme, ovvero quando \(p(Y=0) = p(Y=1) = \frac{1}{2}\), e in tal caso si raggiunge il limite \(1-H(q)\).
   Resta da vedere se tale massimo è raggiungibile al variare di \(X\).
-  Ma se \(X\) è uniforme, lo è anche \(Y\), Infatti
-  \[\Prob[Y=0] = \Prob[X=0]p(0|0) + \Prob[X=1]p(0|1) = \frac{1}{2}(1-q) +\frac{1}{2}q = \frac{1}{2}\]
+  Si vede, però, che se \(X\) è uniforme, lo è anche \(Y\). Infatti,
+  \[\Prob[Y=0] = \Prob[X=0]p(0|0) + \Prob[X=1]p(0|1) = \frac{1}{2}(1-q) +\frac{1}{2}q = \frac{1}{2}, \forall q \in [0,1]\]
   Ciò mostra che
   \[C = \max_{X} I(X;Y) = 1 - H(q)\]
   e si ottiene per \(X\) uniforme su \(\set{0,1}\).
 
   \begin{observation}{}
-    BSC si ottiene quando il rumore si può caratterizzare come una variabile di Bernoulli \(E\) con parametro \(q\) e \(Y \equiv_{2} X + E\)
+    Si ottiene un BSC quando il rumore può essere caratterizzato come una variabile di Bernoulli \(E\) con parametro \(q\) tale per cui \(Y \equiv_{2} X + E\).
   \end{observation}
 \end{example}
 
@@ -174,18 +175,18 @@ Si noti che, fissata una variabile \(X\) e la sua distribuzione $p(x)$, avendo l
 \end{proof}
 
 \begin{proposition}{}
-  La capacità \(C\) di un canale è non negativa
+  La capacità \(C\) di un canale è non negativa.
 \end{proposition}
 \begin{proof}
-  Essendo che \(I(X;Y) \geq 0, \forall X\), si ha che \(C = \max_X I(X;Y) \geq 0\).
+  Essendo \(I(X;Y) \geq 0, \forall X\), si ha che \(C = \max_X I(X;Y) \geq 0\).
 \end{proof}
 
 \begin{proposition}{}
   La capacità \(C\) di un canale è superiormente limitata da \(\log(\min\set{\#\mathcal{X}, \#\mathcal{Y}})\).
-  In particolare quindi \(C\leq\log(\#\mathcal{X})\) e \(C\leq\log(\#\mathcal{Y})\).
 \end{proposition}
 \begin{proof}
-  Tali sono i limiti superiori di \(I(X;Y)\) per qualsiasi \(X\).
+  Per qualsiasi $X$, si osserva \[\log{\#\mathcal{X}} \geq H(X)-H(X|Y)=I(X;Y)=H(Y)-H(Y|X) \leq \log{\#\mathcal{Y}}\]
+  Pertanto, $\max_X I(X;Y) \leq \log(\min\set{\#\mathcal{X}, \#\mathcal{Y}})$.
 \end{proof}
 
 \section{Teorema di Shannon}
