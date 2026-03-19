@@ -22,7 +22,7 @@ $$H(S^{n})=H(S_{1},\dots,S_{n})\leq c(\phi) < H(S^{n})+1$$
 Dunque, per conoscere il \keyword{costo effettivo} per singolo simbolo $c_{e}(\phi)$, si deve dividere l'intera disuguaglianza per $n$:
 $$\begin{aligned}
 \frac{1}{n}H(S^{n}) &\leq c_{e}(\phi) < \frac{1}{n}(H(S^{n})+1), \\
-H(S) &\leq c_{e}(\phi)< \frac{\bcancel{n} H(S)}{\bcancel{n}} +\frac{1}{n} &&\text{($S_{1},\dots,S_{n}$ i.i.d.)}
+H(S) &\leq c_{e}(\phi)< H(S) +\frac{1}{n} &&\text{($S_{1},\dots,S_{n}$ i.i.d.)}
 \end{aligned}$$
 Poiché $\lim_{ n \to \infty } \frac{1}{n}=0$, allora $\lim_{ n \to \infty }{c_{e}(\phi)}=H(S)$, ovvero, aumentando \(n\), possiamo avvicinarci arbitrariamente al costo ideale \(H(S)\).
 
@@ -94,7 +94,14 @@ Questo vale anche per catene di Markov irriducibili, aperiodiche e invarianti ne
   Essendo poi \(H(X|\hat{X},E=1)\) entropia di una variabile con \(\#\mathcal{X}\) possibili valori, si ha che \(H(X|E=1,\hat{X}) \leq \log(\#\mathcal{X})\).
   Da queste osservazioni, si ricava che
   \[H(X|\hat{X}) \leq H(E) + P(E=1) \log(\#\mathcal{X}) = H(P_e) + P_e \log(\#\mathcal{X})\]
-  Infine, poiché \(X \to Y \to \hat{X}\) per ipotesi, vale la disuguaglianza di data processing (DPI, \ref{prop:dpi}), per cui si ha \(H(X|Y) \leq H(X|\hat{X})\). 
+  Infine, poiché \(X \to Y \to \hat{X}\) per ipotesi, vale la disuguaglianza di data processing (DPI, \ref{prop:dpi}), da cui si ottiene 
+  \begin{equation*}
+    \begin{aligned}
+      I(X;\hat{X}) \leq I(X;Y), \\
+      \bcancel{H(X)} - H(X|\hat{X}) \leq \bcancel{H(X)} - H(X|Y), \\
+      H(X|\hat{X}) \geq H(X|Y)
+    \end{aligned}
+  \end{equation*}
 \end{proof}
 
 \begin{observation}{}
@@ -190,81 +197,82 @@ Consideriamo adesso degli esempi di canale.
 \end{proof}
 
 \section{Teorema di Shannon}
-
-Andiamo dunque verso l'enunciare e dimostrare (anche se solo in parte), un importantissimo teorema nella teoria dell'informazione, anche questo dovuto a Shannon.
-
-In maniera informale, tale teorema può essere enunciato come:
+Procediamo verso l'enunciazione e la dimostrazione, seppur parziale, di un teorema, ancora dovuto a Shannon, fondamentale per i canali di trasmissione. In maniera informale, tale teorema può essere enunciato come:
 
 \begin{quote}
-  Dato un DMC si può trasmettere informazione su tale canale con probabilità di errore arbitrariamente bassa se la quantità di informazione per simbolo trasmesso (detto tasso di trasmissione) è minore della capacità del canale.
-  In oltre, non è possibile trasmettere informazione con probabilità di errore arbitrariamente bassa se il tasso di trasmissione è maggiore della capacità del canale.
+  Dato un DMC, si può trasmettere informazione su di esso con probabilità di errore arbitrariamente bassa se la quantità di informazione per simbolo trasmesso, detta tasso di trasmissione, è minore della capacità del canale.
+  Inoltre, non è possibile trasmettere informazione con probabilità di errore arbitrariamente bassa se il tasso di trasmissione è maggiore della capacità del canale.
+  Nel caso in cui il tasso di trasmissione coincida con la capacità del canale, non si hanno certezze.
 \end{quote}
 
-\begin{note}{}
-  In generale, nel caso il tasso di trasmissione sia uguale alla capacità del canale, non si hanno garanzie.
-\end{note}
+Definiamo ora dei concetti che serviranno alla comprensione del teorema. Consideriamo un canale discreto a memoria zero \((\mathcal{X}, \mathcal{Y}, p(y|x))\).
 
 \begin{definition}{Estensione \(n\)-esima di un DMC}
-  Sia \((\mathcal{X}, \mathcal{Y}, p(y|x))\) un canale discreto a memoria zero.
-
-  La sua \keyword{estensione \(n\)-esima} è il canale discreto \((\mathcal{X}^n, \mathcal{Y}^n, p(y_1,\ldots,y_n|x_1,\ldots,x_n))\), dove per \(1\leq k\leq n\),
-  \(p(y_k|x_1, \ldots,x_k,y_1,\ldots,y_{k-1}) = p(y_k|x_k)\), ovvero il \(k\)-esimo output dipende solo dal \(k\)-esimo input.
-  
-  Diciamo che il canale è utilizzato \keyword{senza feedback} se \(p(x_k|x_1,\ldots,x_{k-1},y_1,\ldots,y_{k-1}) = p(x_k|x_1,\ldots,x_{k-1})\), sempre per \(1\leq k \leq n\), ovvero il \(k\)-esimo input dipende solo dagli input precedenti, e non anche dagli output.
+  Diciamo la sua \keyword{estensione \(n\)-esima} il canale discreto 
+  \[(\mathcal{X}^n, \mathcal{Y}^n, p(y_1,\ldots,y_n|x_1,\ldots,x_n))\]
+  dove, per \(1\leq k\leq n\),
+  \[p(y_k|x_1, \ldots,x_k,y_1,\ldots,y_{k-1}) = p(y_k|x_k)\] 
+  ovvero ciascun output dipende esclusivamente dall'input corrispondente.
 \end{definition}
 
-Se il canale è senza feedback, si ha che \(p(y_1,\ldots,y_n|x_1,\ldots,x_n) = \prod_{i=1}^n p(y_i|x_i)\)
+L'estensione $n$-esima di un DMC permette di generalizzare il comportamento del DMC a sequenze di simboli di lunghezza arbitraria $n$. 
+Ciò è necessario se si vuole studiare il comportamento del DMC su sequenze di $n$ simboli.
 
-Per formalizzare il teorema di Shannon è necessario dunque introdurre il concetto di codifica di canale a blocchi.
+\begin{definition}{Canale utilizzato senza feedback}
+  Tale estensione \(n\)-esima è utilizzato \keyword{senza feedback} se, \(1\leq k \leq n\), 
+  \[p(x_k|x_1,\ldots,x_{k-1},y_1,\ldots,y_{k-1}) = p(x_k|x_1,\ldots,x_{k-1})\] 
+  ovvero se il \(k\)-esimo input dipende solo dagli input precedenti e non dagli output.
+\end{definition}
+
+In altre parole, un canale è utilizzato senza feedback quando l'input non sfrutta la conoscenza degli output del canale.
+Se il canale è senza memoria e senza feedback, si ha
+\begin{equation*}
+  \begin{aligned}
+    p(y_1,\ldots,y_n|x_1,\ldots,x_n)&=\overbrace{p(y_1|x_1,\dots,x_n)}^{p(y_1|x_1) \text{memoryless}}\cdot \overbrace{p(y_2|y_1,x_1,\dots,x_n)}^{\overbrace{p(y_2|y_1,x_2)}^{p(y_2|x_2) \text{s.feedback}} \text{memoryless}}\cdot \ldots \cdot \overbrace{p(y_n|y_1,\ldots,y_{n-1},x_1,\ldots,x_n)}^{p(y_n|x_n)} \\
+    &=\prod_{i=1}^{n}p(y_i|x_i)
+  \end{aligned}
+\end{equation*}
 
 \begin{definition}{Codifica di canale a blocchi}
   Dato un DMC \((\mathcal{X}, \mathcal{Y}, p(y|x))\), e dati \(M>1\) e \(n\geq 1\), una \keyword{\((M,n)\)-codifica} dell'estensione \(n\)-esima del DMC, è una terna \((\mathcal{W},f,g)\) con
   \begin{itemize}
-    \item \(\mathcal{W} = \set{1,2,\ldots,M}\) alfabeto (o insieme di indici)
-    \item \(f: \mathcal{W} \to \mathcal{X}^n\) funzione di codifica iniettiva
-    \item \(g: \mathcal{Y}^n \to \mathcal{W}\) funzione di decodifica
+    \item \(\mathcal{W} = \set{1,2,\ldots,M}\) insieme degli indici degli $M$ dati da trasmettere;
+    \item \(f: \mathcal{W} \to \mathcal{X}^n\) funzione di codifica iniettiva;
+    \item \(g: \mathcal{Y}^n \to \mathcal{W}\) funzione di decodifica.
   \end{itemize}
-
-  Possiamo di conseguenza definire le seguenti variabili aleatorie:
+  tale per cui
   \begin{itemize}
-    \item \(W\) variabile su \(\mathcal{W}\), descrive i dati da trasmettere
-    \item \(X^n = (X_1, \ldots, X_n) = f\circ W\) input al canale
-    \item \(Y^n = (Y_1, \ldots, Y_n)\) output del canale
-    \item \(\hat{W} = g \circ Y^n\) variabile su \(\mathcal{W}\), descrive i dati ricevuti
+    \item \(W\), variabile su \(\mathcal{W}\), descrive i dati inviati, con $W=i$ che indica che è stato inviato il dato con indice $i$;
+    \item \(X^n = (X_1, \ldots, X_n) = f\circ W\) descrive l'input del canale;
+    \item \(Y^n = (Y_1, \ldots, Y_n)\) descrive l'output del canale;
+    \item \(\hat{W} = g \circ Y^n\), variabile su \(\mathcal{W}\), descrive i dati ricevuti, con $\hat{W}=i$ che indica che è stato ricevuto il dato con indice $i$.
   \end{itemize}
-
-  Per \(i \in \mathcal{W}\) definiamo \(\lambda_i = \Prob[\hat{W}\neq i|X^n = f(i)]\) la probabilità di errore condizionata all'invio del messaggio \(i\), e \(\lambda^{(n)} = \max_{i\in\mathcal{W}} \lambda_i\) la probabilità di errore massima.
 \end{definition}
 
-\begin{definition}{Tasso di trasmissione}
-  Data una \((M,n)\)-codifica \((\mathcal{W},f,g)\), il \keyword{tasso di trasmissione \(R\)} è la quantità
-  \[R = \frac{\log M}{n}\] 
-  rappresenta la quantità di informazione trasmessa per simbolo del canale.
-  Tasso di trasmissione \(R = \frac{\log M}{n} \iff 2^{nR} = M\) rappresenta la quantità di informazione trasmessa per simbolo del canale.
+\begin{note}{}
+  In questo modello, si richiede l'iniettività di $f$ perché si vuole che, in assenza di rumore sul canale, il ricevente possa decodificare senza ambiguità il messaggio inviato. 
+  Invece, $g$ può non essere iniettiva poiché, come visto nell'esempio del canale binario rumoroso senza sovrapposizioni, output diversi del canale possono corrispondere allo stesso input, proprio perché il mapping tra $X$ e $Y$ è una funzione probabilistica, e quindi $g$ potrebbe associare output diversi allo stesso dato. 
+  Inoltre, la variabile $W$ è assunta uniforme in modo tale da studiare nel modo più indipendente possibile le performance del canale. Tuttavia, in alcuni contesti di studio avanzato, in cui ciascun dato può avere una probabilità di emissione diversa, l'ipotesi di uniformità di $W$ viene accantonata.
+\end{note}
 
-  Si ha dunque che \(M = 2^{nR}\).
+Una \((M,n)\)-codifica presenta la seguente struttura:
+\[W \xrightarrow{f} X^n \xrightarrow{p(y^n|x^n)} Y^n \xrightarrow{g} \hat{W}\]
+con \(p(y^n|x^n) = p(y_1,\ldots,y_n|x_1,\ldots,x_n)\).
+L'evento di trasmissione dell'$i$-esimo dato è indicato con $W=i$. 
+La trasmissione di tale dato avviene come segue: esso viene codificato, mediante $f$, in una sequenza di codice $f(i)=x_1\ldots x_n \in \mathcal{X}^{n}$. 
+La sequenza di codice passa attraverso il canale, che lo trasforma in una sequenza $y_1\ldots y_n \in \mathcal{Y}^{n}$, che a sua volta viene decodificata, mediante $g$, nel dato $j$-esimo. 
+L'evento di ricezione del dato $j$-esimo viene indicato con $\hat{W}=j$.
+Se $i=j$, la trasmissione è avvenuta con successo. Altrimenti, vi è stato un errore di ricezione. 
+
+\begin{definition}{Errore di ricezione}
+  Per \(i \in \mathcal{W}\), definiamo \(\lambda_i = \Prob[\hat{W}\neq i|X^n = f(i)]\) la probabilità di errore di ricezione dato l'invio del dato con indice $i$, e quindi \(\lambda^{(n)} = \max_{i\in\mathcal{W}} \lambda_i\) la probabilità massima di errore di ricezione.
 \end{definition}
-
-\begin{definition}{Tasso raggiungibile}
-  Diremo che un tasso di trasmissione \(R\) è \keyword{raggiungibile} se esiste una successione di \((\lfloor 2^{nR} \rfloor, n)\)-codifiche tali che \(\lim_{n\to\infty} \lambda^{(n)} = 0\).
-\end{definition}
-
-Si ha dunque che una \((M,n)\)-codifica porta a una struttura del tipo
-\begin{equation}
-  W \xrightarrow{f} X^n \xrightarrow{p(y^n|x^n)} Y^n \xrightarrow{g} \hat{W}
-\end{equation}
-con \(p(y^n|x^n) = p(y_1,\ldots,y_n|x_1,\ldots,x_n)\)
-
-Data un elemento di \(\mathcal{W}\), possiamo scrivere che la codifica \(f\) come \(f(i) = x_1(i)\ldots x_n(i) = x^n(i)\) e quindi
-\[\lambda_i = \Prob[\hat{W} \neq i|X^n = f(i)] = \sum_{\substack{y^n \in \mathcal{Y}^n \\ g(y^n) \neq i}} p(y^n|x^n(i))\]
-Ovvero la probabilità di errore di \(i\) è la somma delle probabilità di ricevere una sequenza \(y^n\) che venga decodificata in un messaggio diverso da \(i\), dato che è stato inviato \(x^n(i)\).
 
 \begin{definition}{Probabilità media (aritmetica) di errore}
   La \keyword{probabilità media (aritmetica) di errore} di una \((M,n)\)-codifica \((\mathcal{W},f,g)\) è
   \[P_e^{(n)} = \frac{1}{M} \sum_{i=1}^M \lambda_i\]
-  
-  Tale quantità non è la media in probabilità di errore, a meno che \(W\) non sia uniforme.
-  Si ha ovviamente che \(P_e^{(n)} \leq \lambda^{(n)}\).
+  Se si assume $W$ uniforme, allora si ha $P_e^{(n)}=\EV{\lambda_i}$.
+  Inoltre, è chiaro che la probabilità media di errore è minore o uguale alla probabilità massima di errore, ovvero \(P_e^{(n)} \leq \lambda^{(n)}\).
 \end{definition}
 
 \begin{observation}{}
@@ -278,6 +286,19 @@ Ovvero la probabilità di errore di \(i\) è la somma delle probabilità di rice
   Dunque qualunque variabile si rimuova le \(3\) rimanenti formano una catena di Markov.
 \end{observation}
 
+\begin{definition}{Tasso di trasmissione}
+  Data una \((M,n)\)-codifica \((\mathcal{W},f,g)\), il \keyword{tasso di trasmissione \(R\)} è la quantità
+  \[R = \frac{H(W)}{n} = \frac{\log M}{n}\] 
+\end{definition}
+
+Il tasso di trasmissione rappresenta la quantità di informazione trasmessa, per singolo simbolo, dal canale. Si osserva \(R = \frac{\log M}{n} \iff 2^{nR} = M\).
+
+\begin{definition}{Tasso raggiungibile}
+  Un tasso di trasmissione \(R\) è \keyword{raggiungibile} se esiste una successione di \((M, n)\)-codifiche, con $M=\lfloor 2^{nR} \rfloor$, tale che \(\lim_{n\to\infty} \lambda^{(n)} = 0\).
+\end{definition}
+
+Possiamo adesso enunciare il teorema.
+
 \begin{theorem}[label={thm:shannon_2}]{Shannon}
   Dato un canale con capacità \(C\), e dato \(R>0\) tasso di trasmissione, allora
   \begin{itemize}
@@ -286,7 +307,8 @@ Ovvero la probabilità di errore di \(i\) è la somma delle probabilità di rice
   \end{itemize}
 \end{theorem}
 
-Di tale teorema dimostreremo solo il secondo punto, ma per fare ciò è necessario dimostrare prima un lemma intermedio
+Notiamo che le due implicazioni del teorema non formano una doppia implicazione perché non si è in grado di determinare cosa avviene per \(R = C\).
+Del teorema dimostreremo solo il secondo punto, ma, per fare ciò, è necessario dimostrare prima un lemma intermedio.
 
 \begin{lemma}{}
   Dato un canale di capacità \(C\), si ha che
@@ -295,22 +317,24 @@ Di tale teorema dimostreremo solo il secondo punto, ma per fare ciò è necessar
 \begin{proof}
   Dalla regola di catena,
   \[H(Y^n|X^n) = H(Y_1|X^n) + \sum_{j=2}^n H(Y_j|Y^{j-1},X^n) = H(Y_1|X_1) + \sum_{j=2}^n H(Y_j|X_j)\]
+  dove, nell'ultimo passaggio, è stata usata l'ipotesi di canale senza memoria e senza feedback.
   Quindi
   \[I(X^n;Y^n) = H(Y_1,\ldots,Y_n) - H(Y^n|X^n) = H(Y_1, \ldots, Y_n) - H(Y_1|X_1) - \sum_{j=2}^n H(Y_j|X_j)\]
-  Essendo \(H(Y_1,\ldots, Y_n) \leq \sum_{j=1}^n H(Y_j)\) si ha che
+  Sappiamo che \qi{il condizionamento non aumenta l'entropia}, ovvero che \(H(Y_1,\ldots, Y_n) \leq \sum_{j=1}^n H(Y_j)\), per cui si osserva
   \[I(X^n;Y^n) \leq \sum_{j=1}^n H(Y_j) - \sum_{j=1}^n H(Y_j|X_j) = \sum_{j=1}^n I(X_j;Y_j) \leq n C\]
   
 \end{proof}
 
-\begin{proof}[Dimostrazione di~\ref{thm:shannon_2}]
-  Andiamo a dimostrare solo la seconda parte del teorema, ovvero che se \(R>C\) allora \(R\) non è raggiungibile.
-  Mostriamo l'inverso, ovvero che se \(R\) è raggiungibile allora \(R\leq C\).
-  Sia allora \(R\) un tasso di trasmissione raggiungibile, e consideriamo la successione di \(( 2^{nR},n)\)-codifiche\footnote{Dalla definizione sarebbe necessario utilizzare la funzione \(\lfloor\rfloor\), ma ciò andrebbe solo a complicare i conti, dunque si assumeranno \(2^{nR}\) interi per semplicità} tale che \(\lim_{n\to\infty} \lambda^{(n)} = 0\).
+Andiamo a dimostrare il secondo punto del teorema, ovvero che se \(R>C\) allora \(R\) non è raggiungibile.
+Procederemo per contrapposizione, ovvero dimostreremo che se \(R\) è raggiungibile allora \(R\leq C\).
+
+\begin{proof}[Dimostrazione di~\Cref{thm:shannon_2}]
+  Sia \(R\) un tasso di trasmissione raggiungibile e consideriamo la successione di \(( 2^{nR},n)\)-codifiche\footnote{Dalla definizione sarebbe necessario utilizzare la funzione \(\lfloor\rfloor\), ma ciò andrebbe solo a complicare i conti, dunque si assumeranno \(2^{nR}\) interi per semplicità} tale che \(\lim_{n\to\infty} \lambda^{(n)} = 0\).
   
   Fissato \(n\), sia \(\mathcal{W} = \set{1, \ldots, 2^{nR}}\) e sia \(W\) uniforme su \(\mathcal{W}\),\footnote{Possiamo assumere una qualsiasi distribuzione poiché le quantità coinvolte nel teorema sono relative al solo canale, e non alla sorgente sottostante}
   cosicché \(nR = H(W) = H(W|\hat{W}) + I(W;\hat{W})\).
 
-  Poiché \(W \to X^n \to Y^n \to \hat{W}\) formano una catena di Markov, possiamo applicare la disuguaglianza di Fano~\ref{thm:fano} per ottenere
+  Poiché si ha \(W \to X^n \to Y^n \to \hat{W}\), è possibile applicare la disuguaglianza di Fano~\ref{thm:fano} per ottenere
   \[H(W|\hat{W}) \leq H(P_e^{(n)}) + P_e^{(n)} nR\leq 1 + P_e^{(n)} nR\]
   Inoltre, dalla disuguaglianza di data processing, si ha che
   \[I(W;\hat{W}) \leq I(X^n;Y^n) \leq n C \]
@@ -318,27 +342,27 @@ Di tale teorema dimostreremo solo il secondo punto, ma per fare ciò è necessar
   \[nR \leq 1 + P_e^{(n)} nR + n C \implies R \leq \frac{1}{n} + P_e^{(n)} R + C\]
   Avendo dimostrato che \(R\) è maggiorato per un qualsiasi \(n\), sarà anche maggiorato al limite per \(n\to\infty\).
   Essendo che \(\lim_{n\to\infty} \lambda^{(n)} = 0\), e che \(P_e^{(n)} \leq \lambda^{(n)}\), si ha che
-  \[R \leq \lim_{n\to\infty} \left(\frac{1}{n} + P_e^{(n)} R + C\right) \leq C\]
+  \[R \leq \lim_{n\to\infty} \left(\frac{1}{n} + P_e^{(n)} R + C\right) = C\]
 \end{proof}
 
-Andiamo dunque a concludere questo capitolo con due ultime domande importanti
+Il teorema conferma un risultato, tutto sommato, intuitivo: se l'informazione da trasmettere, per singolo simbolo, è maggiore della capacità del canale, allora è inevitabile perdere informazione attraverso il canale. Infatti, definendo la capacità di un canale, avevamo osservato che essa è la quantità massima di informazione che il canale riesce a conservare dall'input all'output. 
+Infine, concludiamo il capitolo con due domande:
 \begin{itemize}
-  \item Si perde qualcosa nel separare codifica di sorgente e canale?
-  \item Che rapporto c'è tra costo di codifica e tasso, tra entropia e capacità?
+  \item Si perde informazione nel separare codifica di sorgente e di canale?
+  \item Che rapporto c'è tra costo di codifica e tasso di trasmissione? Tra entropia e capacità?
 \end{itemize}
 
-Alla prima è possibile dare risposta col seguente teorema.
+Alla prima domanda è possibile dare una risposta con il seguente teorema.
 
 \begin{theorem}{Separazione sorgente-canale}
   Sia \(\underline{S}\) una sorgente stazionaria e \(C\) la capacità di un canale.
   Allora:
   \begin{itemize}
     \item Se \(H(\underline{S}) < C\), esistono codifiche per cui
-      \[\lim_{n\to\infty} \P(\hat{S}^n \neq S^n) = 0\]
+      \[\lim_{n\to\infty} \Prob(\hat{S}^n \neq S^n) = 0\]
     \item Se \(H(\underline{S}) > C\), la probabilità di errore nel trasmettere messaggi di \(\underline{S}\) sul canale non può essere resa arbitrariamente piccola.
   \end{itemize}
 \end{theorem}
 
-In particolare, qualsiasi codifica non dà particolari vantaggi rispetto a due codifiche separate.
-
-Per la seconda invece, vedremo qualcosa nel prossimo capitolo.
+In generale, una codifica unica tra sorgente e canale non dà particolari vantaggi rispetto a due codifiche separate.
+Invece, per quanto riguarda la seconda domanda, daremo una risposta nel prossimo capitolo.
